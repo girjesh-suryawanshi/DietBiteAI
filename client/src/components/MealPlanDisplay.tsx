@@ -65,35 +65,18 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
 
       const data = await response.json();
       
-      // Check if it's a PDF or HTML preview
-      if (data.url.includes('preview=true')) {
-        // For HTML preview, remove the preview parameter to trigger download
-        const downloadUrl = data.url.replace('?preview=true', '');
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `fitbite-meal-plan-${Date.now()}.html`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        toast({
-          title: "Download started!",
-          description: "Your meal plan has been downloaded as HTML file",
-        });
-      } else {
-        // Download PDF file
-        const link = document.createElement('a');
-        link.href = data.url;
-        link.download = `fitbite-meal-plan-${Date.now()}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        toast({
-          title: "Download started!",
-          description: "Your meal plan PDF is being downloaded",
-        });
-      }
+      // Download PDF file
+      const link = document.createElement('a');
+      link.href = data.url;
+      link.download = `fitbite-meal-plan-${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: "Download started!",
+        description: "Your meal plan PDF is being downloaded",
+      });
       
       onDownloadPDF();
     } catch (error) {

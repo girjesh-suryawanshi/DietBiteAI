@@ -200,14 +200,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (filename.endsWith('.pdf')) {
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-      } else if (filename.endsWith('.html')) {
-        // Check if it's a preview request
-        if (req.query.preview === 'true') {
-          res.setHeader('Content-Type', 'text/html');
-        } else {
-          res.setHeader('Content-Type', 'text/html');
-          res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        }
       }
       res.sendFile(filePath);
     } else {
