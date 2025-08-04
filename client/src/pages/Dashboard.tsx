@@ -132,10 +132,11 @@ export default function Dashboard() {
   };
 
   const handleGoalSubmit = (goal: string) => {
-    if (!userData?.country_region || !userData?.activity_level) {
+    // Check if we have user data and essential fields
+    if (!currentUser?.uid) {
       toast({
-        title: "Profile incomplete",
-        description: "Please complete your profile first",
+        title: "Authentication required",
+        description: "Please log in to continue",
         variant: "destructive",
       });
       return;
@@ -143,9 +144,9 @@ export default function Dashboard() {
 
     generatePlanMutation.mutate({
       fitness_goal: goal,
-      cuisine: userData.country_region,
-      diet_type: (userData as any).food_preference || 'vegetarian',
-      user_id: currentUser?.uid,
+      cuisine: userData?.country_region || 'indian',
+      diet_type: (userData as any)?.food_preference || 'vegetarian',
+      user_id: currentUser.uid,
     });
   };
 
