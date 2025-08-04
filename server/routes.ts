@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema } from "@shared/schema";
-import { generateMealPlan } from "./services/openai";
+import { generateMealPlan } from "./services/gemini";
 import { generateMealPlanPDF } from "./services/pdf";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -72,17 +72,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Generate meal plan using OpenAI
+      // Generate meal plan using Gemini
       const mealPlanData = await generateMealPlan({
         fitness_goal,
         cuisine,
         diet_type,
         medical_conditions: user.medical_conditions || [],
         food_exclusions: user.food_exclusions || [],
-        age: user.age,
-        gender: user.gender,
-        weight_kg: user.weight_kg,
-        height_cm: user.height_cm,
+        age: user.age || undefined,
+        gender: user.gender || undefined,
+        weight_kg: user.weight_kg || undefined,
+        height_cm: user.height_cm || undefined,
       });
 
       // Save meal plan to storage
@@ -126,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate PDF
-      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data);
+      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data as any);
 
       // Store PDF record with 48-hour expiration
       const expiresAt = new Date();
