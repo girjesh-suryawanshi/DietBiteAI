@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingDown, TrendingUp, Activity, Target } from "lucide-react";
+import { TrendingDown, TrendingUp, Activity, Target, ArrowLeft } from "lucide-react";
 
 interface GoalSelectionFormProps {
   onSubmit: (goal: string) => void;
+  onBack?: () => void;
   isLoading?: boolean;
 }
 
@@ -39,7 +40,7 @@ const FITNESS_GOALS = [
   }
 ];
 
-export function GoalSelectionForm({ onSubmit, isLoading = false }: GoalSelectionFormProps) {
+export function GoalSelectionForm({ onSubmit, onBack, isLoading = false }: GoalSelectionFormProps) {
   const [selectedGoal, setSelectedGoal] = useState<string>("");
 
   const handleSubmit = () => {
@@ -111,28 +112,44 @@ export function GoalSelectionForm({ onSubmit, isLoading = false }: GoalSelection
         })}
       </div>
 
-      <div className="text-center">
-        <Button
-          onClick={handleSubmit}
-          disabled={!selectedGoal || isLoading}
-          className="px-8 py-3 bg-primary hover:bg-green-600 text-white text-lg font-medium"
-          size="lg"
-        >
-          {isLoading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-              Generating Your Meal Plan...
-            </>
-          ) : (
-            "Generate My Meal Plan"
-          )}
-        </Button>
-        
-        {selectedGoal && (
-          <p className="text-sm text-gray-500 mt-3">
-            Your meal plan will be optimized for {FITNESS_GOALS.find(g => g.id === selectedGoal)?.title.toLowerCase()}
-          </p>
+      <div className="flex items-center justify-between">
+        {onBack && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onBack}
+            className="flex items-center space-x-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Profile</span>
+          </Button>
         )}
+        
+        <div className="flex-1 text-center">
+          <Button
+            onClick={handleSubmit}
+            disabled={!selectedGoal || isLoading}
+            className="px-8 py-3 bg-primary hover:bg-green-600 text-white text-lg font-medium"
+            size="lg"
+          >
+            {isLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                Generating Your Meal Plan...
+              </>
+            ) : (
+              "Generate My Meal Plan"
+            )}
+          </Button>
+          
+          {selectedGoal && (
+            <p className="text-sm text-gray-500 mt-3">
+              Your meal plan will be optimized for {FITNESS_GOALS.find(g => g.id === selectedGoal)?.title.toLowerCase()}
+            </p>
+          )}
+        </div>
+        
+        {!onBack && <div className="w-32" />} {/* Spacer when no back button */}
       </div>
     </div>
   );

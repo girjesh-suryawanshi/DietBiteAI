@@ -215,6 +215,7 @@ export default function Dashboard() {
         <Navbar onShowAuth={() => setShowAuthModal(true)} />
         <GoalSelectionForm 
           onSubmit={handleGoalSubmit}
+          onBack={() => setOnboardingStep('profile')}
           isLoading={generatePlanMutation.isPending}
         />
         

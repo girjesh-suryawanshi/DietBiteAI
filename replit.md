@@ -59,6 +59,13 @@ Preferred communication style: Simple, everyday language.
 - **React Hook Form**: Form validation and state management with Zod schema validation
 - **Date-fns**: Date manipulation and formatting utilities
 
+### Recent Improvements (January 2025)
+- **Multiple Meal Plan Generation**: Users can now generate unlimited meal plans instead of being limited to one
+- **Enhanced Navigation**: Added back button functionality throughout all onboarding steps and meal plan generation
+- **Improved Food Preferences**: Fixed "Foods to Include" step to properly capture and pass preferences to AI generation
+- **Optional Step Handling**: Made health conditions and food preferences optional with skip functionality
+- **User Experience**: Enhanced onboarding flow with proper validation and navigation controls
+
 ### Planned Integrations
 - **Puppeteer**: HTML to PDF conversion for meal plan downloads
 - **Firebase Cloud Messaging**: Push notifications for meal reminders
