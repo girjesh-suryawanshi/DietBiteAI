@@ -100,6 +100,14 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   const progress = (currentStep / STEPS.length) * 100;
 
   const nextStep = async () => {
+    // For steps 4 and 5, we don't need strict validation as they are optional
+    if (currentStep === 4 || currentStep === 5) {
+      if (currentStep < STEPS.length) {
+        setCurrentStep(currentStep + 1);
+      }
+      return;
+    }
+    
     const fieldsToValidate = getFieldsForStep(currentStep);
     const isStepValid = await trigger(fieldsToValidate as any);
     
@@ -357,6 +365,12 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
                 </div>
               ))}
             </div>
+            
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600">
+                <strong>Note:</strong> This step is optional. You can skip it if you don't have specific food preferences to include.
+              </p>
+            </div>
           </div>
         );
 
@@ -426,14 +440,27 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
               </Button>
 
               {currentStep < STEPS.length ? (
-                <Button
-                  type="button"
-                  onClick={nextStep}
-                  className="flex items-center space-x-2 bg-primary hover:bg-green-600"
-                >
-                  <span>Next</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+                <div className="flex space-x-2">
+                  {currentStep === 5 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={nextStep}
+                      className="flex items-center space-x-2"
+                    >
+                      <span>Skip</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="flex items-center space-x-2 bg-primary hover:bg-green-600"
+                  >
+                    <span>Next</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
               ) : (
                 <Button
                   type="submit"
