@@ -123,15 +123,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         height_cm: user.height_cm || undefined,
       });
 
-      // Save meal plan to storage
+      // Save meal plan to storage using the database user ID
       const mealPlan = await storage.createMealPlan({
-        user_id,
+        user_id: user.id, // Use database user ID, not Firebase UID
         fitness_goal,
         cuisine,
         diet_type,
         plan_data: mealPlanData,
         is_active: true,
       });
+
+      console.log(`Created meal plan for user ${user.id} (Firebase UID: ${user.uid})`);
 
       res.status(201).json(mealPlan);
     } catch (error) {

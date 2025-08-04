@@ -37,7 +37,7 @@ export default function Dashboard() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/meal-plans'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/meal-plans', currentUser?.uid] });
       setShowPlanForm(false);
       toast({
         title: "Meal plan generated!",
@@ -82,7 +82,7 @@ export default function Dashboard() {
   const handleGeneratePlan = (formData: any) => {
     generatePlanMutation.mutate({
       ...formData,
-      user_id: userData?.id,
+      user_id: currentUser?.uid, // Use Firebase UID instead of database ID
     });
   };
 

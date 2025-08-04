@@ -40,7 +40,13 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id, 
-      created_at: new Date() 
+      created_at: new Date(),
+      age: insertUser.age ?? null,
+      gender: insertUser.gender ?? null,
+      height_cm: insertUser.height_cm ?? null,
+      weight_kg: insertUser.weight_kg ?? null,
+      medical_conditions: insertUser.medical_conditions ?? null,
+      food_exclusions: insertUser.food_exclusions ?? null,
     };
     this.users.set(id, user);
     return user;
@@ -80,6 +86,7 @@ export class MemStorage implements IStorage {
       ...insertMealPlan,
       id,
       created_at: new Date(),
+      is_active: insertMealPlan.is_active ?? true,
     };
     this.mealPlans.set(id, mealPlan);
     return mealPlan;
