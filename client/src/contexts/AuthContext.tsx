@@ -94,18 +94,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCurrentUser(user);
       
       if (user) {
-        // Fetch user data from our database
+        // Try to fetch user data from our database, create if doesn't exist
         try {
-          const response = await apiRequest("GET", `/api/users/${user.uid}`);
+          let response = await apiRequest("GET", `/api/users/${user.uid}`);
+          
+          if (!response.ok) {
+            // User doesn't exist in our DB, create them
+            response = await apiRequest("POST", "/api/users/auto-create", {
+              uid: user.uid,
+              email: user.email || "",
+              name: user.displayName || "User",
+            });
+          }
+          
           if (response.ok) {
             const userData = await response.json();
             setUserData(userData);
           } else {
-            console.error("User not found in database");
+            console.error("Failed to get or create user");
             setUserData(null);
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error with user authentication:", error);
           setUserData(null);
         }
       } else {

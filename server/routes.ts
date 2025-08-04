@@ -19,6 +19,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Auto-create user endpoint for when Firebase user exists but not in our DB
+  app.post("/api/users/auto-create", async (req, res) => {
+    try {
+      const { uid, email, name } = req.body;
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByUid(uid);
+      if (existingUser) {
+        return res.json(existingUser);
+      }
+
+      // Create new user
+      const user = await storage.createUser({
+        uid,
+        email: email || "",
+        name: name || "User",
+      });
+      
+      res.status(201).json(user);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to auto-create user", error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
   app.post("/api/users", async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
@@ -49,10 +73,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Meal plan routes
   app.get("/api/meal-plans/:uid", async (req, res) => {
     try {
-      // Get user first
-      const user = await storage.getUserByUid(req.params.uid);
+      // Get user first, create if doesn't exist
+      let user = await storage.getUserByUid(req.params.uid);
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        // Auto-create user if they have a valid Firebase UID but don't exist in our DB
+        user = await storage.createUser({
+          uid: req.params.uid,
+          email: "",
+          name: "User",
+        });
       }
 
       const mealPlans = await storage.getMealPlansByUserId(user.id);
@@ -66,10 +95,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { fitness_goal, cuisine, diet_type, user_id } = req.body;
 
-      // Get user data for personalization
-      const user = await storage.getUser(user_id);
+      // Get user data for personalization, create if doesn't exist
+      let user = await storage.getUser(user_id);
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        // If user_id is actually a Firebase UID, try to find by UID
+        user = await storage.getUserByUid(user_id);
+        if (!user) {
+          // Create user if doesn't exist
+          user = await storage.createUser({
+            uid: user_id,
+            email: "",
+            name: "User",
+          });
+        }
       }
 
       // Generate meal plan using Gemini
