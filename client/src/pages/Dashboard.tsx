@@ -116,12 +116,12 @@ export default function Dashboard() {
     // Only run logic if we have a current user
     if (!currentUser) return;
     
-    // Priority 1: If we have meal plans, show them
+    // Priority 1: If we have meal plans, show them (but allow regeneration)
     if (!plansLoading && mealPlans && mealPlans.length > 0) {
       if (onboardingStep !== 'complete') {
         setOnboardingStep('complete');
       }
-      return;
+      // Don't return here - allow continuing to profile/goal checks for regeneration
     }
     
     // Priority 2: If user data is loaded, check completion
@@ -173,6 +173,9 @@ export default function Dashboard() {
       cuisine: effectiveUserData?.country_region || 'indian',
       diet_type: (effectiveUserData as any)?.food_preference || 'vegetarian',
       user_id: currentUser.uid,
+      // Include foods to include from user profile
+      foods_to_include: (effectiveUserData as any)?.foods_to_include || [],
+      health_conditions: (effectiveUserData as any)?.health_conditions || [],
     });
   };
 

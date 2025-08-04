@@ -113,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/meal-plans/generate", async (req, res) => {
     try {
-      const { fitness_goal, cuisine, diet_type, user_id } = req.body;
+      const { fitness_goal, cuisine, diet_type, user_id, foods_to_include, health_conditions } = req.body;
 
       // Get user data for personalization, create if doesn't exist
       let user = await storage.getUser(user_id);
@@ -130,13 +130,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      // Deactivate any existing active meal plans for this user
+      const existingPlans = await storage.getMealPlansByUserId(user.id);
+      for (const plan of existingPlans) {
+        if (plan.is_active) {
+          await storage.updateMealPlan(plan.id, { is_active: false });
+        }
+      }
+
       // Generate meal plan using Gemini
       const mealPlanData = await generateMealPlan({
         fitness_goal,
         cuisine,
         diet_type,
-        medical_conditions: user.health_conditions || [],
-        food_exclusions: user.foods_to_include || [],
+        medical_conditions: health_conditions || user.health_conditions || [],
+        food_exclusions: foods_to_include || user.foods_to_include || [],
         age: user.age || undefined,
         gender: user.gender || undefined,
         weight_kg: user.weight_kg || undefined,
