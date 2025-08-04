@@ -7,12 +7,30 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/not-found";
+import AboutUs from "@/pages/AboutUs";
+import ContactUs from "@/pages/ContactUs";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsAndConditions from "@/pages/TermsAndConditions";
+import Disclaimer from "@/pages/Disclaimer";
+import DMCA from "@/pages/DMCA";
+import CookiePolicy from "@/pages/CookiePolicy";
+import FAQ from "@/pages/FAQ";
+import Sitemap from "@/pages/Sitemap";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/about" component={AboutUs} />
+      <Route path="/contact" component={ContactUs} />
+      <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/terms" component={TermsAndConditions} />
+      <Route path="/disclaimer" component={Disclaimer} />
+      <Route path="/dmca" component={DMCA} />
+      <Route path="/cookies" component={CookiePolicy} />
+      <Route path="/faq" component={FAQ} />
+      <Route path="/sitemap" component={Sitemap} />
       <Route component={NotFound} />
     </Switch>
   );
