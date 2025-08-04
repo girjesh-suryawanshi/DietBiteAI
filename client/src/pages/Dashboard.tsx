@@ -35,41 +35,8 @@ export default function Dashboard() {
   // Use fetched user data if available, otherwise fall back to context userData
   const effectiveUserData = fetchedUserData || userData;
 
-  // Redirect to landing if not authenticated
-  if (!currentUser) {
-    return <Redirect to="/" />;
-  }
-
-  // Determine onboarding step based on user data
-  React.useEffect(() => {
-    // Priority 1: If we have meal plans, show them
-    if (!plansLoading && mealPlans && mealPlans.length > 0) {
-      if (onboardingStep !== 'complete') {
-        setOnboardingStep('complete');
-      }
-      return;
-    }
-    
-    // Priority 2: If user data is loaded, check completion
-    if (effectiveUserData) {
-      const isProfileComplete = !!(effectiveUserData.age && effectiveUserData.height_cm && effectiveUserData.weight_kg && effectiveUserData.activity_level && effectiveUserData.country_region);
-      
-      if (!isProfileComplete) {
-        if (onboardingStep !== 'profile') {
-          setOnboardingStep('profile');
-        }
-      } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
-        if (onboardingStep !== 'goal') {
-          setOnboardingStep('goal');
-        }
-      }
-    } else if (currentUser && !userDataLoading && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
-      // Priority 3: No user data, no meal plans - start onboarding
-      if (onboardingStep !== 'profile') {
-        setOnboardingStep('profile');
-      }
-    }
-  }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, onboardingStep]);
+  const activePlan = mealPlans?.find(plan => plan.is_active) || mealPlans?.[0];
+  const weeklyPlan = activePlan?.plan_data as WeeklyMealPlan;
 
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({
@@ -122,9 +89,6 @@ export default function Dashboard() {
     },
   });
 
-  const activePlan = mealPlans?.find(plan => plan.is_active) || mealPlans?.[0];
-  const weeklyPlan = activePlan?.plan_data as WeeklyMealPlan;
-
   // Update user profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (profileData: any) => {
@@ -146,6 +110,42 @@ export default function Dashboard() {
       });
     },
   });
+
+  // Redirect to landing if not authenticated
+  if (!currentUser) {
+    return <Redirect to="/" />;
+  }
+
+  // Determine onboarding step based on user data
+  React.useEffect(() => {
+    // Priority 1: If we have meal plans, show them
+    if (!plansLoading && mealPlans && mealPlans.length > 0) {
+      if (onboardingStep !== 'complete') {
+        setOnboardingStep('complete');
+      }
+      return;
+    }
+    
+    // Priority 2: If user data is loaded, check completion
+    if (effectiveUserData) {
+      const isProfileComplete = !!(effectiveUserData.age && effectiveUserData.height_cm && effectiveUserData.weight_kg && effectiveUserData.activity_level && effectiveUserData.country_region);
+      
+      if (!isProfileComplete) {
+        if (onboardingStep !== 'profile') {
+          setOnboardingStep('profile');
+        }
+      } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
+        if (onboardingStep !== 'goal') {
+          setOnboardingStep('goal');
+        }
+      }
+    } else if (currentUser && !userDataLoading && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
+      // Priority 3: No user data, no meal plans - start onboarding
+      if (onboardingStep !== 'profile') {
+        setOnboardingStep('profile');
+      }
+    }
+  }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, onboardingStep]);
 
   const handleProfileSubmit = (profileData: any) => {
     updateProfileMutation.mutate({
