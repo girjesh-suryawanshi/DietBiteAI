@@ -111,17 +111,18 @@ export default function Dashboard() {
     },
   });
 
-  // Determine onboarding step based on user data
+  // Determine onboarding step based on user data (only on initial load)
+  const [hasInitialized, setHasInitialized] = React.useState(false);
+  
   React.useEffect(() => {
-    // Only run logic if we have a current user
-    if (!currentUser) return;
+    // Only run logic if we have a current user and haven't initialized yet
+    if (!currentUser || hasInitialized) return;
     
     // Priority 1: If we have meal plans, show them (but allow regeneration)
     if (!plansLoading && mealPlans && mealPlans.length > 0) {
-      if (onboardingStep !== 'complete') {
-        setOnboardingStep('complete');
-      }
-      // Don't return here - allow continuing to profile/goal checks for regeneration
+      setOnboardingStep('complete');
+      setHasInitialized(true);
+      return;
     }
     
     // Priority 2: If user data is loaded, check completion
@@ -129,21 +130,17 @@ export default function Dashboard() {
       const isProfileComplete = !!(effectiveUserData.age && effectiveUserData.height_cm && effectiveUserData.weight_kg && effectiveUserData.activity_level && effectiveUserData.country_region);
       
       if (!isProfileComplete) {
-        if (onboardingStep !== 'profile') {
-          setOnboardingStep('profile');
-        }
+        setOnboardingStep('profile');
       } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
-        if (onboardingStep !== 'goal') {
-          setOnboardingStep('goal');
-        }
+        setOnboardingStep('goal');
       }
+      setHasInitialized(true);
     } else if (currentUser && !userDataLoading && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
       // Priority 3: No user data, no meal plans - start onboarding
-      if (onboardingStep !== 'profile') {
-        setOnboardingStep('profile');
-      }
+      setOnboardingStep('profile');
+      setHasInitialized(true);
     }
-  }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, onboardingStep]);
+  }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, hasInitialized]);
 
   // Redirect to landing if not authenticated
   if (!currentUser) {
@@ -155,6 +152,8 @@ export default function Dashboard() {
       ...profileData,
       uid: currentUser?.uid,
     });
+    // After profile submission, move to goal selection
+    setOnboardingStep('goal');
   };
 
   const handleGoalSubmit = (goal: string) => {
@@ -246,7 +245,7 @@ export default function Dashboard() {
               </p>
             </div>
             <Button
-              onClick={() => setOnboardingStep('goal')}
+              onClick={() => setOnboardingStep('profile')}
               className="bg-primary hover:bg-green-600 text-white"
             >
               <i className="fas fa-magic mr-2"></i>
@@ -298,7 +297,7 @@ export default function Dashboard() {
                   Generate your first AI-powered meal plan to get started on your health journey.
                 </p>
                 <Button
-                  onClick={() => setOnboardingStep('goal')}
+                  onClick={() => setOnboardingStep('profile')}
                   className="bg-primary hover:bg-green-600 text-white"
                 >
                   <i className="fas fa-magic mr-2"></i>
