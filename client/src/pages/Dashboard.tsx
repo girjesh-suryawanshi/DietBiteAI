@@ -46,6 +46,7 @@ export default function Dashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-plans', currentUser?.uid] });
+      setOnboardingStep('complete'); // Navigate to show the meal plan
       toast({
         title: "Meal plan generated!",
         description: "Your personalized meal plan is ready",
@@ -141,6 +142,14 @@ export default function Dashboard() {
       setHasInitialized(true);
     }
   }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, hasInitialized]);
+
+  // Additional effect to handle meal plan generation completion
+  React.useEffect(() => {
+    // If meal plans are loaded and we have plans, but we're not in complete state, go to complete
+    if (!plansLoading && mealPlans && mealPlans.length > 0 && onboardingStep !== 'complete') {
+      setOnboardingStep('complete');
+    }
+  }, [mealPlans, plansLoading, onboardingStep]);
 
   // Redirect to landing if not authenticated
   if (!currentUser) {
