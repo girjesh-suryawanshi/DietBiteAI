@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "wouter";
+import { Menu, X } from "lucide-react";
 
 interface NavbarProps {
   onShowAuth: () => void;
