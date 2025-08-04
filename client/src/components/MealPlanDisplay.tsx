@@ -141,54 +141,53 @@ export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoad
           </div>
         </div>
 
-        {/* Daily Tabs */}
-        <Tabs value={selectedDay.toString()} onValueChange={(value) => setSelectedDay(parseInt(value))}>
-          <TabsList className="grid w-full grid-cols-7 mb-6">
-            {WEEKDAYS.map((day, index) => (
-              <TabsTrigger 
-                key={day} 
-                value={index.toString()}
-                className="text-xs capitalize"
-              >
-                {day.slice(0, 3)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          <TabsContent value={selectedDay.toString()}>
-            <div className="space-y-6">
-              {/* Meals */}
-              {currentDay.meals.map((meal, index) => (
-                <MealCard key={index} meal={meal} />
-              ))}
-
-              {/* Daily Summary */}
-              <Card className="bg-neutral-50">
-                <CardContent className="p-6">
-                  <h4 className="text-lg font-semibold text-neutral-800 mb-4">Daily Summary</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">{totalDailyCalories}</div>
-                      <div className="text-sm text-neutral-600">Total Calories</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-secondary">85g</div>
-                      <div className="text-sm text-neutral-600">Protein</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-accent">120g</div>
-                      <div className="text-sm text-neutral-600">Carbs</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-warning">45g</div>
-                      <div className="text-sm text-neutral-600">Fats</div>
-                    </div>
+        {/* All Days Display */}
+        <div className="space-y-8">
+          {mealPlan.days.map((day, dayIndex) => {
+            const dayTotalCalories = day.meals.reduce((sum, meal) => sum + meal.calories, 0);
+            return (
+              <div key={dayIndex} className="border-b border-neutral-200 pb-8 last:border-b-0">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-neutral-800 capitalize">{day.day}</h3>
+                  <div className="text-sm text-neutral-500">
+                    <i className="fas fa-fire mr-1"></i>{dayTotalCalories} calories
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                
+                <div className="space-y-4">
+                  {day.meals.map((meal, mealIndex) => (
+                    <MealCard key={mealIndex} meal={meal} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Weekly Summary */}
+        <Card className="bg-neutral-50 mt-8">
+          <CardContent className="p-6">
+            <h4 className="text-lg font-semibold text-neutral-800 mb-4">Weekly Summary</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary">{mealPlan.total_daily_calories}</div>
+                <div className="text-sm text-neutral-600">Daily Target</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-secondary">7</div>
+                <div className="text-sm text-neutral-600">Days Planned</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{mealPlan.days.length * 3}</div>
+                <div className="text-sm text-neutral-600">Total Meals</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600 capitalize">{mealPlan.goals.cuisine}</div>
+                <div className="text-sm text-neutral-600">Cuisine</div>
+              </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </CardContent>
+        </Card>
       </div>
     </Card>
   );
