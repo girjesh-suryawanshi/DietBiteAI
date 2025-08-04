@@ -1,0 +1,119 @@
+Prompt for Replit AI: Build FitBite – AI-Powered Global Diet Planner App (Web)
+🎯 GOAL:
+
+Build a full-stack, web + mobile-compatible application called FitBite — an AI-personalized global diet planner that helps users achieve Weight Loss, Weight Gain, or Health Maintenance through culturally relevant 7-day meal plans. Users should be able to input their preferences, generate plans using AI, and download/share them in PDF format. App should support progress tracking and be scalable.
+
+💻 TECHNOLOGY STACK (Web-first MVP):
+Frontend: React.js with Tailwind CSS
+
+Backend: Node.js + Express.js (Firebase Functions optional)
+
+Database & Auth: Firebase Authentication + Firebase Firestore
+
+File Storage: Firebase Storage (for PDFs)
+
+Notifications: Firebase Cloud Messaging (future phase)
+
+PDF Generation: Firebase Cloud Functions using Puppeteer or pdf-lib
+
+Optional Charts: Recharts
+
+✅ CORE FEATURES TO IMPLEMENT
+🔐 1. User Authentication
+Email/password login
+
+Google, Facebook, Apple social login
+
+Store user profile in Firestore:
+
+json
+Copy
+Edit
+{
+  uid: "firebase-user-id",
+  name: "John Doe",
+  email: "john@example.com",
+  age: 28,
+  gender: "Male",
+  height_cm: 175,
+  weight_kg: 70,
+  medical_conditions: ["Diabetes"],
+  food_exclusions: ["Eggs", "Seafood"]
+}
+🧠 2. AI-Based Meal Plan Generator
+User inputs:
+
+Fitness Goal: Weight Loss / Gain / Maintain
+
+Region/Culture: Indian, American, Mediterranean, etc.
+
+Diet Type: Veg / Non-Veg / Vegan / Keto / Diabetic-Friendly
+
+Medical Conditions
+
+Food items to exclude
+
+Use OpenAI API or rule-based logic to generate:
+
+7-Day Meal Plan
+
+Per day:
+
+⏰ Meal Time
+
+🍽️ Meal Name
+
+🥗 Ingredients (exclude user’s restrictions)
+
+📋 Cooking Steps
+
+🔥 Calories
+
+Example Meal JSON:
+
+json
+Copy
+Edit
+{
+  "day": "Monday",
+  "meals": [
+    {
+      "type": "Breakfast",
+      "time": "8:00 AM",
+      "name": "Oats with Almond Milk",
+      "ingredients": ["Oats", "Almond Milk", "Banana"],
+      "instructions": "Mix oats with almond milk and microwave for 2 mins...",
+      "calories": 250
+    }
+  ]
+}
+📋 3. Meal Plan Display (Frontend UI)
+Structured day-wise view with tabs or collapsible sections
+
+Display:
+
+Meal Name
+
+Time
+
+Ingredients
+
+Cooking Instructions
+
+Calorie Count
+
+📄 4. PDF Generation
+“Download PDF” button triggers Firebase Cloud Function
+
+Format meal plan into branded, neat PDF
+
+Store PDF in Firebase Storage
+
+Return secure URL to frontend
+
+Auto-delete file after 48 hours (optional using Cloud Function cron job)
+
+🔁 5. Sharing & Printing
+"Share My Plan" button: Use Web Share API to share meal plan link/text
+
+"Print Plan" button: Opens print-friendly PDF view
