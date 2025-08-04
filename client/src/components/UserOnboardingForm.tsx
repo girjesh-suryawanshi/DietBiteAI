@@ -140,11 +140,9 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
     if (conditionId === 'none') {
       newConditions = checked ? ['none'] : [];
     } else if (conditionId === 'other') {
-      if (checked && customHealthCondition.trim()) {
-        newConditions = [...healthConditions.filter(c => c !== 'none'), customHealthCondition.trim()];
-      } else {
-        newConditions = healthConditions.filter(c => c !== customHealthCondition.trim());
-      }
+      newConditions = checked
+        ? [...healthConditions.filter(c => c !== 'none'), 'other']
+        : healthConditions.filter(c => c !== 'other' && c !== customHealthCondition.trim());
     } else {
       newConditions = checked
         ? [...healthConditions.filter(c => c !== 'none'), conditionId]
@@ -157,11 +155,9 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   const handleFoodIncludeChange = (foodId: string, checked: boolean) => {
     let newFoods;
     if (foodId === 'other') {
-      if (checked && customFoodToInclude.trim()) {
-        newFoods = [...foodsToInclude, customFoodToInclude.trim()];
-      } else {
-        newFoods = foodsToInclude.filter(f => f !== customFoodToInclude.trim());
-      }
+      newFoods = checked
+        ? [...foodsToInclude, 'other']
+        : foodsToInclude.filter(f => f !== 'other' && f !== customFoodToInclude.trim());
     } else {
       newFoods = checked
         ? [...foodsToInclude, foodId]
@@ -172,10 +168,19 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   };
 
   const onFormSubmit = (data: UserOnboardingData) => {
+    // Replace 'other' with custom values in final submission
+    const finalHealthConditions = healthConditions.map(condition => 
+      condition === 'other' && customHealthCondition.trim() ? customHealthCondition.trim() : condition
+    ).filter(condition => condition !== 'other' || customHealthCondition.trim());
+
+    const finalFoodsToInclude = foodsToInclude.map(food => 
+      food === 'other' && customFoodToInclude.trim() ? customFoodToInclude.trim() : food
+    ).filter(food => food !== 'other' || customFoodToInclude.trim());
+
     const finalData = {
       ...data,
-      health_conditions: healthConditions,
-      foods_to_include: foodsToInclude,
+      health_conditions: finalHealthConditions,
+      foods_to_include: finalFoodsToInclude,
     };
     onSubmit(finalData);
   };
@@ -349,14 +354,14 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={condition.id}
-                      checked={condition.id === 'other' ? healthConditions.includes(customHealthCondition) : healthConditions.includes(condition.id)}
+                      checked={healthConditions.includes(condition.id)}
                       onCheckedChange={(checked) => handleHealthConditionChange(condition.id, checked as boolean)}
                     />
                     <Label htmlFor={condition.id} className="text-sm font-normal">
                       {condition.label}
                     </Label>
                   </div>
-                  {condition.id === 'other' && (
+                  {condition.id === 'other' && healthConditions.includes('other') && (
                     <div className="ml-6">
                       <Input
                         placeholder="Please specify your health condition"
@@ -386,14 +391,14 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={food.id}
-                      checked={food.id === 'other' ? foodsToInclude.includes(customFoodToInclude) : foodsToInclude.includes(food.id)}
+                      checked={foodsToInclude.includes(food.id)}
                       onCheckedChange={(checked) => handleFoodIncludeChange(food.id, checked as boolean)}
                     />
                     <Label htmlFor={food.id} className="text-sm font-normal">
                       {food.label}
                     </Label>
                   </div>
-                  {food.id === 'other' && (
+                  {food.id === 'other' && foodsToInclude.includes('other') && (
                     <div className="ml-6">
                       <Input
                         placeholder="Please specify the food you'd like to include"
