@@ -32,6 +32,9 @@ export function Navbar({ onShowAuth }: NavbarProps) {
           <div className="flex items-center space-x-4">
             {currentUser ? (
               <>
+                <Link href="/">
+                  <Button variant="ghost" className="text-neutral-600 hover:text-primary">Home</Button>
+                </Link>
                 <Link href="/dashboard">
                   <Button variant="ghost" className="text-neutral-600 hover:text-primary">Dashboard</Button>
                 </Link>

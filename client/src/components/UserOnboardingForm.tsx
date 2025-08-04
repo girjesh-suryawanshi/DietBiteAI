@@ -79,6 +79,8 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   const [currentStep, setCurrentStep] = useState(1);
   const [healthConditions, setHealthConditions] = useState<string[]>([]);
   const [foodsToInclude, setFoodsToInclude] = useState<string[]>([]);
+  const [customHealthCondition, setCustomHealthCondition] = useState("");
+  const [customFoodToInclude, setCustomFoodToInclude] = useState("");
 
   const {
     register,
@@ -137,6 +139,12 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
     let newConditions;
     if (conditionId === 'none') {
       newConditions = checked ? ['none'] : [];
+    } else if (conditionId === 'other') {
+      if (checked && customHealthCondition.trim()) {
+        newConditions = [...healthConditions.filter(c => c !== 'none'), customHealthCondition.trim()];
+      } else {
+        newConditions = healthConditions.filter(c => c !== customHealthCondition.trim());
+      }
     } else {
       newConditions = checked
         ? [...healthConditions.filter(c => c !== 'none'), conditionId]
@@ -147,9 +155,18 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   };
 
   const handleFoodIncludeChange = (foodId: string, checked: boolean) => {
-    const newFoods = checked
-      ? [...foodsToInclude, foodId]
-      : foodsToInclude.filter(f => f !== foodId);
+    let newFoods;
+    if (foodId === 'other') {
+      if (checked && customFoodToInclude.trim()) {
+        newFoods = [...foodsToInclude, customFoodToInclude.trim()];
+      } else {
+        newFoods = foodsToInclude.filter(f => f !== customFoodToInclude.trim());
+      }
+    } else {
+      newFoods = checked
+        ? [...foodsToInclude, foodId]
+        : foodsToInclude.filter(f => f !== foodId);
+    }
     setFoodsToInclude(newFoods);
     setValue('foods_to_include', newFoods);
   };
@@ -328,15 +345,27 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
             
             <div className="space-y-3">
               {HEALTH_CONDITIONS.map((condition) => (
-                <div key={condition.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={condition.id}
-                    checked={healthConditions.includes(condition.id)}
-                    onCheckedChange={(checked) => handleHealthConditionChange(condition.id, checked as boolean)}
-                  />
-                  <Label htmlFor={condition.id} className="text-sm font-normal">
-                    {condition.label}
-                  </Label>
+                <div key={condition.id} className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={condition.id}
+                      checked={condition.id === 'other' ? healthConditions.includes(customHealthCondition) : healthConditions.includes(condition.id)}
+                      onCheckedChange={(checked) => handleHealthConditionChange(condition.id, checked as boolean)}
+                    />
+                    <Label htmlFor={condition.id} className="text-sm font-normal">
+                      {condition.label}
+                    </Label>
+                  </div>
+                  {condition.id === 'other' && (
+                    <div className="ml-6">
+                      <Input
+                        placeholder="Please specify your health condition"
+                        value={customHealthCondition}
+                        onChange={(e) => setCustomHealthCondition(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -353,15 +382,27 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
             
             <div className="space-y-3">
               {FOODS_TO_INCLUDE.map((food) => (
-                <div key={food.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={food.id}
-                    checked={foodsToInclude.includes(food.id)}
-                    onCheckedChange={(checked) => handleFoodIncludeChange(food.id, checked as boolean)}
-                  />
-                  <Label htmlFor={food.id} className="text-sm font-normal">
-                    {food.label}
-                  </Label>
+                <div key={food.id} className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id={food.id}
+                      checked={food.id === 'other' ? foodsToInclude.includes(customFoodToInclude) : foodsToInclude.includes(food.id)}
+                      onCheckedChange={(checked) => handleFoodIncludeChange(food.id, checked as boolean)}
+                    />
+                    <Label htmlFor={food.id} className="text-sm font-normal">
+                      {food.label}
+                    </Label>
+                  </div>
+                  {food.id === 'other' && (
+                    <div className="ml-6">
+                      <Input
+                        placeholder="Please specify the food you'd like to include"
+                        value={customFoodToInclude}
+                        onChange={(e) => setCustomFoodToInclude(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
