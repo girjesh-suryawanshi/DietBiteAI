@@ -16,11 +16,17 @@ import DMCA from "@/pages/DMCA";
 import CookiePolicy from "@/pages/CookiePolicy";
 import FAQ from "@/pages/FAQ";
 import Sitemap from "@/pages/Sitemap";
+import Features from "@/pages/Features";
+import HowItWorks from "@/pages/HowItWorks";
+import Pricing from "@/pages/Pricing";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
+      <Route path="/features" component={Features} />
+      <Route path="/how-it-works" component={HowItWorks} />
+      <Route path="/pricing" component={Pricing} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/about" component={AboutUs} />
       <Route path="/contact" component={ContactUs} />

@@ -23,9 +23,15 @@ export function Navbar({ onShowAuth }: NavbarProps) {
           
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <a href="#features" className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">Features</a>
-              <a href="#how-it-works" className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">How It Works</a>
-              <a href="#pricing" className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">Pricing</a>
+              <Link href="/features">
+                <span className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer">Features</span>
+              </Link>
+              <Link href="/how-it-works">
+                <span className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer">How It Works</span>
+              </Link>
+              <Link href="/pricing">
+                <span className="text-neutral-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer">Pricing</span>
+              </Link>
             </div>
           </div>
           
