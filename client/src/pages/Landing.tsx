@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AuthModal } from "@/components/AuthModal";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "wouter";
 
@@ -174,26 +174,47 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-neutral-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Downloads</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="/dashboard" className="hover:text-white transition-colors">Get Started</a></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
+              <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-neutral-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
+                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
+                <li><a href="/sitemap" className="hover:text-white transition-colors">Sitemap</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-neutral-400">
+                <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-white transition-colors">Terms & Conditions</a></li>
+                <li><a href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</a></li>
+                <li><a href="/dmca" className="hover:text-white transition-colors">DMCA Policy</a></li>
+                <li><a href="/cookies" className="hover:text-white transition-colors">Cookie Policy</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-neutral-700 pt-8 mt-12 text-center text-neutral-400">
-            <p>&copy; 2023 FitBite. All rights reserved.</p>
+          <div className="border-t border-neutral-700 pt-8 mt-12">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-neutral-400">
+                &copy; {new Date().getFullYear()} FitBite. All rights reserved.
+              </p>
+              <div className="flex space-x-6 mt-4 md:mt-0">
+                <a href="/privacy" className="text-neutral-400 hover:text-white text-sm transition-colors">Privacy</a>
+                <a href="/terms" className="text-neutral-400 hover:text-white text-sm transition-colors">Terms</a>
+                <a href="/cookies" className="text-neutral-400 hover:text-white text-sm transition-colors">Cookies</a>
+                <a href="/contact" className="text-neutral-400 hover:text-white text-sm transition-colors">Support</a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
@@ -204,8 +225,6 @@ export default function Landing() {
           onClose={() => setShowAuthModal(false)}
         />
       )}
-      
-      <Footer />
     </div>
   );
 }
