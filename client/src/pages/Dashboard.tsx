@@ -33,18 +33,32 @@ export default function Dashboard() {
 
   // Determine onboarding step based on user data
   React.useEffect(() => {
-    if (userData) {
-      if (!userData.age || !userData.height_cm || !userData.weight_kg || !userData.activity_level) {
-        setOnboardingStep('profile');
-      } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
-        setOnboardingStep('goal');
-      } else if (mealPlans && mealPlans.length > 0) {
+    // Priority 1: If we have meal plans, show them
+    if (!plansLoading && mealPlans && mealPlans.length > 0) {
+      if (onboardingStep !== 'complete') {
         setOnboardingStep('complete');
       }
-    } else if (currentUser) {
-      setOnboardingStep('profile');
+      return;
     }
-  }, [userData, mealPlans, currentUser, plansLoading]);
+    
+    // Priority 2: If user data is loaded, check completion
+    if (userData) {
+      if (!userData.age || !userData.height_cm || !userData.weight_kg || !userData.activity_level) {
+        if (onboardingStep !== 'profile') {
+          setOnboardingStep('profile');
+        }
+      } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
+        if (onboardingStep !== 'goal') {
+          setOnboardingStep('goal');
+        }
+      }
+    } else if (currentUser && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
+      // Priority 3: No user data, no meal plans - start onboarding
+      if (onboardingStep !== 'profile') {
+        setOnboardingStep('profile');
+      }
+    }
+  }, [userData, mealPlans, currentUser, plansLoading, onboardingStep]);
 
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({
@@ -54,7 +68,6 @@ export default function Dashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-plans', currentUser?.uid] });
-      setOnboardingStep('complete');
       toast({
         title: "Meal plan generated!",
         description: "Your personalized meal plan is ready",
@@ -97,15 +110,6 @@ export default function Dashboard() {
       });
     },
   });
-
-  // Debug: Log meal plans data
-  React.useEffect(() => {
-    if (mealPlans) {
-      console.log('Meal plans data:', mealPlans);
-      console.log('Active plan search:', mealPlans.find(plan => plan.is_active));
-      console.log('First plan (fallback):', mealPlans[0]);
-    }
-  }, [mealPlans]);
 
   const activePlan = mealPlans?.find(plan => plan.is_active) || mealPlans?.[0];
   const weeklyPlan = activePlan?.plan_data as WeeklyMealPlan;
