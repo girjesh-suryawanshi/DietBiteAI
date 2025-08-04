@@ -152,7 +152,6 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
       health_conditions: healthConditions,
       foods_to_include: foodsToInclude,
     };
-    console.log('Submitting profile data:', finalData);
     onSubmit(finalData);
   };
 

@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { MealPlan, WeeklyMealPlan } from "@shared/schema";
+import { MealPlan, WeeklyMealPlan, User } from "@shared/schema";
 import { Redirect } from "wouter";
 
 export default function Dashboard() {
@@ -25,6 +25,15 @@ export default function Dashboard() {
     queryKey: ['/api/meal-plans', currentUser?.uid],
     enabled: !!currentUser,
   });
+
+  // Fetch user data separately to ensure it's always up to date
+  const { data: fetchedUserData, isLoading: userDataLoading } = useQuery<User>({
+    queryKey: ['/api/users', currentUser?.uid],
+    enabled: !!currentUser,
+  });
+
+  // Use fetched user data if available, otherwise fall back to context userData
+  const effectiveUserData = fetchedUserData || userData;
 
   // Redirect to landing if not authenticated
   if (!currentUser) {
@@ -42,37 +51,25 @@ export default function Dashboard() {
     }
     
     // Priority 2: If user data is loaded, check completion
-    if (userData) {
-      const isProfileComplete = userData.age && userData.height_cm && userData.weight_kg && userData.activity_level && userData.country_region;
-      
-      console.log('Profile completion check:', {
-        age: userData.age,
-        height_cm: userData.height_cm,
-        weight_kg: userData.weight_kg,
-        activity_level: userData.activity_level,
-        country_region: userData.country_region,
-        isProfileComplete,
-        currentStep: onboardingStep
-      });
+    if (effectiveUserData) {
+      const isProfileComplete = !!(effectiveUserData.age && effectiveUserData.height_cm && effectiveUserData.weight_kg && effectiveUserData.activity_level && effectiveUserData.country_region);
       
       if (!isProfileComplete) {
         if (onboardingStep !== 'profile') {
-          console.log('Setting to profile - incomplete');
           setOnboardingStep('profile');
         }
       } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
         if (onboardingStep !== 'goal') {
-          console.log('Setting to goal - profile complete, no meal plans');
           setOnboardingStep('goal');
         }
       }
-    } else if (currentUser && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
+    } else if (currentUser && !userDataLoading && !plansLoading && (!mealPlans || mealPlans.length === 0)) {
       // Priority 3: No user data, no meal plans - start onboarding
       if (onboardingStep !== 'profile') {
         setOnboardingStep('profile');
       }
     }
-  }, [userData, mealPlans, currentUser, plansLoading, onboardingStep]);
+  }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, onboardingStep]);
 
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({
@@ -170,8 +167,8 @@ export default function Dashboard() {
 
     generatePlanMutation.mutate({
       fitness_goal: goal,
-      cuisine: userData?.country_region || 'indian',
-      diet_type: (userData as any)?.food_preference || 'vegetarian',
+      cuisine: effectiveUserData?.country_region || 'indian',
+      diet_type: (effectiveUserData as any)?.food_preference || 'vegetarian',
       user_id: currentUser.uid,
     });
   };
@@ -235,7 +232,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-neutral-800">
-                Welcome back, {userData?.name}!
+                Welcome back, {effectiveUserData?.name}!
               </h1>
               <p className="text-neutral-600 mt-2">
                 Your personalized meal planning dashboard
