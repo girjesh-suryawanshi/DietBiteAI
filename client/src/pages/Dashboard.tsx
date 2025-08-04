@@ -45,12 +45,24 @@ export default function Dashboard() {
     if (userData) {
       const isProfileComplete = userData.age && userData.height_cm && userData.weight_kg && userData.activity_level && userData.country_region;
       
+      console.log('Profile completion check:', {
+        age: userData.age,
+        height_cm: userData.height_cm,
+        weight_kg: userData.weight_kg,
+        activity_level: userData.activity_level,
+        country_region: userData.country_region,
+        isProfileComplete,
+        currentStep: onboardingStep
+      });
+      
       if (!isProfileComplete) {
         if (onboardingStep !== 'profile') {
+          console.log('Setting to profile - incomplete');
           setOnboardingStep('profile');
         }
       } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
         if (onboardingStep !== 'goal') {
+          console.log('Setting to goal - profile complete, no meal plans');
           setOnboardingStep('goal');
         }
       }

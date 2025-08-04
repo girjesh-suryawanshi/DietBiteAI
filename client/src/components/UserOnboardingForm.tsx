@@ -147,11 +147,13 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   };
 
   const onFormSubmit = (data: UserOnboardingData) => {
-    onSubmit({
+    const finalData = {
       ...data,
       health_conditions: healthConditions,
       foods_to_include: foodsToInclude,
-    });
+    };
+    console.log('Submitting profile data:', finalData);
+    onSubmit(finalData);
   };
 
   const renderStepContent = () => {
