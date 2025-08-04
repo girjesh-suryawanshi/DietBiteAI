@@ -36,15 +36,15 @@ export default function Dashboard() {
     if (userData) {
       if (!userData.age || !userData.height_cm || !userData.weight_kg || !userData.activity_level) {
         setOnboardingStep('profile');
-      } else if (!mealPlans || mealPlans.length === 0) {
+      } else if (!plansLoading && (!mealPlans || mealPlans.length === 0)) {
         setOnboardingStep('goal');
-      } else {
+      } else if (mealPlans && mealPlans.length > 0) {
         setOnboardingStep('complete');
       }
     } else if (currentUser) {
       setOnboardingStep('profile');
     }
-  }, [userData, mealPlans, currentUser]);
+  }, [userData, mealPlans, currentUser, plansLoading]);
 
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({
@@ -98,7 +98,16 @@ export default function Dashboard() {
     },
   });
 
-  const activePlan = mealPlans?.find(plan => plan.is_active);
+  // Debug: Log meal plans data
+  React.useEffect(() => {
+    if (mealPlans) {
+      console.log('Meal plans data:', mealPlans);
+      console.log('Active plan search:', mealPlans.find(plan => plan.is_active));
+      console.log('First plan (fallback):', mealPlans[0]);
+    }
+  }, [mealPlans]);
+
+  const activePlan = mealPlans?.find(plan => plan.is_active) || mealPlans?.[0];
   const weeklyPlan = activePlan?.plan_data as WeeklyMealPlan;
 
   // Update user profile mutation
