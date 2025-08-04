@@ -67,11 +67,18 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
       
       // Check if it's a PDF or HTML preview
       if (data.url.includes('preview=true')) {
-        // Open HTML preview in new tab
-        window.open(data.url, '_blank');
+        // For HTML preview, remove the preview parameter to trigger download
+        const downloadUrl = data.url.replace('?preview=true', '');
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `fitbite-meal-plan-${Date.now()}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
         toast({
-          title: "Preview opened!",
-          description: "Your meal plan preview has opened in a new tab",
+          title: "Download started!",
+          description: "Your meal plan has been downloaded as HTML file",
         });
       } else {
         // Download PDF file
