@@ -19,16 +19,16 @@ export default function Dashboard() {
   const { currentUser, userData } = useAuth();
   const { toast } = useToast();
 
+  // Fetch user's meal plans
+  const { data: mealPlans, isLoading: plansLoading } = useQuery<MealPlan[]>({
+    queryKey: ['/api/meal-plans', currentUser?.uid],
+    enabled: !!currentUser,
+  });
+
   // Redirect to landing if not authenticated
   if (!currentUser) {
     return <Redirect to="/" />;
   }
-
-  // Fetch user's meal plans
-  const { data: mealPlans, isLoading: plansLoading } = useQuery<MealPlan[]>({
-    queryKey: ['/api/meal-plans', currentUser.uid],
-    enabled: !!currentUser,
-  });
 
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({

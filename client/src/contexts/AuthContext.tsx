@@ -97,10 +97,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Fetch user data from our database
         try {
           const response = await apiRequest("GET", `/api/users/${user.uid}`);
-          const userData = await response.json();
-          setUserData(userData);
+          if (response.ok) {
+            const userData = await response.json();
+            setUserData(userData);
+          } else {
+            console.error("User not found in database");
+            setUserData(null);
+          }
         } catch (error) {
           console.error("Error fetching user data:", error);
+          setUserData(null);
         }
       } else {
         setUserData(null);
