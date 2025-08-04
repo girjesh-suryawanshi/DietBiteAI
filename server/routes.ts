@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import * as path from "path";
+import * as fs from "fs";
 import { storage } from "./storage";
 import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema } from "@shared/schema";
 import { generateMealPlan } from "./services/gemini";
@@ -185,6 +187,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Failed to generate PDF", 
         error: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // Serve PDF and HTML files
+  app.get("/temp/:filename", (req, res) => {
+    const filename = req.params.filename;
+    const tempDir = path.join(process.cwd(), "server", "temp");
+    const filePath = path.join(tempDir, filename);
+    
+    if (fs.existsSync(filePath)) {
+      if (filename.endsWith('.pdf')) {
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      } else if (filename.endsWith('.html')) {
+        res.setHeader('Content-Type', 'text/html');
+      }
+      res.sendFile(filePath);
+    } else {
+      res.status(404).json({ message: "File not found" });
     }
   });
 

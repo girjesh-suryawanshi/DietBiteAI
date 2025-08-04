@@ -48,6 +48,55 @@ export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoad
   const currentDay = mealPlan.days[selectedDay];
   const totalDailyCalories = currentDay?.meals.reduce((sum, meal) => sum + meal.calories, 0) || 0;
 
+  const handleDownload = async () => {
+    try {
+      // Call the PDF generation endpoint
+      const response = await fetch(`/api/meal-plans/${mealPlan.id}/pdf`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate download');
+      }
+
+      const data = await response.json();
+      
+      // Check if it's a PDF or HTML preview
+      if (data.url.includes('preview=true')) {
+        // Open HTML preview in new tab
+        window.open(data.url, '_blank');
+        toast({
+          title: "Preview opened!",
+          description: "Your meal plan preview has opened in a new tab",
+        });
+      } else {
+        // Download PDF file
+        const link = document.createElement('a');
+        link.href = data.url;
+        link.download = `fitbite-meal-plan-${Date.now()}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        toast({
+          title: "Download started!",
+          description: "Your meal plan PDF is being downloaded",
+        });
+      }
+      
+      onDownloadPDF();
+    } catch (error) {
+      toast({
+        title: "Download failed",
+        description: "Unable to generate your meal plan file. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -103,7 +152,7 @@ export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoad
           </div>
           <div className="flex items-center space-x-3">
             <Button 
-              onClick={onDownloadPDF}
+              onClick={handleDownload}
               disabled={downloadLoading}
               variant="outline"
               className="text-neutral-700 hover:bg-neutral-50"
@@ -116,7 +165,7 @@ export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoad
               ) : (
                 <>
                   <i className="fas fa-download mr-2"></i>
-                  Download PDF
+                  Download
                 </>
               )}
             </Button>
