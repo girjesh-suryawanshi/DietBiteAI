@@ -43,7 +43,9 @@ export default function Dashboard() {
     
     // Priority 2: If user data is loaded, check completion
     if (userData) {
-      if (!userData.age || !userData.height_cm || !userData.weight_kg || !userData.activity_level) {
+      const isProfileComplete = userData.age && userData.height_cm && userData.weight_kg && userData.activity_level && userData.country_region;
+      
+      if (!isProfileComplete) {
         if (onboardingStep !== 'profile') {
           setOnboardingStep('profile');
         }
@@ -122,7 +124,6 @@ export default function Dashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/users', currentUser?.uid] });
-      setOnboardingStep('goal');
       toast({
         title: "Profile updated!",
         description: "Your profile has been set up successfully",
