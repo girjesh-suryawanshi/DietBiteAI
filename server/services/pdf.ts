@@ -1,4 +1,4 @@
-import { WeeklyMealPlan } from "@shared/schema";
+import { WeeklyMealPlan, User } from "@shared/schema";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import * as fs from "fs";
 import * as path from "path";
@@ -14,7 +14,7 @@ function sanitizeText(text: string): string {
 }
 
 
-export async function generateMealPlanPDF(mealPlan: WeeklyMealPlan): Promise<string> {
+export async function generateMealPlanPDF(mealPlan: WeeklyMealPlan, userProfile?: User): Promise<string> {
   // Generate a unique filename using process.cwd() instead of __dirname
   const filename = `meal-plan-${Date.now()}.pdf`;
   const tempDir = path.join(process.cwd(), "server", "temp");
@@ -52,14 +52,140 @@ export async function generateMealPlanPDF(mealPlan: WeeklyMealPlan): Promise<str
   };
   
   // Draw title
-  currentPage.drawText('FitBite Meal Plan', {
+  currentPage.drawText('FitBite Personalized Meal Plan', {
     x: leftMargin,
     y: yPosition,
     size: 28,
     font: helveticaBoldFont,
     color: darkGreen,
   });
-  yPosition -= 40;
+  yPosition -= 50;
+
+  // User Profile Section (if available)
+  if (userProfile) {
+    checkAndAddPage(150);
+    
+    currentPage.drawText('User Profile', {
+      x: leftMargin,
+      y: yPosition,
+      size: 18,
+      font: helveticaBoldFont,
+      color: darkGray,
+    });
+    yPosition -= 30;
+    
+    // Personal Information
+    if (userProfile.name) {
+      currentPage.drawText(`Name: ${sanitizeText(userProfile.name)}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.age) {
+      currentPage.drawText(`Age: ${userProfile.age} years`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.gender) {
+      currentPage.drawText(`Gender: ${userProfile.gender}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.height_cm && userProfile.weight_kg) {
+      currentPage.drawText(`Height: ${userProfile.height_cm} cm | Weight: ${userProfile.weight_kg} kg`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.activity_level) {
+      currentPage.drawText(`Activity Level: ${userProfile.activity_level.replace('_', ' ')}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.country_region) {
+      currentPage.drawText(`Region: ${sanitizeText(userProfile.country_region)}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    // Health & Diet Information
+    yPosition -= 10;
+    currentPage.drawText('Health & Diet Information', {
+      x: leftMargin,
+      y: yPosition,
+      size: 14,
+      font: helveticaBoldFont,
+      color: darkGray,
+    });
+    yPosition -= 25;
+    
+    if (userProfile.health_conditions && userProfile.health_conditions.length > 0) {
+      currentPage.drawText(`Health Conditions: ${userProfile.health_conditions.join(', ')}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    if (userProfile.foods_to_include && userProfile.foods_to_include.length > 0) {
+      currentPage.drawText(`Preferred Foods: ${userProfile.foods_to_include.join(', ')}`, {
+        x: leftMargin,
+        y: yPosition,
+        size: 12,
+        font: helveticaFont,
+        color: darkGray,
+      });
+      yPosition -= lineHeight;
+    }
+    
+    yPosition -= 20;
+  }
+  
+  // Meal Plan Section
+  currentPage.drawText('Weekly Meal Plan', {
+    x: leftMargin,
+    y: yPosition,
+    size: 18,
+    font: helveticaBoldFont,
+    color: darkGray,
+  });
+  yPosition -= 30;
   
   // Draw subtitle info
   currentPage.drawText(`Week: ${mealPlan.week_start}`, {

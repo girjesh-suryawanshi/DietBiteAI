@@ -193,8 +193,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Meal plan not found" });
       }
 
-      // Generate PDF
-      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data as any);
+      // Get user profile for enhanced PDF
+      const userProfile = await storage.getUser(mealPlan.user_id);
+
+      // Generate PDF with user profile
+      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data as any, userProfile);
 
       // Store PDF record with 48-hour expiration
       const expiresAt = new Date();
