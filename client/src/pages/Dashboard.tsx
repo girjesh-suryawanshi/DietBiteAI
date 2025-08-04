@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navbar } from "@/components/Navbar";
-import { MealPlanForm } from "@/components/MealPlanForm";
+import { UserOnboardingForm } from "@/components/UserOnboardingForm";
+import { GoalSelectionForm } from "@/components/GoalSelectionForm";
 import { MealPlanDisplay } from "@/components/MealPlanDisplay";
 import { AuthModal } from "@/components/AuthModal";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +16,7 @@ import { Redirect } from "wouter";
 
 export default function Dashboard() {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showPlanForm, setShowPlanForm] = useState(false);
+  const [onboardingStep, setOnboardingStep] = useState<'profile' | 'goal' | 'complete'>('complete');
   const { currentUser, userData } = useAuth();
   const { toast } = useToast();
 
@@ -30,6 +31,21 @@ export default function Dashboard() {
     return <Redirect to="/" />;
   }
 
+  // Determine onboarding step based on user data
+  React.useEffect(() => {
+    if (userData) {
+      if (!userData.age || !userData.height_cm || !userData.weight_kg || !userData.activity_level) {
+        setOnboardingStep('profile');
+      } else if (!mealPlans || mealPlans.length === 0) {
+        setOnboardingStep('goal');
+      } else {
+        setOnboardingStep('complete');
+      }
+    } else if (currentUser) {
+      setOnboardingStep('profile');
+    }
+  }, [userData, mealPlans, currentUser]);
+
   // Generate meal plan mutation
   const generatePlanMutation = useMutation({
     mutationFn: async (planData: any) => {
@@ -38,7 +54,7 @@ export default function Dashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/meal-plans', currentUser?.uid] });
-      setShowPlanForm(false);
+      setOnboardingStep('complete');
       toast({
         title: "Meal plan generated!",
         description: "Your personalized meal plan is ready",
@@ -85,10 +101,51 @@ export default function Dashboard() {
   const activePlan = mealPlans?.find(plan => plan.is_active);
   const weeklyPlan = activePlan?.plan_data as WeeklyMealPlan;
 
-  const handleGeneratePlan = (formData: any) => {
+  // Update user profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (profileData: any) => {
+      const response = await apiRequest("PUT", "/api/users/profile", profileData);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users', currentUser?.uid] });
+      setOnboardingStep('goal');
+      toast({
+        title: "Profile updated!",
+        description: "Your profile has been set up successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to update profile",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleProfileSubmit = (profileData: any) => {
+    updateProfileMutation.mutate({
+      ...profileData,
+      uid: currentUser?.uid,
+    });
+  };
+
+  const handleGoalSubmit = (goal: string) => {
+    if (!userData?.country_region || !userData?.activity_level) {
+      toast({
+        title: "Profile incomplete",
+        description: "Please complete your profile first",
+        variant: "destructive",
+      });
+      return;
+    }
+
     generatePlanMutation.mutate({
-      ...formData,
-      user_id: currentUser?.uid, // Use Firebase UID instead of database ID
+      fitness_goal: goal,
+      cuisine: userData.country_region,
+      diet_type: (userData as any).food_preference || 'vegetarian',
+      user_id: currentUser?.uid,
     });
   };
 
@@ -101,6 +158,45 @@ export default function Dashboard() {
   const handleShare = () => {
     // Handled in MealPlanDisplay component
   };
+
+  // Show onboarding steps based on current state
+  if (onboardingStep === 'profile') {
+    return (
+      <div className="min-h-screen bg-neutral-50">
+        <Navbar onShowAuth={() => setShowAuthModal(true)} />
+        <UserOnboardingForm 
+          onSubmit={handleProfileSubmit}
+          isLoading={updateProfileMutation.isPending}
+        />
+        
+        {showAuthModal && (
+          <AuthModal 
+            isOpen={showAuthModal} 
+            onClose={() => setShowAuthModal(false)} 
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (onboardingStep === 'goal') {
+    return (
+      <div className="min-h-screen bg-neutral-50">
+        <Navbar onShowAuth={() => setShowAuthModal(true)} />
+        <GoalSelectionForm 
+          onSubmit={handleGoalSubmit}
+          isLoading={generatePlanMutation.isPending}
+        />
+        
+        {showAuthModal && (
+          <AuthModal 
+            isOpen={showAuthModal} 
+            onClose={() => setShowAuthModal(false)} 
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -119,7 +215,7 @@ export default function Dashboard() {
               </p>
             </div>
             <Button
-              onClick={() => setShowPlanForm(!showPlanForm)}
+              onClick={() => setOnboardingStep('goal')}
               className="bg-primary hover:bg-green-600 text-white"
             >
               <i className="fas fa-magic mr-2"></i>
@@ -127,16 +223,6 @@ export default function Dashboard() {
             </Button>
           </div>
         </div>
-
-        {/* Plan Generation Form */}
-        {showPlanForm && (
-          <div className="mb-8">
-            <MealPlanForm 
-              onSubmit={handleGeneratePlan}
-              loading={generatePlanMutation.isPending}
-            />
-          </div>
-        )}
 
         {/* Main Content */}
         {plansLoading ? (
@@ -181,7 +267,7 @@ export default function Dashboard() {
                   Generate your first AI-powered meal plan to get started on your health journey.
                 </p>
                 <Button
-                  onClick={() => setShowPlanForm(true)}
+                  onClick={() => setOnboardingStep('goal')}
                   className="bg-primary hover:bg-green-600 text-white"
                 >
                   <i className="fas fa-magic mr-2"></i>
@@ -193,10 +279,12 @@ export default function Dashboard() {
         )}
       </div>
 
-      <AuthModal 
-        isOpen={showAuthModal} 
-        onClose={() => setShowAuthModal(false)} 
-      />
+      {showAuthModal && (
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
+      )}
     </div>
   );
 }

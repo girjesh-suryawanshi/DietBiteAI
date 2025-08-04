@@ -9,11 +9,13 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   age: integer("age"),
-  gender: text("gender"),
+  gender: text("gender"), // male, female, other
   height_cm: integer("height_cm"),
   weight_kg: integer("weight_kg"),
-  medical_conditions: text("medical_conditions").array(),
-  food_exclusions: text("food_exclusions").array(),
+  activity_level: text("activity_level"), // sedentary, lightly_active, moderately_active, very_active, extremely_active
+  country_region: text("country_region"),
+  health_conditions: text("health_conditions").array(), // diabetes, high_blood_pressure, thyroid, pcos, none, other
+  foods_to_include: text("foods_to_include").array(), // tea, coffee, dark_chocolate, one_cookie_a_day, other
   created_at: timestamp("created_at").defaultNow(),
 });
 

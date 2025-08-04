@@ -72,6 +72,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/users/profile", async (req, res) => {
+    try {
+      const { uid, ...profileData } = req.body;
+      
+      // Find user by Firebase UID
+      let user = await storage.getUserByUid(uid);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Update user profile
+      const updatedUser = await storage.updateUser(user.id, profileData);
+      res.json(updatedUser);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update profile", error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
   // Meal plan routes
   app.get("/api/meal-plans/:uid", async (req, res) => {
     try {
@@ -117,8 +135,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         fitness_goal,
         cuisine,
         diet_type,
-        medical_conditions: user.medical_conditions || [],
-        food_exclusions: user.food_exclusions || [],
+        medical_conditions: user.health_conditions || [],
+        food_exclusions: user.foods_to_include || [],
         age: user.age || undefined,
         gender: user.gender || undefined,
         weight_kg: user.weight_kg || undefined,

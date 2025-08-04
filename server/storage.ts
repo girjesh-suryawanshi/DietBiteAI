@@ -45,8 +45,10 @@ export class MemStorage implements IStorage {
       gender: insertUser.gender ?? null,
       height_cm: insertUser.height_cm ?? null,
       weight_kg: insertUser.weight_kg ?? null,
-      medical_conditions: insertUser.medical_conditions ?? null,
-      food_exclusions: insertUser.food_exclusions ?? null,
+      activity_level: insertUser.activity_level ?? null,
+      country_region: insertUser.country_region ?? null,
+      health_conditions: insertUser.health_conditions ?? null,
+      foods_to_include: insertUser.foods_to_include ?? null,
     };
     this.users.set(id, user);
     return user;
