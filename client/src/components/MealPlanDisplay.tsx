@@ -191,12 +191,21 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
           </div>
         </div>
 
-        {/* All Days Display */}
-        <div className="space-y-8">
+        {/* Day Tabs */}
+        <Tabs defaultValue="0" className="w-full">
+          <TabsList className="grid w-full grid-cols-7 mb-6">
+            {mealPlan.days.map((day, index) => (
+              <TabsTrigger key={index} value={index.toString()} className="text-xs">
+                {day.day.slice(0, 3)}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          
           {mealPlan.days.map((day, dayIndex) => {
             const dayTotalCalories = day.meals.reduce((sum, meal) => sum + meal.calories, 0);
+            
             return (
-              <div key={dayIndex} className="border-b border-neutral-200 pb-8 last:border-b-0">
+              <TabsContent key={dayIndex} value={dayIndex.toString()} className="space-y-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold text-neutral-800 capitalize">{day.day}</h3>
                   <div className="text-sm text-neutral-500">
@@ -209,10 +218,10 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
                     <MealCard key={mealIndex} meal={meal} />
                   ))}
                 </div>
-              </div>
+              </TabsContent>
             );
           })}
-        </div>
+        </Tabs>
 
         {/* Weekly Summary */}
         <Card className="bg-neutral-50 mt-8">
