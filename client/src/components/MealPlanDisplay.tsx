@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface MealPlanDisplayProps {
   mealPlan: WeeklyMealPlan;
+  mealPlanId: string;
   onDownloadPDF: () => void;
   onShare: () => void;
   downloadLoading?: boolean;
@@ -41,7 +42,7 @@ const MEAL_COLORS = {
 
 const WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
-export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoading = false }: MealPlanDisplayProps) {
+export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, downloadLoading = false }: MealPlanDisplayProps) {
   const [selectedDay, setSelectedDay] = useState(0);
   const { toast } = useToast();
 
@@ -51,7 +52,7 @@ export function MealPlanDisplay({ mealPlan, onDownloadPDF, onShare, downloadLoad
   const handleDownload = async () => {
     try {
       // Call the PDF generation endpoint
-      const response = await fetch(`/api/meal-plans/${mealPlan.id}/pdf`, {
+      const response = await fetch(`/api/meal-plans/${mealPlanId}/pdf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

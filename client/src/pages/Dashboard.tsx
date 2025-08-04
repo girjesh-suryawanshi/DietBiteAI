@@ -153,9 +153,10 @@ export default function Dashboard() {
               </div>
             </CardContent>
           </Card>
-        ) : weeklyPlan ? (
+        ) : weeklyPlan && activePlan ? (
           <MealPlanDisplay
             mealPlan={weeklyPlan}
+            mealPlanId={activePlan.id}
             onDownloadPDF={handleDownloadPDF}
             onShare={handleShare}
             downloadLoading={downloadPdfMutation.isPending}
