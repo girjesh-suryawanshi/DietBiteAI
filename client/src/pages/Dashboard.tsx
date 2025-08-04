@@ -111,13 +111,11 @@ export default function Dashboard() {
     },
   });
 
-  // Redirect to landing if not authenticated
-  if (!currentUser) {
-    return <Redirect to="/" />;
-  }
-
   // Determine onboarding step based on user data
   React.useEffect(() => {
+    // Only run logic if we have a current user
+    if (!currentUser) return;
+    
     // Priority 1: If we have meal plans, show them
     if (!plansLoading && mealPlans && mealPlans.length > 0) {
       if (onboardingStep !== 'complete') {
@@ -146,6 +144,11 @@ export default function Dashboard() {
       }
     }
   }, [effectiveUserData, mealPlans, currentUser, plansLoading, userDataLoading, onboardingStep]);
+
+  // Redirect to landing if not authenticated
+  if (!currentUser) {
+    return <Redirect to="/" />;
+  }
 
   const handleProfileSubmit = (profileData: any) => {
     updateProfileMutation.mutate({
