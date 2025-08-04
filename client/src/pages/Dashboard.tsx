@@ -60,11 +60,17 @@ export default function Dashboard() {
       return response.json();
     },
     onSuccess: (data) => {
-      // Open PDF in new tab
-      window.open(data.url, '_blank');
+      // Download PDF file directly
+      const link = document.createElement('a');
+      link.href = data.url;
+      link.download = `fitbite-meal-plan-${Date.now()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
       toast({
-        title: "PDF generated!",
-        description: "Your meal plan PDF is ready for download",
+        title: "PDF downloaded!",
+        description: "Your meal plan PDF has been downloaded to your device",
       });
     },
     onError: (error: any) => {
