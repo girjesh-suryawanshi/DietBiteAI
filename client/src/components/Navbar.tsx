@@ -56,6 +56,11 @@ export function Navbar({ onShowAuth }: NavbarProps) {
             >
               How It Works
             </a>
+            <Link href="/blog">
+              <span className="text-neutral-600 hover:text-primary font-medium transition-colors cursor-pointer">
+                Blog
+              </span>
+            </Link>
             <Link href="/about">
               <span className="text-neutral-600 hover:text-primary font-medium transition-colors cursor-pointer">
                 About
@@ -144,6 +149,14 @@ export function Navbar({ onShowAuth }: NavbarProps) {
               >
                 How It Works
               </a>
+              <Link href="/blog">
+                <span 
+                  className="text-neutral-600 hover:text-primary py-3 font-medium transition-colors cursor-pointer block border-b border-neutral-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Blog
+                </span>
+              </Link>
               <Link href="/about">
                 <span 
                   className="text-neutral-600 hover:text-primary py-3 font-medium transition-colors cursor-pointer block border-b border-neutral-100"

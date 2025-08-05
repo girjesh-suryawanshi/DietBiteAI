@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# Specific directives for search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# Block sensitive areas
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /.env
+Disallow: /server/
+Disallow: /node_modules/
+Disallow: /temp/
+
+# Allow important files
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Sitemap location
+Sitemap: https://fitbite.app/sitemap.xml
+
+# Host directive
+Host: https://fitbite.app

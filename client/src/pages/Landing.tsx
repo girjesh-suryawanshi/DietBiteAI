@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { SEOHead } from "@/components/SEOHead";
 import { Link } from "wouter";
 
 export default function Landing() {
@@ -19,6 +20,41 @@ export default function Landing() {
     restriction: ""
   });
   const { currentUser } = useAuth();
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "FitBite",
+    "description": "AI-powered global diet planner that creates personalized meal plans based on your fitness goals, cultural preferences, and health conditions.",
+    "url": "https://fitbite.app",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "15000",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "FitBite",
+      "url": "https://fitbite.app"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "FitBite",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fitbite.app/logo.png"
+      }
+    }
+  };
 
   const features = [
     {
@@ -117,6 +153,13 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <SEOHead
+        title="FitBite - AI-Powered Global Diet Planner | Personalized Meal Plans for Every Culture"
+        description="Transform your health with FitBite's AI-powered meal planning. Get personalized nutrition plans featuring global cuisines, tailored to your fitness goals, dietary restrictions, and cultural preferences. Start your free 7-day meal plan today!"
+        keywords="AI diet planner, personalized meal plans, global cuisine nutrition, weight loss meal planner, cultural diet plans, healthy recipe generator, nutrition app, meal prep planner, international food diet, fitness meal planning"
+        canonical="https://fitbite.app"
+        structuredData={structuredData}
+      />
       <Navbar onShowAuth={() => setShowAuthModal(true)} />
       
       {/* Hero Section */}

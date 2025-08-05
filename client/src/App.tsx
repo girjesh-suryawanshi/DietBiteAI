@@ -19,6 +19,7 @@ import Sitemap from "@/pages/Sitemap";
 import Features from "@/pages/Features";
 import HowItWorks from "@/pages/HowItWorks";
 import Pricing from "@/pages/Pricing";
+import Blog from "@/pages/Blog";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/features" component={Features} />
       <Route path="/how-it-works" component={HowItWorks} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/blog" component={Blog} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/about" component={AboutUs} />
       <Route path="/contact" component={ContactUs} />
