@@ -134,26 +134,26 @@ export default function Pricing() {
       <Navbar onShowAuth={() => {}} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16">
+      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-800 mb-4 sm:mb-6 leading-tight">
             Simple, Transparent <span className="text-primary">Pricing</span>
           </h1>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
             Choose the perfect plan for your nutrition journey. Start free and upgrade as your needs grow. 
             No hidden fees, cancel anytime.
           </p>
-          <div className="flex items-center justify-center gap-4 text-sm text-neutral-600">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-neutral-600">
             <div className="flex items-center">
-              <Check className="w-4 h-4 text-primary mr-2" />
+              <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary mr-2" />
               14-day free trial
             </div>
             <div className="flex items-center">
-              <Check className="w-4 h-4 text-primary mr-2" />
+              <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary mr-2" />
               No setup fees
             </div>
             <div className="flex items-center">
-              <Check className="w-4 h-4 text-primary mr-2" />
+              <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary mr-2" />
               Cancel anytime
             </div>
           </div>
@@ -161,9 +161,9 @@ export default function Pricing() {
       </section>
 
       {/* Pricing Plans */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {plans.map((plan, index) => {
               const Icon = plan.icon;
               return (

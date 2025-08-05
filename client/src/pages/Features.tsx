@@ -125,17 +125,17 @@ export default function Features() {
       <Navbar onShowAuth={() => {}} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16">
+      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-800 mb-4 sm:mb-6 leading-tight">
             Powerful Features for <span className="text-primary">Personalized Nutrition</span>
           </h1>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
             Discover how FitBite's advanced AI technology and comprehensive features make 
             healthy meal planning effortless, personalized, and culturally authentic.
           </p>
           <Link href="/dashboard">
-            <Button size="lg" className="bg-primary hover:bg-green-600 text-white px-8 py-3">
+            <Button size="lg" className="bg-primary hover:bg-green-600 text-white px-6 sm:px-8 py-3 text-sm sm:text-base">
               Try FitBite Free
             </Button>
           </Link>
@@ -143,35 +143,35 @@ export default function Features() {
       </section>
 
       {/* Main Features */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">Core Features</h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-800 mb-4">Core Features</h2>
+            <p className="text-base sm:text-lg text-neutral-600 max-w-2xl mx-auto px-4">
               Everything you need for intelligent, personalized meal planning in one comprehensive platform
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <Card key={index} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center mb-4">
-                      <div className={`${feature.bgColor} p-3 rounded-lg mr-4`}>
-                        <Icon className={`w-8 h-8 ${feature.color}`} />
+                  <CardHeader className="pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center mb-4">
+                      <div className={`${feature.bgColor} p-3 rounded-lg mb-3 sm:mb-0 sm:mr-4 w-fit`}>
+                        <Icon className={`w-6 sm:w-8 h-6 sm:h-8 ${feature.color}`} />
                       </div>
-                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                      <CardTitle className="text-lg sm:text-xl">{feature.title}</CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-neutral-700 mb-6">{feature.description}</p>
+                  <CardContent className="pt-0">
+                    <p className="text-neutral-700 mb-4 sm:mb-6 text-sm sm:text-base">{feature.description}</p>
                     <ul className="space-y-2">
                       {feature.benefits.map((benefit, idx) => (
-                        <li key={idx} className="flex items-center text-sm text-neutral-600">
-                          <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                          {benefit}
+                        <li key={idx} className="flex items-start text-xs sm:text-sm text-neutral-600">
+                          <div className="w-2 h-2 bg-primary rounded-full mr-3 mt-1.5 flex-shrink-0"></div>
+                          <span>{benefit}</span>
                         </li>
                       ))}
                     </ul>
@@ -184,26 +184,26 @@ export default function Features() {
       </section>
 
       {/* Additional Features Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">Additional Benefits</h2>
-            <p className="text-lg text-neutral-600">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-800 mb-4">Additional Benefits</h2>
+            <p className="text-base sm:text-lg text-neutral-600 px-4">
               More reasons why FitBite is the complete solution for your nutrition needs
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {additionalFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <Card key={index} className="text-center hover:shadow-md transition-shadow">
-                  <CardContent className="pt-8">
-                    <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon className="w-8 h-8 text-primary" />
+                  <CardContent className="pt-6 sm:pt-8 px-4 sm:px-6">
+                    <div className="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold text-neutral-800 mb-3">{feature.title}</h3>
-                    <p className="text-neutral-600">{feature.description}</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-neutral-800 mb-2 sm:mb-3">{feature.title}</h3>
+                    <p className="text-sm sm:text-base text-neutral-600">{feature.description}</p>
                   </CardContent>
                 </Card>
               );

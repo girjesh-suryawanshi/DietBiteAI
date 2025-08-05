@@ -61,27 +61,27 @@ export default function Landing() {
       <Navbar onShowAuth={() => setShowAuthModal(true)} />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/5 to-secondary/5 py-20 lg:py-32">
+      <section className="relative bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
-            <div className="lg:col-span-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 leading-tight">
+            <div className="lg:col-span-6 text-center lg:text-left">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 leading-tight mb-4 sm:mb-6">
                 AI-Powered <span className="text-primary">Global Diet</span> Planning Made Simple
               </h1>
-              <p className="mt-6 text-xl text-neutral-600 leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-neutral-600 leading-relaxed mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
                 Get personalized 7-day meal plans tailored to your culture, health goals, and dietary preferences. Powered by AI, designed for your lifestyle.
               </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 {currentUser ? (
                   <Link href="/dashboard">
-                    <Button className="bg-primary hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition-all transform hover:scale-105">
+                    <Button className="bg-primary hover:bg-green-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto">
                       Go to Dashboard
                     </Button>
                   </Link>
                 ) : (
                   <Button 
                     onClick={() => setShowAuthModal(true)}
-                    className="bg-primary hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition-all transform hover:scale-105"
+                    className="bg-primary hover:bg-green-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-semibold shadow-lg transition-all transform hover:scale-105 w-full sm:w-auto"
                   >
                     Start Free Plan
                   </Button>

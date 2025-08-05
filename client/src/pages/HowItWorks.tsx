@@ -121,17 +121,17 @@ export default function HowItWorks() {
       <Navbar onShowAuth={() => {}} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-16">
+      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-800 mb-4 sm:mb-6 leading-tight">
             How <span className="text-primary">FitBite</span> Works
           </h1>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
             Transform your nutrition in 6 simple steps. From profile creation to personalized meal plans, 
             discover how easy healthy eating can be with AI-powered planning.
           </p>
           <Link href="/dashboard">
-            <Button size="lg" className="bg-primary hover:bg-green-600 text-white px-8 py-3">
+            <Button size="lg" className="bg-primary hover:bg-green-600 text-white px-6 sm:px-8 py-3 text-sm sm:text-base">
               Start Your Journey
             </Button>
           </Link>
