@@ -617,75 +617,103 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-800 text-white py-16">
+      <footer className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="lg:col-span-1">
               <div className="flex items-center mb-4">
-                <i className="fas fa-apple-alt text-primary text-2xl mr-2"></i>
-                <span className="text-2xl font-bold">FitBite</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center mr-3">
+                  <i className="fas fa-apple-alt text-white text-lg"></i>
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  FitBite
+                </span>
               </div>
-              <p className="text-neutral-400 mb-6 max-w-md">
-                AI-powered global diet planning that adapts to your culture, health goals, and lifestyle. Start your personalized nutrition journey today.
+              <p className="text-neutral-400 mb-6 text-sm leading-relaxed">
+                AI-powered global diet planning that adapts to your culture, health goals, and preferences. Join 15,000+ users transforming their health journey.
               </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">
-                  <i className="fab fa-twitter text-xl"></i>
+              <div className="flex space-x-3">
+                <a href="https://twitter.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-primary rounded-full flex items-center justify-center transition-colors group">
+                  <i className="fab fa-twitter text-neutral-400 group-hover:text-white"></i>
                 </a>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">
-                  <i className="fab fa-facebook text-xl"></i>
+                <a href="https://facebook.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors group">
+                  <i className="fab fa-facebook text-neutral-400 group-hover:text-white"></i>
                 </a>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">
-                  <i className="fab fa-instagram text-xl"></i>
-                </a>
-                <a href="#" className="text-neutral-400 hover:text-white transition-colors">
-                  <i className="fab fa-linkedin text-xl"></i>
+                <a href="https://instagram.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors group">
+                  <i className="fab fa-instagram text-neutral-400 group-hover:text-white"></i>
                 </a>
               </div>
             </div>
             
+            {/* Product Section */}
             <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-neutral-400">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="/dashboard" className="hover:text-white transition-colors">Get Started</a></li>
+              <h4 className="font-semibold text-white mb-4">Product</h4>
+              <ul className="space-y-3 text-sm">
+                <li><a href="#features" className="text-neutral-400 hover:text-primary transition-colors flex items-center">Features</a></li>
+                <li><a href="#how-it-works" className="text-neutral-400 hover:text-primary transition-colors flex items-center">How It Works</a></li>
+                <li>
+                  <button 
+                    onClick={() => setShowMiniGenerator(true)}
+                    className="text-neutral-400 hover:text-primary transition-colors flex items-center"
+                  >
+                    Try Demo <i className="fas fa-external-link-alt ml-1 text-xs"></i>
+                  </button>
+                </li>
+                <li><a href="/dashboard" className="text-neutral-400 hover:text-primary transition-colors flex items-center">Get Started</a></li>
               </ul>
             </div>
             
+            {/* Company Section */}
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-neutral-400">
-                <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="/sitemap" className="hover:text-white transition-colors">Sitemap</a></li>
+              <h4 className="font-semibold text-white mb-4">Company</h4>
+              <ul className="space-y-3 text-sm">
+                <li><a href="/about" className="text-neutral-400 hover:text-primary transition-colors">About Us</a></li>
+                <li><a href="/contact" className="text-neutral-400 hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="/faq" className="text-neutral-400 hover:text-primary transition-colors">FAQ</a></li>
+                <li><a href="/sitemap" className="text-neutral-400 hover:text-primary transition-colors">Sitemap</a></li>
               </ul>
             </div>
             
+            {/* Legal Section */}
             <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-neutral-400">
-                <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="/terms" className="hover:text-white transition-colors">Terms & Conditions</a></li>
-                <li><a href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</a></li>
-                <li><a href="/dmca" className="hover:text-white transition-colors">DMCA Policy</a></li>
-                <li><a href="/cookies" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              <h4 className="font-semibold text-white mb-4">Legal</h4>
+              <ul className="space-y-3 text-sm">
+                <li><a href="/privacy" className="text-neutral-400 hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><a href="/terms" className="text-neutral-400 hover:text-primary transition-colors">Terms & Conditions</a></li>
+                <li><a href="/disclaimer" className="text-neutral-400 hover:text-primary transition-colors">Disclaimer</a></li>
+                <li><a href="/dmca" className="text-neutral-400 hover:text-primary transition-colors">DMCA</a></li>
+                <li><a href="/cookies" className="text-neutral-400 hover:text-primary transition-colors">Cookies</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-neutral-700 pt-8 mt-12">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-neutral-400">
-                &copy; {new Date().getFullYear()} FitBite. All rights reserved.
-              </p>
-              <div className="flex space-x-6 mt-4 md:mt-0">
-                <a href="/privacy" className="text-neutral-400 hover:text-white text-sm transition-colors">Privacy</a>
-                <a href="/terms" className="text-neutral-400 hover:text-white text-sm transition-colors">Terms</a>
-                <a href="/cookies" className="text-neutral-400 hover:text-white text-sm transition-colors">Cookies</a>
-                <a href="/contact" className="text-neutral-400 hover:text-white text-sm transition-colors">Support</a>
+          {/* Bottom Section */}
+          <div className="border-t border-neutral-700 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
+                <p className="text-neutral-400 text-sm">
+                  &copy; {new Date().getFullYear()} FitBite. All rights reserved.
+                </p>
+                <div className="flex items-center space-x-4 text-xs text-neutral-500">
+                  <span className="flex items-center">
+                    <i className="fas fa-shield-alt mr-1"></i>
+                    Secure & Private
+                  </span>
+                  <span className="flex items-center">
+                    <i className="fas fa-heart mr-1"></i>
+                    Made with AI
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button 
+                  onClick={currentUser ? () => {} : () => setShowAuthModal(true)}
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-green-600 hover:to-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all"
+                >
+                  {currentUser ? "Dashboard" : "Start Free"}
+                </Button>
               </div>
             </div>
           </div>
