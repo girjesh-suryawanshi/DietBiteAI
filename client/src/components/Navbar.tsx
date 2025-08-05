@@ -30,10 +30,30 @@ export function Navbar({ onShowAuth }: NavbarProps) {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-neutral-600 hover:text-primary font-medium transition-colors">
+            <a 
+              href="#features" 
+              className="text-neutral-600 hover:text-primary font-medium transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('features');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
               Features
             </a>
-            <a href="#how-it-works" className="text-neutral-600 hover:text-primary font-medium transition-colors">
+            <a 
+              href="#how-it-works" 
+              className="text-neutral-600 hover:text-primary font-medium transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('how-it-works');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
               How It Works
             </a>
             <Link href="/about">
@@ -91,75 +111,94 @@ export function Navbar({ onShowAuth }: NavbarProps) {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-neutral-200 py-4 bg-white">
-            <div className="flex flex-col space-y-4">
+          <div className="md:hidden border-t border-neutral-200 py-4 bg-white/95 backdrop-blur-sm">
+            <div className="flex flex-col space-y-3 px-4">
               <a 
                 href="#features" 
-                className="text-neutral-600 hover:text-primary px-4 py-2 rounded-md font-medium transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-neutral-600 hover:text-primary py-3 font-medium transition-colors border-b border-neutral-100"
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  // Small delay to allow menu to close before scrolling
+                  setTimeout(() => {
+                    const element = document.getElementById('features');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 100);
+                }}
               >
                 Features
               </a>
               <a 
                 href="#how-it-works" 
-                className="text-neutral-600 hover:text-primary px-4 py-2 rounded-md font-medium transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-neutral-600 hover:text-primary py-3 font-medium transition-colors border-b border-neutral-100"
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => {
+                    const element = document.getElementById('how-it-works');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 100);
+                }}
               >
                 How It Works
               </a>
               <Link href="/about">
                 <span 
-                  className="text-neutral-600 hover:text-primary px-4 py-2 rounded-md font-medium transition-colors cursor-pointer block"
+                  className="text-neutral-600 hover:text-primary py-3 font-medium transition-colors cursor-pointer block border-b border-neutral-100"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About
                 </span>
               </Link>
               
-              {currentUser ? (
-                <>
-                  <Link href="/dashboard">
+              <div className="pt-4 space-y-3">
+                {currentUser ? (
+                  <>
+                    <Link href="/dashboard">
+                      <Button 
+                        className="w-full bg-primary hover:bg-green-600 text-white rounded-full font-medium py-3"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Dashboard
+                      </Button>
+                    </Link>
                     <Button 
-                      className="w-full bg-primary hover:bg-green-600 text-white rounded-full mx-4"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      variant="outline" 
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-neutral-600 hover:text-primary border-neutral-300 rounded-full py-3"
                     >
-                      Dashboard
+                      Sign Out
                     </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      logout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full text-neutral-600 hover:text-primary border-neutral-300 rounded-full mx-4"
-                  >
-                    Sign Out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button 
-                    variant="ghost"
-                    onClick={() => {
-                      onShowAuth();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full justify-start text-neutral-600 hover:text-primary mx-4"
-                  >
-                    Sign In
-                  </Button>
-                  <Button 
-                    onClick={() => {
-                      onShowAuth();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-lg mx-4"
-                  >
-                    Get Started Free
-                  </Button>
-                </>
-              )}
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      variant="ghost"
+                      onClick={() => {
+                        onShowAuth();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-neutral-600 hover:text-primary border border-neutral-200 rounded-full py-3"
+                    >
+                      Sign In
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        onShowAuth();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full bg-gradient-to-r from-primary to-secondary hover:from-green-600 hover:to-blue-600 text-white rounded-full shadow-lg font-medium py-3"
+                    >
+                      Get Started Free
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         )}
