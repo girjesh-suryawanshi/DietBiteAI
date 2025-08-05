@@ -74,7 +74,7 @@ export default function Blog() {
       date: "December 22, 2024",
       readTime: "11 min read",
       category: "Intermittent Fasting",
-      image: "https://images.unsplash.com/photo-1599048062351-6e081b8779d1?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80",
       slug: "intermittent-fasting-middle-eastern-cuisine"
     },
     {
@@ -85,7 +85,7 @@ export default function Blog() {
       date: "December 20, 2024",
       readTime: "8 min read",
       category: "Gluten-Free",
-      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1587334274328-64186a80aeee?auto=format&fit=crop&w=800&q=80",
       slug: "gluten-free-european-comfort-foods"
     },
     {
@@ -96,7 +96,7 @@ export default function Blog() {
       date: "December 18, 2024",
       readTime: "9 min read",
       category: "Keto Diet",
-      image: "https://images.unsplash.com/photo-1559314809-0f31657def5e?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
       slug: "keto-thai-vietnamese-recipes"
     },
     {
@@ -140,7 +140,7 @@ export default function Blog() {
       date: "December 8, 2024",
       readTime: "11 min read",
       category: "Athletic Performance",
-      image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80",
       slug: "scandinavian-nordic-athletic-performance"
     },
     {
@@ -195,7 +195,7 @@ export default function Blog() {
       date: "November 25, 2024",
       readTime: "9 min read",
       category: "Digestive Health",
-      image: "https://images.unsplash.com/photo-1571091655789-405eb7a3a3a8?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1609501676725-7186f07a4051?auto=format&fit=crop&w=800&q=80",
       slug: "fermented-foods-digestive-health"
     },
     {
@@ -217,7 +217,7 @@ export default function Blog() {
       date: "November 20, 2024",
       readTime: "12 min read",
       category: "Mental Health",
-      image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80",
       slug: "mental-health-brain-boosting-foods"
     },
     {
