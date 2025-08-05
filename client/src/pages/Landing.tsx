@@ -202,26 +202,42 @@ export default function Landing() {
                 <div className="grid grid-cols-2 gap-4 rounded-2xl overflow-hidden shadow-2xl">
                   <div className="space-y-4">
                     <img 
-                      src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" 
+                      src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop&crop=center&auto=format&q=80" 
                       alt="Healthy Indian curry bowl" 
                       className="w-full h-48 object-cover rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400&h=300&fit=crop&crop=center&auto=format&q=80";
+                      }}
                     />
                     <img 
-                      src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                      src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=200&fit=crop&crop=center&auto=format&q=80" 
                       alt="Fresh Mediterranean salad" 
                       className="w-full h-32 object-cover rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=200&fit=crop&crop=center&auto=format&q=80";
+                      }}
                     />
                   </div>
                   <div className="space-y-4 pt-8">
                     <img 
-                      src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                      src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop&crop=center&auto=format&q=80" 
                       alt="Delicious pizza slice" 
                       className="w-full h-32 object-cover rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=200&fit=crop&crop=center&auto=format&q=80";
+                      }}
                     />
                     <img 
-                      src="https://images.unsplash.com/photo-1563379091339-03246963d9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" 
+                      src="https://images.unsplash.com/photo-1563379091339-03246963d9d7?w=400&h=300&fit=crop&crop=center&auto=format&q=80" 
                       alt="Nutritious grain bowl" 
                       className="w-full h-48 object-cover rounded-lg"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop&crop=center&auto=format&q=80";
+                      }}
                     />
                   </div>
                 </div>
