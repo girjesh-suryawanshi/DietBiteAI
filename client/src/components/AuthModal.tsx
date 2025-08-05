@@ -19,7 +19,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   
-  const { login, signup, loginWithGoogle, loginWithFacebook } = useAuth();
+  const { login, signup, loginWithGoogle } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,22 +69,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
-  const handleFacebookAuth = async () => {
-    try {
-      await loginWithFacebook();
-      toast({
-        title: "Signed in with Facebook!",
-        description: "Welcome to FitBite",
-      });
-      onClose();
-    } catch (error: any) {
-      toast({
-        title: "Facebook sign-in failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -127,14 +112,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             >
               <i className="fab fa-google text-red-500 mr-3"></i>
               Continue with Google
-            </Button>
-            <Button 
-              onClick={handleFacebookAuth}
-              variant="outline" 
-              className="w-full flex items-center justify-center py-3"
-            >
-              <i className="fab fa-facebook text-blue-600 mr-3"></i>
-              Continue with Facebook
             </Button>
           </div>
 

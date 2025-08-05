@@ -7,7 +7,7 @@ import {
   signOut,
   onAuthStateChanged
 } from "firebase/auth";
-import { auth, googleProvider, facebookProvider } from "@/lib/firebase";
+import { auth, googleProvider } from "@/lib/firebase";
 import { apiRequest } from "@/lib/queryClient";
 import { User } from "@shared/schema";
 
@@ -18,7 +18,6 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, name: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
-  loginWithFacebook: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -68,21 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function loginWithFacebook() {
-    const { user } = await signInWithPopup(auth, facebookProvider);
-    
-    // Check if user exists in our database, create if not
-    try {
-      await apiRequest("GET", `/api/users/${user.uid}`);
-    } catch (error) {
-      // User doesn't exist, create them
-      await apiRequest("POST", "/api/users", {
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName || "User",
-      });
-    }
-  }
+
 
   async function logout() {
     await signOut(auth);
@@ -135,7 +120,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     login,
     signup,
     loginWithGoogle,
-    loginWithFacebook,
     logout,
   };
 
