@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthModal } from "@/components/AuthModal";
 import { Navbar } from "@/components/Navbar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "wouter";
@@ -120,12 +120,23 @@ export default function Landing() {
       <Navbar onShowAuth={() => setShowAuthModal(true)} />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 py-12 sm:py-16 md:py-20 lg:py-32">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-green-400 rounded-full blur-xl"></div>
+          <div className="absolute top-40 right-20 w-32 h-32 bg-blue-400 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-1/3 w-24 h-24 bg-purple-400 rounded-full blur-xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
             <div className="lg:col-span-6 text-center lg:text-left">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 mb-6">
+                <span className="text-sm font-medium text-primary">🎉 Join 15,000+ Happy Users</span>
+              </div>
+              
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 leading-tight mb-4 sm:mb-6">
-                AI-Powered <span className="text-primary">Global Diet</span> Planning Made Simple
+                AI-Powered <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Global Diet</span> Planning Made Simple
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-neutral-600 leading-relaxed mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
                 Get personalized 7-day meal plans tailored to your culture, health goals, and dietary preferences. Powered by AI, designed for your lifestyle.
@@ -186,11 +197,63 @@ export default function Landing() {
               </div>
             </div>
             <div className="mt-12 lg:mt-0 lg:col-span-6">
-              <img 
-                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
-                alt="Healthy meal planning on smartphone" 
-                className="rounded-2xl shadow-2xl w-full h-auto" 
-              />
+              <div className="relative">
+                {/* Food Collage */}
+                <div className="grid grid-cols-2 gap-4 rounded-2xl overflow-hidden shadow-2xl">
+                  <div className="space-y-4">
+                    <img 
+                      src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" 
+                      alt="Healthy Indian curry bowl" 
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                    <img 
+                      src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                      alt="Fresh Mediterranean salad" 
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                  </div>
+                  <div className="space-y-4 pt-8">
+                    <img 
+                      src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                      alt="Delicious pizza slice" 
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <img 
+                      src="https://images.unsplash.com/photo-1563379091339-03246963d9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300" 
+                      alt="Nutritious grain bowl" 
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                  </div>
+                </div>
+                
+                {/* Floating Badge */}
+                <div className="absolute -top-4 -right-4 bg-white rounded-full p-3 shadow-lg border border-neutral-200">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">4.9</div>
+                    <div className="text-xs text-neutral-600">★★★★★</div>
+                  </div>
+                </div>
+                
+                {/* Bottom Stats */}
+                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-xl px-6 py-3 shadow-lg border border-neutral-200">
+                  <div className="flex items-center space-x-4 text-sm">
+                    <div className="text-center">
+                      <div className="font-bold text-primary">15K+</div>
+                      <div className="text-neutral-600">Plans</div>
+                    </div>
+                    <div className="w-px h-8 bg-neutral-300"></div>
+                    <div className="text-center">
+                      <div className="font-bold text-secondary">50+</div>
+                      <div className="text-neutral-600">Cuisines</div>
+                    </div>
+                    <div className="w-px h-8 bg-neutral-300"></div>
+                    <div className="text-center">
+                      <div className="font-bold text-accent">24/7</div>
+                      <div className="text-neutral-600">Support</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -278,8 +341,88 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
+              How FitBite Creates Your Perfect Plan
+            </h2>
+            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+              Just 3 simple steps to get personalized meal plans that fit your culture and health goals
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
+            <div className="text-center group">
+              <div className="relative mx-auto w-20 h-20 mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10 w-full h-full bg-white rounded-2xl shadow-lg flex items-center justify-center border-2 border-primary/20">
+                  <i className="fas fa-user-cog text-2xl text-primary"></i>
+                </div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  1
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-neutral-800 mb-3">Tell Us About You</h3>
+              <p className="text-neutral-600">
+                Share your fitness goals, cultural food preferences, health conditions, and dietary restrictions in our quick 5-step setup.
+              </p>
+            </div>
+
+            <div className="text-center group">
+              <div className="relative mx-auto w-20 h-20 mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-secondary to-accent rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10 w-full h-full bg-white rounded-2xl shadow-lg flex items-center justify-center border-2 border-secondary/20">
+                  <i className="fas fa-magic text-2xl text-secondary"></i>
+                </div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  2
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-neutral-800 mb-3">AI Creates Your Plan</h3>
+              <p className="text-neutral-600">
+                Our advanced AI analyzes your profile and generates a personalized 7-day meal plan with recipes from your favorite cuisines.
+              </p>
+            </div>
+
+            <div className="text-center group">
+              <div className="relative mx-auto w-20 h-20 mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent to-primary rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10 w-full h-full bg-white rounded-2xl shadow-lg flex items-center justify-center border-2 border-accent/20">
+                  <i className="fas fa-download text-2xl text-accent"></i>
+                </div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  3
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-neutral-800 mb-3">Download & Enjoy</h3>
+              <p className="text-neutral-600">
+                Get your beautiful PDF meal plan with shopping lists, nutrition facts, and easy-to-follow recipes. Share with family or friends!
+              </p>
+            </div>
+          </div>
+
+          {/* Process Flow */}
+          <div className="relative">
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-30 hidden md:block"></div>
+            <div className="flex justify-between items-center max-w-4xl mx-auto">
+              <div className="bg-white px-4 py-2 rounded-full border-2 border-primary/20 text-sm font-medium text-primary">
+                5-Step Setup
+              </div>
+              <div className="bg-white px-4 py-2 rounded-full border-2 border-secondary/20 text-sm font-medium text-secondary">
+                AI Processing
+              </div>
+              <div className="bg-white px-4 py-2 rounded-full border-2 border-accent/20 text-sm font-medium text-accent">
+                Ready in 60s
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
+      <section id="features" className="py-20 bg-gradient-to-br from-neutral-50 to-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
@@ -302,6 +445,173 @@ export default function Landing() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
+              Why Choose FitBite Over Alternatives?
+            </h2>
+            <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
+              See how FitBite compares to traditional nutritionists and generic diet apps
+            </p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+              <thead className="bg-gradient-to-r from-primary/10 to-secondary/10">
+                <tr>
+                  <th className="px-6 py-4 text-left font-semibold text-neutral-800">Features</th>
+                  <th className="px-6 py-4 text-center font-semibold text-primary">
+                    <div className="flex items-center justify-center space-x-2">
+                      <i className="fas fa-apple-alt"></i>
+                      <span>FitBite</span>
+                    </div>
+                  </th>
+                  <th className="px-6 py-4 text-center font-semibold text-neutral-600">Traditional Nutritionist</th>
+                  <th className="px-6 py-4 text-center font-semibold text-neutral-600">Generic Diet Apps</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-200">
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">Cost</td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="text-primary font-bold">Free</span>
+                  </td>
+                  <td className="px-6 py-4 text-center text-neutral-600">$150-300/session</td>
+                  <td className="px-6 py-4 text-center text-neutral-600">$10-30/month</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">Cultural Cuisines</td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-primary text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">Instant Results</td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="text-primary font-medium">60 seconds</span>
+                  </td>
+                  <td className="px-6 py-4 text-center text-neutral-600">1-2 weeks</td>
+                  <td className="px-6 py-4 text-center text-neutral-600">Basic templates</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">Health Conditions</td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-primary text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-secondary text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">PDF Downloads</td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-primary text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">24/7 Availability</td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-primary text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-times-circle text-neutral-400 text-xl"></i>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <i className="fas fa-check-circle text-secondary text-xl"></i>
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-6 py-4 font-medium text-neutral-800">Multiple Plans</td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="text-primary font-medium">Unlimited</span>
+                  </td>
+                  <td className="px-6 py-4 text-center text-neutral-600">1 per session</td>
+                  <td className="px-6 py-4 text-center text-neutral-600">Limited</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="text-center mt-12">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-medium shadow-lg">
+              <i className="fas fa-trophy mr-2"></i>
+              FitBite: Best of all worlds, completely free
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-6">
+            Ready to Transform Your Health Journey?
+          </h2>
+          <p className="text-xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+            Join 15,000+ users who've discovered the power of culturally authentic, AI-powered meal planning.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            {currentUser ? (
+              <Link href="/dashboard">
+                <Button className="bg-primary hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition-all transform hover:scale-105">
+                  <i className="fas fa-rocket mr-2"></i>
+                  Go to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                onClick={() => setShowAuthModal(true)}
+                className="bg-primary hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition-all transform hover:scale-105"
+              >
+                <i className="fas fa-rocket mr-2"></i>
+                Start Your Free Plan
+              </Button>
+            )}
+            <Button 
+              variant="outline"
+              onClick={() => setShowMiniGenerator(true)}
+              className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all"
+            >
+              <i className="fas fa-play mr-2"></i>
+              Try Quick Generator
+            </Button>
+          </div>
+          
+          <div className="flex items-center justify-center space-x-6 text-sm text-neutral-500">
+            <div className="flex items-center">
+              <i className="fas fa-check-circle text-success mr-2"></i>
+              <span>No credit card required</span>
+            </div>
+            <div className="flex items-center">
+              <i className="fas fa-check-circle text-success mr-2"></i>
+              <span>Start in 60 seconds</span>
+            </div>
+            <div className="flex items-center">
+              <i className="fas fa-check-circle text-success mr-2"></i>
+              <span>Always free</span>
+            </div>
           </div>
         </div>
       </section>
@@ -399,6 +709,9 @@ export default function Landing() {
             <DialogTitle className="text-center">
               {miniGeneratorStep < 4 ? `Quick Generator (${miniGeneratorStep}/3)` : "Your Sample Day"}
             </DialogTitle>
+            <DialogDescription className="text-center text-neutral-600">
+              {miniGeneratorStep < 4 ? "Answer a few questions to see your personalized meal preview" : "Based on your preferences"}
+            </DialogDescription>
           </DialogHeader>
           
           <div className="p-6">
