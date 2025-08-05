@@ -107,7 +107,7 @@ export default function Blog() {
       date: "December 15, 2024",
       readTime: "12 min read",
       category: "Maternal Health",
-      image: "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
       slug: "postpartum-nutrition-global-recipes"
     },
     {
@@ -118,7 +118,7 @@ export default function Blog() {
       date: "December 12, 2024",
       readTime: "10 min read",
       category: "Budget Meals",
-      image: "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80",
       slug: "budget-friendly-healthy-international-meals"
     },
     {
