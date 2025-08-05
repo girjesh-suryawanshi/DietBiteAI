@@ -209,7 +209,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expires_at: expiresAt,
       });
 
-      res.json({ url: pdfFile.file_url, expires_at: pdfFile.expires_at });
+      // Extract filename from URL for better user experience
+      const filename = pdfUrl.split('/').pop() || 'meal-plan.pdf';
+      
+      res.json({ 
+        url: pdfFile.file_url, 
+        expires_at: pdfFile.expires_at,
+        filename: filename
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
       res.status(500).json({ 

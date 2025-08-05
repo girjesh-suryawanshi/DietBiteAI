@@ -29,8 +29,10 @@ interface Day {
 
 
 export async function generateMealPlanPDF(mealPlan: WeeklyMealPlan, userProfile?: User): Promise<string> {
-  // Generate a unique filename using process.cwd() instead of __dirname
-  const filename = `meal-plan-${Date.now()}.pdf`;
+  // Generate a filename with username if available
+  const userName = userProfile?.name ? userProfile.name.replace(/[^a-zA-Z0-9]/g, '_') : 'user';
+  const timestamp = Date.now();
+  const filename = `${userName}_meal_plan_${timestamp}.pdf`;
   const tempDir = path.join(process.cwd(), "server", "temp");
   const filePath = path.join(tempDir, filename);
   

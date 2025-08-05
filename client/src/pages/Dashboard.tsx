@@ -68,10 +68,10 @@ export default function Dashboard() {
       return response.json();
     },
     onSuccess: (data) => {
-      // Download PDF file directly
+      // Download PDF file directly with user-friendly filename
       const link = document.createElement('a');
       link.href = data.url;
-      link.download = `fitbite-meal-plan-${Date.now()}.pdf`;
+      link.download = data.filename || `fitbite-meal-plan-${Date.now()}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
