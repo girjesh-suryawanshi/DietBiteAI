@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import * as path from "path";
 import * as fs from "fs";
 import { storage } from "./storage";
-import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema } from "@shared/schema";
+import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema, WeeklyMealPlan } from "@shared/schema";
 import { generateMealPlan } from "./services/gemini";
 import { generateMealPlanPDF } from "./services/pdf";
 
@@ -197,7 +197,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userProfile = await storage.getUser(mealPlan.user_id);
 
       // Generate PDF with user profile
-      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data as any, userProfile);
+      const pdfUrl = await generateMealPlanPDF(mealPlan.plan_data as WeeklyMealPlan, userProfile);
 
       // Store PDF record with 48-hour expiration
       const expiresAt = new Date();
