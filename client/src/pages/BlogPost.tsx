@@ -66,7 +66,7 @@ export default function BlogPost() {
       date: "January 5, 2025",
       readTime: "8 min read",
       category: "Weight Loss",
-      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "asian-fusion-meal-prep-recipes": {
       title: "Asian Fusion Meal Prep: 7-Day Healthy Recipe Collection",
@@ -124,7 +124,7 @@ export default function BlogPost() {
       date: "January 3, 2025",
       readTime: "12 min read",
       category: "Meal Prep",
-      image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "diabetes-indian-cuisine-nutrition": {
       title: "Managing Diabetes with Indian Cuisine: Expert Nutritionist Tips",
@@ -195,7 +195,7 @@ export default function BlogPost() {
       date: "December 30, 2024",
       readTime: "10 min read",
       category: "Health Conditions",
-      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "plant-based-african-muscle-building": {
       title: "Plant-Based African Dishes for Muscle Building",
@@ -243,7 +243,7 @@ export default function BlogPost() {
       date: "December 28, 2024",
       readTime: "9 min read",
       category: "Muscle Building",
-      image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "latin-american-superfoods-recipes": {
       title: "Latin American Superfoods: Quinoa to Chia Seed Recipes",
@@ -290,7 +290,7 @@ export default function BlogPost() {
       date: "December 25, 2024",
       readTime: "7 min read",
       category: "Superfoods",
-      image: "https://images.unsplash.com/photo-1589827548019-7d32f8f67f63?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "intermittent-fasting-middle-eastern-cuisine": {
       title: "Intermittent Fasting with Middle Eastern Cuisine",
@@ -345,7 +345,7 @@ export default function BlogPost() {
       date: "December 22, 2024",
       readTime: "11 min read",
       category: "Intermittent Fasting",
-      image: "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "gluten-free-european-comfort-foods": {
       title: "Gluten-Free European Comfort Foods You'll Actually Love",
@@ -399,7 +399,7 @@ export default function BlogPost() {
       date: "December 20, 2024",
       readTime: "8 min read",
       category: "Gluten-Free",
-      image: "https://images.unsplash.com/photo-1587334274328-64186a80aeee?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "keto-thai-vietnamese-recipes": {
       title: "Keto-Friendly Thai and Vietnamese Dishes",
@@ -460,7 +460,7 @@ export default function BlogPost() {
       date: "December 18, 2024",
       readTime: "9 min read",
       category: "Keto Diet",
-      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "postpartum-nutrition-global-recipes": {
       title: "Postpartum Nutrition: Global Recovery Recipes for New Moms",
@@ -523,7 +523,7 @@ export default function BlogPost() {
       date: "December 15, 2024",
       readTime: "12 min read",
       category: "Maternal Health",
-      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "budget-friendly-healthy-international-meals": {
       title: "Budget-Friendly Healthy Meals: International Edition",
@@ -600,7 +600,7 @@ export default function BlogPost() {
       date: "December 12, 2024",
       readTime: "10 min read",
       category: "Budget Meals",
-      image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1543362906-acfc16c67564?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "senior-nutrition-global-cuisine": {
       title: "Senior Nutrition: Easy-to-Digest Global Cuisine Adaptations",
@@ -647,7 +647,7 @@ export default function BlogPost() {
       date: "December 10, 2024",
       readTime: "8 min read",
       category: "Senior Health",
-      image: "https://images.unsplash.com/photo-1573225342350-16731dd9bf3d?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "scandinavian-nordic-athletic-performance": {
       title: "Athletic Performance: Scandinavian and Nordic Diet Secrets",
@@ -698,7 +698,7 @@ export default function BlogPost() {
       date: "December 8, 2024",
       readTime: "11 min read",
       category: "Athletic Performance",
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "heart-healthy-blue-zones-recipes": {
       title: "Heart-Healthy Recipes from the Blue Zones",
@@ -752,7 +752,7 @@ export default function BlogPost() {
       date: "December 5, 2024",
       readTime: "9 min read",
       category: "Heart Health",
-      image: "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "anti-inflammatory-global-spices-herbs": {
       title: "Anti-Inflammatory Foods: Global Spices and Herbs Guide",
@@ -816,7 +816,7 @@ export default function BlogPost() {
       date: "December 3, 2024",
       readTime: "10 min read",
       category: "Anti-Inflammatory",
-      image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "kids-nutrition-international-foods": {
       title: "Kids' Nutrition: Making International Foods Fun and Healthy",
@@ -886,7 +886,7 @@ export default function BlogPost() {
       date: "November 30, 2024",
       readTime: "8 min read",
       category: "Kids Nutrition",
-      image: "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "shift-worker-meal-planning-strategies": {
       title: "Meal Planning for Shift Workers: 24/7 Nutrition Strategies",
@@ -957,7 +957,7 @@ export default function BlogPost() {
       date: "November 28, 2024",
       readTime: "11 min read",
       category: "Shift Work Nutrition",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "fermented-foods-digestive-health": {
       title: "Digestive Health: Fermented Foods from Around the World",
@@ -1039,7 +1039,7 @@ export default function BlogPost() {
       date: "November 25, 2024",
       readTime: "9 min read",
       category: "Digestive Health",
-      image: "https://images.unsplash.com/photo-1609501676725-7186f07a4051?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "seasonal-eating-global-cuisines": {
       title: "Seasonal Eating: Adapting Global Cuisines to Local Ingredients",
@@ -1117,7 +1117,7 @@ export default function BlogPost() {
       date: "November 22, 2024",
       readTime: "10 min read",
       category: "Seasonal Eating",
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "mental-health-brain-boosting-foods": {
       title: "Mental Health and Nutrition: Brain-Boosting Global Foods",
@@ -1209,7 +1209,7 @@ export default function BlogPost() {
       date: "November 20, 2024",
       readTime: "12 min read",
       category: "Mental Health",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     "travel-nutrition-global-cuisines": {
       title: "Travel Nutrition: Staying Healthy While Exploring Global Cuisines",
@@ -1311,7 +1311,7 @@ export default function BlogPost() {
       date: "November 18, 2024",
       readTime: "8 min read",
       category: "Travel Nutrition",
-      image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80"
+      image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     }
   };
 
