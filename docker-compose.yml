@@ -27,6 +27,7 @@ services:
       - fitbite-network
     depends_on:
       - redis
+      - postgres
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fitbite.rule=Host(`yourdomain.com`)"
@@ -62,21 +63,27 @@ services:
     depends_on:
       - fitbite-app
 
-  # PostgreSQL database (optional - use if not using external DB)
-  # postgres:
-  #   image: postgres:15-alpine
-  #   container_name: fitbite-postgres
-  #   restart: unless-stopped
-  #   environment:
-  #     POSTGRES_DB: fitbite
-  #     POSTGRES_USER: ${DB_USER}
-  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
-  #   networks:
-  #     - fitbite-network
+  # PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: fitbite-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-fitbite}
+      POSTGRES_USER: ${DB_USER:-fitbite_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - fitbite-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-fitbite_user} -d ${DB_NAME:-fitbite}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   fitbite-network:
@@ -84,4 +91,4 @@ networks:
 
 volumes:
   redis-data:
-  # postgres-data:  # Uncomment if using local PostgreSQL
+  postgres-data:
