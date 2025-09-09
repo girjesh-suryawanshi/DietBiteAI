@@ -1,5 +1,8 @@
-import { type User, type InsertUser, type MealPlan, type InsertMealPlan, type PdfFile, type InsertPdfFile } from "@shared/schema";
+import { type User, type InsertUser, type MealPlan, type InsertMealPlan, type PdfFile, type InsertPdfFile, users, meal_plans, pdf_files } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { eq, and, lt } from "drizzle-orm";
+import { Pool } from "pg";
 
 export interface IStorage {
   // User operations
@@ -130,4 +133,99 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// PostgreSQL Storage Implementation
+export class PostgresStorage implements IStorage {
+  private db: any;
+  private pool: Pool;
+
+  constructor() {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is required");
+    }
+    
+    this.pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+    
+    this.db = drizzle(this.pool);
+  }
+
+  // User operations
+  async getUser(id: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserByUid(uid: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.uid, uid)).limit(1);
+    return result[0];
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const result = await this.db.insert(users).values(insertUser).returning();
+    return result[0];
+  }
+
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
+    const result = await this.db.update(users).set(updates).where(eq(users.id, id)).returning();
+    if (!result[0]) {
+      throw new Error("User not found");
+    }
+    return result[0];
+  }
+
+  // Meal plan operations
+  async getMealPlan(id: string): Promise<MealPlan | undefined> {
+    const result = await this.db.select().from(meal_plans).where(eq(meal_plans.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getMealPlansByUserId(userId: string): Promise<MealPlan[]> {
+    const result = await this.db.select().from(meal_plans).where(eq(meal_plans.user_id, userId));
+    return result;
+  }
+
+  async createMealPlan(insertMealPlan: InsertMealPlan): Promise<MealPlan> {
+    const result = await this.db.insert(meal_plans).values(insertMealPlan).returning();
+    return result[0];
+  }
+
+  async updateMealPlan(id: string, updates: Partial<MealPlan>): Promise<MealPlan> {
+    const result = await this.db.update(meal_plans).set(updates).where(eq(meal_plans.id, id)).returning();
+    if (!result[0]) {
+      throw new Error("Meal plan not found");
+    }
+    return result[0];
+  }
+
+  // PDF operations
+  async getPdfFile(id: string): Promise<PdfFile | undefined> {
+    const result = await this.db.select().from(pdf_files).where(eq(pdf_files.id, id)).limit(1);
+    return result[0];
+  }
+
+  async createPdfFile(insertPdfFile: InsertPdfFile): Promise<PdfFile> {
+    const result = await this.db.insert(pdf_files).values(insertPdfFile).returning();
+    return result[0];
+  }
+
+  async deletePdfFile(id: string): Promise<void> {
+    await this.db.delete(pdf_files).where(eq(pdf_files.id, id));
+  }
+
+  async getExpiredPdfFiles(): Promise<PdfFile[]> {
+    const now = new Date();
+    const result = await this.db.select().from(pdf_files).where(lt(pdf_files.expires_at, now));
+    return result;
+  }
+
+  // Cleanup method for graceful shutdown
+  async close(): Promise<void> {
+    await this.pool.end();
+  }
+}
+
+// Use PostgreSQL storage in production, Memory storage for development
+export const storage = process.env.NODE_ENV === 'production' 
+  ? new PostgresStorage() 
+  : new MemStorage();
