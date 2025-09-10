@@ -46,7 +46,7 @@ check_requirements() {
     fi
     
     # Check if Docker Compose is installed
-    if ! command -v docker-compose &> /dev/null; then
+    if ! command -v docker compose &> /dev/null; then
         print_error "Docker Compose is not installed. Please install Docker Compose first."
         exit 1
     fi
@@ -71,7 +71,7 @@ backup_data() {
     BACKUP_FILE="$BACKUP_DIR/backup_$TIMESTAMP.tar.gz"
     
     # Backup volumes and configuration
-    docker-compose -f "$DOCKER_COMPOSE_FILE" exec -T fitbite-app tar -czf - /app/server/temp > "$BACKUP_FILE" 2>/dev/null || true
+    docker compose -f "$DOCKER_COMPOSE_FILE" exec -T fitbite-app tar -czf - /app/server/temp > "$BACKUP_FILE" 2>/dev/null || true
     
     # Backup environment file
     cp "$ENV_FILE" "$BACKUP_DIR/.env_$TIMESTAMP"
@@ -105,16 +105,16 @@ build_and_deploy() {
     print_status "Building and deploying application..."
     
     # Pull base images
-    docker-compose -f "$DOCKER_COMPOSE_FILE" pull
+    docker compose -f "$DOCKER_COMPOSE_FILE" pull
     
     # Build the application
-    docker-compose -f "$DOCKER_COMPOSE_FILE" build --no-cache
+    docker compose -f "$DOCKER_COMPOSE_FILE" build --no-cache
     
     # Stop existing containers
-    docker-compose -f "$DOCKER_COMPOSE_FILE" down
+    docker compose -f "$DOCKER_COMPOSE_FILE" down
     
     # Start new containers
-    docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
+    docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     
     print_success "Application deployed successfully"
 }
@@ -126,11 +126,11 @@ health_check() {
     sleep 30
     
     # Check if containers are running
-    if docker-compose -f "$DOCKER_COMPOSE_FILE" ps | grep -q "Up"; then
+    if docker compose -f "$DOCKER_COMPOSE_FILE" ps | grep -q "Up"; then
         print_success "Containers are running"
     else
         print_error "Some containers failed to start"
-        docker-compose -f "$DOCKER_COMPOSE_FILE" logs
+        docker compose -f "$DOCKER_COMPOSE_FILE" logs
         return 1
     fi
     
@@ -156,13 +156,13 @@ rollback() {
     fi
     
     # Stop current containers
-    docker-compose -f "$DOCKER_COMPOSE_FILE" down
+    docker compose -f "$DOCKER_COMPOSE_FILE" down
     
     # Restore backup
-    docker-compose -f "$DOCKER_COMPOSE_FILE" run --rm fitbite-app tar -xzf - -C / < "$LATEST_BACKUP"
+    docker compose -f "$DOCKER_COMPOSE_FILE" run --rm fitbite-app tar -xzf - -C / < "$LATEST_BACKUP"
     
     # Start containers
-    docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
+    docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     
     print_success "Rollback completed"
 }
@@ -181,15 +181,15 @@ cleanup_old_images() {
 
 show_logs() {
     print_status "Showing application logs..."
-    docker-compose -f "$DOCKER_COMPOSE_FILE" logs -f --tail=100
+    docker compose -f "$DOCKER_COMPOSE_FILE" logs -f --tail=100
 }
 
 show_status() {
     print_status "Application Status:"
-    docker-compose -f "$DOCKER_COMPOSE_FILE" ps
+    docker compose -f "$DOCKER_COMPOSE_FILE" ps
     
     print_status "Resource Usage:"
-    docker stats --no-stream $(docker-compose -f "$DOCKER_COMPOSE_FILE" ps -q)
+    docker stats --no-stream $(docker compose -f "$DOCKER_COMPOSE_FILE" ps -q)
 }
 
 # Main deployment function
@@ -244,15 +244,15 @@ case "${1:-deploy}" in
         show_status
         ;;
     stop)
-        docker-compose -f "$DOCKER_COMPOSE_FILE" down
+        docker compose -f "$DOCKER_COMPOSE_FILE" down
         print_success "Application stopped"
         ;;
     start)
-        docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
+        docker compose -f "$DOCKER_COMPOSE_FILE" up -d
         print_success "Application started"
         ;;
     restart)
-        docker-compose -f "$DOCKER_COMPOSE_FILE" restart
+        docker compose -f "$DOCKER_COMPOSE_FILE" restart
         print_success "Application restarted"
         ;;
     cleanup)
