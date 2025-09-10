@@ -39,6 +39,9 @@ RUN npm ci && npm cache clean --force
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy static files to the location the server expects
+COPY --from=builder /app/dist/public ./public
+
 # Create temp directory for PDF generation
 RUN mkdir -p server/temp && chown -R fitbite:nodejs server/temp
 
