@@ -15,7 +15,7 @@ RUN npm ci
 COPY . .
 
 # Build the application with fixed import.meta.dirname
-RUN vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --define:import.meta.dirname='"/app"'
+RUN npx vite build && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --define:import.meta.dirname='"/app"'
 
 # Stage 2: Production image
 FROM node:18-alpine AS production
