@@ -86,8 +86,15 @@ pull_latest_code() {
     print_status "Pulling latest code from repository..."
     
     if [ -d ".git" ]; then
+        # Configure git to handle divergent branches
+        git config pull.rebase false 2>/dev/null || true
+        
+        # Try to pull with merge strategy
         git pull origin main || {
-            print_warning "Git pull failed. Continuing with existing code..."
+            print_warning "Git pull failed. Trying to reset to remote..."
+            git fetch origin main && git reset --hard origin/main || {
+                print_warning "Could not update code. Continuing with existing code..."
+            }
         }
     else
         print_warning "Not a git repository. Skipping code update."

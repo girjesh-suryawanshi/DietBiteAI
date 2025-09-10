@@ -38,11 +38,6 @@ RUN npm ci --only=production && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/client/dist ./client/dist
-COPY --from=builder /app/public ./public
-
-# Copy necessary server files
-COPY --from=builder /app/server/temp ./server/temp
 
 # Create temp directory for PDF generation
 RUN mkdir -p server/temp && chown -R fitbite:nodejs server/temp
