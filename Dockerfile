@@ -40,10 +40,14 @@ RUN npm ci && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 
 # Copy static files to the location the server expects
+# The server code expects to find 'public' directory relative to current working directory
 COPY --from=builder /app/dist/public ./public
 
 # Create temp directory for PDF generation
-RUN mkdir -p server/temp && chown -R fitbite:nodejs server/temp
+RUN mkdir -p server/temp
+
+# Fix ownership before switching to non-root user
+RUN chown -R fitbite:nodejs /app
 
 # Change to non-root user
 USER fitbite
