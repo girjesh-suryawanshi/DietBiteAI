@@ -14,8 +14,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the application with fixed import.meta.dirname
+RUN chmod +x build-production.sh && ./build-production.sh
 
 # Stage 2: Production image
 FROM node:18-alpine AS production
