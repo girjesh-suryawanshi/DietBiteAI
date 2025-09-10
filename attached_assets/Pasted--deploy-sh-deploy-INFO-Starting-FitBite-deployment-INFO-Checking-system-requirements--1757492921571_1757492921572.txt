@@ -1,0 +1,91 @@
+ ./deploy.sh deploy
+[INFO] Starting FitBite deployment...
+[INFO] Checking system requirements...
+[SUCCESS] System requirements check passed
+[INFO] Creating backup...
+[SUCCESS] Backup created: ./backups/backup_20250910_082401.tar.gz
+[INFO] Pulling latest code from repository...
+From https://github.com/girjesh-suryawanshi/DietBiteAI
+ * branch            main       -> FETCH_HEAD
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.
+[WARNING] Git pull failed. Continuing with existing code...
+[INFO] Building and deploying application...
+WARN[0000] /home/fitbite/DietBiteAI/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
+[+] Pulling 15/15
+ ✔ fitbite-app Skipped - No image to be pulled                0.0s
+ ✔ redis Pulled                                               2.8s
+ ✔ postgres Pulled                                           16.0s
+   ✔ 9824c27679d3 Already exists                              0.0s
+   ✔ 45222bf54768 Pull complete                               1.3s
+   ✔ cc455ce33b7a Pull complete                               1.4s
+   ✔ 6e59367d2e76 Pull complete                               1.4s
+   ✔ a9186699d5f8 Pull complete                               2.6s
+   ✔ 90793d70c9dc Pull complete                              11.2s
+   ✔ d97eb1910934 Pull complete                              11.2s
+   ✔ 8a4d728ab743 Pull complete                              11.3s
+   ✔ cb75953ddf8d Pull complete                              11.3s
+   ✔ 4c5335ab75e4 Pull complete                              11.3s
+   ✔ 02c858cee38f Pull complete                              11.3s
+ ✔ nginx Pulled                                               2.8s
+WARN[0000] /home/fitbite/DietBiteAI/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
+[+] Building 65.6s (21/22)
+ => [internal] load local bake definitions                    0.0s
+ => => reading from stdin 551B                                0.0s
+ => [internal] load build definition from Dockerfile          0.0s
+ => => transferring dockerfile: 1.54kB                        0.0s
+ => [internal] load metadata for docker.io/library/node:18-a  2.2s
+ => [internal] load .dockerignore                             0.0s
+ => => transferring context: 1.50kB                           0.0s
+ => CACHED [builder 1/6] FROM docker.io/library/node:18-alpi  0.0s
+ => [internal] load build context                             0.3s
+ => => transferring context: 1.11MB                           0.2s
+ => CACHED [builder 2/6] WORKDIR /app                         0.0s
+ => [production  2/12] RUN apk add --no-cache dumb-init       3.2s
+ => [builder 3/6] COPY package*.json ./                       0.2s
+ => [builder 4/6] RUN npm ci                                 49.2s
+ => [production  3/12] WORKDIR /app                           0.1s
+ => [production  4/12] RUN addgroup -g 1001 -S nodejs         0.5s
+ => [production  5/12] RUN adduser -S fitbite -u 1001         0.4s
+ => [production  6/12] COPY package*.json ./                  0.1s
+ => [production  7/12] RUN npm ci --only=production && npm   45.4s
+ => [builder 5/6] COPY . .                                    0.1s
+ => [builder 6/6] RUN npm run build                           9.1s
+ => CACHED [production  8/12] COPY --from=builder /app/dist   0.0s
+ => ERROR [production  9/12] COPY --from=builder /app/client  0.0s
+ => CACHED [production 10/12] COPY --from=builder /app/publi  0.0s
+ => ERROR [production 11/12] COPY --from=builder /app/server  0.0s
+------
+ > [production  9/12] COPY --from=builder /app/client/dist ./client/dist:
+------
+------
+ > [production 11/12] COPY --from=builder /app/server/temp ./server/temp:
+------
+Dockerfile:41
+
+--------------------
+
+  39 |     # Copy built application from builder stage
+
+  40 |     COPY --from=builder /app/dist ./dist
+
+  41 | >>> COPY --from=builder /app/client/dist ./client/dist
+
+  42 |     COPY --from=builder /app/public ./public
+
+  43 |
+
+--------------------
+
+failed to solve: failed to compute cache key: failed to calculate checksum of ref 1dc4a34c-597e-4166-94e1-9df1c7258005::r197ndmpsool46pc1s5t5wm70: "/app/client/dist": not found
