@@ -9,7 +9,7 @@ services:
     container_name: fitbite-app
     restart: unless-stopped
     ports:
-      - "3001:5000"  # FitBite app on port 3001
+      - "3002:5000"  # FitBite app on port 3002 (avoiding conflict with existing app)
     environment:
       - NODE_ENV=production
       - PORT=5000
