@@ -10,7 +10,7 @@ export function Footer() {
           <div className="col-span-1">
             <div className="flex items-center mb-4">
               <i className="fas fa-apple-alt text-primary text-2xl mr-2"></i>
-              <span className="text-2xl font-bold text-neutral-800">FitBite</span>
+              <span className="text-2xl font-bold text-neutral-800">MyMealify</span>
             </div>
             <p className="text-neutral-600 text-sm mb-4">
               AI-powered personalized meal planning for a healthier lifestyle. 

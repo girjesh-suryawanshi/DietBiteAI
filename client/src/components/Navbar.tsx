@@ -23,7 +23,7 @@ export function Navbar({ onShowAuth }: NavbarProps) {
                 <i className="fas fa-apple-alt text-white text-lg"></i>
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                FitBite
+                MyMealify
               </span>
             </Link>
           </div>

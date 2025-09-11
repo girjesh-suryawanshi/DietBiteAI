@@ -1,8 +1,8 @@
-# FitBite - AI-Powered Global Diet Planner
+# MyMealify - AI-Powered Global Diet Planner
 
 ## Overview
 
-FitBite is a full-stack web application that provides AI-powered personalized meal planning for global cuisines. The application helps users achieve their fitness goals (weight loss, weight gain, or maintenance) through culturally diverse, customized meal plans. Users can input their preferences, health conditions, and dietary restrictions to receive tailored weekly meal plans that can be downloaded as PDFs or shared with others.
+MyMealify is a full-stack web application that provides AI-powered personalized meal planning for global cuisines. The application helps users achieve their fitness goals (weight loss, weight gain, or maintenance) through culturally diverse, customized meal plans. Users can input their preferences, health conditions, and dietary restrictions to receive tailored weekly meal plans that can be downloaded as PDFs or shared with others.
 
 ## User Preferences
 

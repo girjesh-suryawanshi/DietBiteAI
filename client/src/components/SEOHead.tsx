@@ -18,7 +18,7 @@ export function SEOHead({
   description,
   keywords,
   canonical,
-  ogImage = "https://fitbite.app/og-image.jpg",
+  ogImage = "https://mymealify.com/og-image.jpg",
   ogType = "website",
   articleAuthor,
   articlePublishedTime,
@@ -67,7 +67,7 @@ export function SEOHead({
       { property: 'og:type', content: ogType },
       { property: 'og:image', content: ogImage },
       { property: 'og:url', content: canonical || window.location.href },
-      { property: 'og:site_name', content: 'FitBite - AI-Powered Global Diet Planner' }
+      { property: 'og:site_name', content: 'MyMealify - AI-Powered Global Diet Planner' }
     ];
 
     ogTags.forEach(({ property, content }) => {
@@ -86,7 +86,7 @@ export function SEOHead({
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
       { name: 'twitter:image', content: ogImage },
-      { name: 'twitter:site', content: '@FitBiteApp' }
+      { name: 'twitter:site', content: '@MyMealifyApp' }
     ];
 
     twitterTags.forEach(({ name, content }) => {

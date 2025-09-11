@@ -24,9 +24,9 @@ export default function Landing() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "FitBite",
+    "name": "MyMealify",
     "description": "AI-powered global diet planner that creates personalized meal plans based on your fitness goals, cultural preferences, and health conditions.",
-    "url": "https://fitbite.app",
+    "url": "https://mymealify.com",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Web",
     "offers": {
@@ -43,15 +43,15 @@ export default function Landing() {
     },
     "author": {
       "@type": "Organization",
-      "name": "FitBite",
-      "url": "https://fitbite.app"
+      "name": "MyMealify",
+      "url": "https://mymealify.com"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "FitBite",
+      "name": "MyMealify",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://fitbite.app/logo.png"
+        "url": "https://mymealify.com/logo.png"
       }
     }
   };
@@ -154,10 +154,10 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <SEOHead
-        title="FitBite - AI-Powered Global Diet Planner | Personalized Meal Plans for Every Culture"
-        description="Transform your health with FitBite's AI-powered meal planning. Get personalized nutrition plans featuring global cuisines, tailored to your fitness goals, dietary restrictions, and cultural preferences. Start your free 7-day meal plan today!"
+        title="MyMealify - AI-Powered Global Diet Planner | Personalized Meal Plans for Every Culture"
+        description="Transform your health with MyMealify's AI-powered meal planning. Get personalized nutrition plans featuring global cuisines, tailored to your fitness goals, dietary restrictions, and cultural preferences. Start your free 7-day meal plan today!"
         keywords="AI diet planner, personalized meal plans, global cuisine nutrition, weight loss meal planner, cultural diet plans, healthy recipe generator, nutrition app, meal prep planner, international food diet, fitness meal planning"
-        canonical="https://fitbite.app"
+        canonical="https://mymealify.com"
         structuredData={structuredData}
       />
       <Navbar onShowAuth={() => setShowAuthModal(true)} />
