@@ -5,6 +5,16 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+# Accept build arguments for Firebase configuration
+ARG VITE_FIREBASE_API_KEY
+ARG VITE_FIREBASE_PROJECT_ID
+ARG VITE_FIREBASE_APP_ID
+
+# Set environment variables for the build process
+ENV VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY}
+ENV VITE_FIREBASE_PROJECT_ID=${VITE_FIREBASE_PROJECT_ID}
+ENV VITE_FIREBASE_APP_ID=${VITE_FIREBASE_APP_ID}
+
 # Copy package files
 COPY package*.json ./
 
