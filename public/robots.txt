@@ -27,7 +27,7 @@ Allow: /sitemap.xml
 Allow: /robots.txt
 
 # Sitemap location
-Sitemap: https://fitbite.app/sitemap.xml
+Sitemap: https://mymealify.com/sitemap.xml
 
 # Host directive
-Host: https://fitbite.app
+Host: https://mymealify.com

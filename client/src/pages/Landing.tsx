@@ -361,7 +361,7 @@ export default function Landing() {
                   ))}
                 </div>
                 <p className="text-neutral-700 mb-4 italic">
-                  "As a diabetic, finding safe Indian recipes was impossible. FitBite created perfect meal plans that control my blood sugar."
+                  "As a diabetic, finding safe Indian recipes was impossible. MyMealify created perfect meal plans that control my blood sugar."
                 </p>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center text-white font-semibold">
@@ -405,7 +405,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
-              How FitBite Creates Your Perfect Plan
+              How MyMealify Creates Your Perfect Plan
             </h2>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
               Just 3 simple steps to get personalized meal plans that fit your culture and health goals
@@ -488,7 +488,7 @@ export default function Landing() {
               Everything You Need for Healthy Living
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              From AI-powered meal planning to cultural cuisine options, FitBite adapts to your unique lifestyle and health goals.
+              From AI-powered meal planning to cultural cuisine options, MyMealify adapts to your unique lifestyle and health goals.
             </p>
           </div>
           
@@ -513,10 +513,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
-              Why Choose FitBite Over Alternatives?
+              Why Choose MyMealify Over Alternatives?
             </h2>
             <p className="text-xl text-neutral-600 max-w-2xl mx-auto">
-              See how FitBite compares to traditional nutritionists and generic diet apps
+              See how MyMealify compares to traditional nutritionists and generic diet apps
             </p>
           </div>
           
@@ -528,7 +528,7 @@ export default function Landing() {
                   <th className="px-6 py-4 text-center font-semibold text-primary">
                     <div className="flex items-center justify-center space-x-2">
                       <i className="fas fa-apple-alt"></i>
-                      <span>FitBite</span>
+                      <span>MyMealify</span>
                     </div>
                   </th>
                   <th className="px-6 py-4 text-center font-semibold text-neutral-600">Traditional Nutritionist</th>
@@ -615,7 +615,7 @@ export default function Landing() {
           <div className="text-center mt-12">
             <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-medium shadow-lg">
               <i className="fas fa-trophy mr-2"></i>
-              FitBite: Best of all worlds, completely free
+              MyMealify: Best of all worlds, completely free
             </div>
           </div>
         </div>
@@ -686,7 +686,7 @@ export default function Landing() {
                   <i className="fas fa-apple-alt text-white text-lg"></i>
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  FitBite
+                  MyMealify
                 </span>
               </div>
               <p className="text-neutral-400 mb-6 text-sm leading-relaxed">
@@ -752,7 +752,7 @@ export default function Landing() {
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
                 <p className="text-neutral-400 text-sm">
-                  &copy; {new Date().getFullYear()} FitBite. All rights reserved.
+                  &copy; {new Date().getFullYear()} MyMealify. All rights reserved.
                 </p>
                 <div className="flex items-center space-x-4 text-xs text-neutral-500">
                   <span className="flex items-center">

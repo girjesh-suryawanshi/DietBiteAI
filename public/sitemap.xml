@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <!-- Homepage -->
   <url>
-    <loc>https://fitbite.app/</loc>
+    <loc>https://mymealify.com/</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -10,42 +10,42 @@
   
   <!-- Main Pages -->
   <url>
-    <loc>https://fitbite.app/features</loc>
+    <loc>https://mymealify.com/features</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/how-it-works</loc>
+    <loc>https://mymealify.com/how-it-works</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/pricing</loc>
+    <loc>https://mymealify.com/pricing</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog</loc>
+    <loc>https://mymealify.com/blog</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/about</loc>
+    <loc>https://mymealify.com/about</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/contact</loc>
+    <loc>https://mymealify.com/contact</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -53,140 +53,140 @@
   
   <!-- Blog Posts -->
   <url>
-    <loc>https://fitbite.app/blog/mediterranean-diet-weight-loss-guide</loc>
+    <loc>https://mymealify.com/blog/mediterranean-diet-weight-loss-guide</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/asian-fusion-meal-prep-recipes</loc>
+    <loc>https://mymealify.com/blog/asian-fusion-meal-prep-recipes</loc>
     <lastmod>2025-01-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/diabetes-indian-cuisine-nutrition</loc>
+    <loc>https://mymealify.com/blog/diabetes-indian-cuisine-nutrition</loc>
     <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/plant-based-african-muscle-building</loc>
+    <loc>https://mymealify.com/blog/plant-based-african-muscle-building</loc>
     <lastmod>2024-12-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/latin-american-superfoods-recipes</loc>
+    <loc>https://mymealify.com/blog/latin-american-superfoods-recipes</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/intermittent-fasting-middle-eastern-cuisine</loc>
+    <loc>https://mymealify.com/blog/intermittent-fasting-middle-eastern-cuisine</loc>
     <lastmod>2024-12-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/gluten-free-european-comfort-foods</loc>
+    <loc>https://mymealify.com/blog/gluten-free-european-comfort-foods</loc>
     <lastmod>2024-12-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/keto-thai-vietnamese-recipes</loc>
+    <loc>https://mymealify.com/blog/keto-thai-vietnamese-recipes</loc>
     <lastmod>2024-12-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/postpartum-nutrition-global-recipes</loc>
+    <loc>https://mymealify.com/blog/postpartum-nutrition-global-recipes</loc>
     <lastmod>2024-12-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/budget-friendly-healthy-international-meals</loc>
+    <loc>https://mymealify.com/blog/budget-friendly-healthy-international-meals</loc>
     <lastmod>2024-12-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/senior-nutrition-global-cuisine</loc>
+    <loc>https://mymealify.com/blog/senior-nutrition-global-cuisine</loc>
     <lastmod>2024-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/scandinavian-nordic-athletic-performance</loc>
+    <loc>https://mymealify.com/blog/scandinavian-nordic-athletic-performance</loc>
     <lastmod>2024-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/heart-healthy-blue-zones-recipes</loc>
+    <loc>https://mymealify.com/blog/heart-healthy-blue-zones-recipes</loc>
     <lastmod>2024-12-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/anti-inflammatory-global-spices-herbs</loc>
+    <loc>https://mymealify.com/blog/anti-inflammatory-global-spices-herbs</loc>
     <lastmod>2024-12-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/kids-nutrition-international-foods</loc>
+    <loc>https://mymealify.com/blog/kids-nutrition-international-foods</loc>
     <lastmod>2024-11-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/shift-worker-meal-planning-strategies</loc>
+    <loc>https://mymealify.com/blog/shift-worker-meal-planning-strategies</loc>
     <lastmod>2024-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/fermented-foods-digestive-health</loc>
+    <loc>https://mymealify.com/blog/fermented-foods-digestive-health</loc>
     <lastmod>2024-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/seasonal-eating-global-cuisines</loc>
+    <loc>https://mymealify.com/blog/seasonal-eating-global-cuisines</loc>
     <lastmod>2024-11-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/mental-health-brain-boosting-foods</loc>
+    <loc>https://mymealify.com/blog/mental-health-brain-boosting-foods</loc>
     <lastmod>2024-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/blog/travel-nutrition-global-cuisines</loc>
+    <loc>https://mymealify.com/blog/travel-nutrition-global-cuisines</loc>
     <lastmod>2024-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -194,49 +194,49 @@
   
   <!-- Legal and Policy Pages -->
   <url>
-    <loc>https://fitbite.app/privacy</loc>
+    <loc>https://mymealify.com/privacy</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/terms</loc>
+    <loc>https://mymealify.com/terms</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/disclaimer</loc>
+    <loc>https://mymealify.com/disclaimer</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/dmca</loc>
+    <loc>https://mymealify.com/dmca</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/cookies</loc>
+    <loc>https://mymealify.com/cookies</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/faq</loc>
+    <loc>https://mymealify.com/faq</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://fitbite.app/sitemap</loc>
+    <loc>https://mymealify.com/sitemap</loc>
     <lastmod>2025-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
