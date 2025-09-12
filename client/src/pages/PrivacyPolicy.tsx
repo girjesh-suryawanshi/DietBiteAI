@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
             
             <h3 className="text-xl font-semibold text-neutral-800 mb-3">Personal Information</h3>
             <p className="text-neutral-700 mb-4">
-              When you create an account with FitBite, we collect personal information including:
+              When you create an account with Mymealify, we collect personal information including:
             </p>
             <ul className="list-disc pl-6 text-neutral-700 mb-6">
               <li>Name and email address</li>
@@ -94,7 +94,7 @@ export default function PrivacyPolicy() {
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">8. Children's Privacy</h2>
             <p className="text-neutral-700 mb-6">
-              FitBite is not intended for children under 13. We do not knowingly collect personal 
+              Mymealify is not intended for children under 13. We do not knowingly collect personal 
               information from children under 13. If we discover such information, we will delete it immediately.
             </p>
 
@@ -115,7 +115,7 @@ export default function PrivacyPolicy() {
               For privacy-related questions or to exercise your rights, contact us at:
             </p>
             <ul className="list-none text-neutral-700 mb-6">
-              <li>Email: privacy@fitbite.com</li>
+              <li>Email: privacy@mymealify.com</li>
               <li>Subject: Privacy Policy Inquiry</li>
             </ul>
           </CardContent>

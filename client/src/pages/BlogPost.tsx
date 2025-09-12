@@ -1346,7 +1346,7 @@ export default function BlogPost() {
     "dateModified": new Date(post.date).toISOString(),
     "publisher": {
       "@type": "Organization",
-      "name": "FitBite",
+      "name": "Mymealify",
       "logo": {
         "@type": "ImageObject",
         "url": "https://fitbite.app/logo.png"
@@ -1364,7 +1364,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title={`${post.title} | FitBite Blog`}
+        title={`${post.title} | Mymealify Blog`}
         description={post.content.replace(/<[^>]*>/g, '').substring(0, 160)}
         keywords={`${post.category.toLowerCase()}, nutrition, healthy recipes, meal planning, diet tips`}
         canonical={`https://fitbite.app/blog/${slug}`}

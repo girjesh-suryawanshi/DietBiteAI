@@ -31,13 +31,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         await signup(email, password, name);
         toast({
           title: "Account created successfully!",
-          description: "Welcome to FitBite",
+          description: "Welcome to Mymealify",
         });
       } else {
         await login(email, password);
         toast({
           title: "Signed in successfully!",
-          description: "Welcome back to FitBite",
+          description: "Welcome back to Mymealify",
         });
       }
       onClose();
@@ -57,7 +57,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       await loginWithGoogle();
       toast({
         title: "Signed in with Google!",
-        description: "Welcome to FitBite",
+        description: "Welcome to Mymealify",
       });
       onClose();
     } catch (error: any) {
@@ -93,7 +93,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <i className="fas fa-apple-alt text-primary text-3xl mr-2"></i>
-              <span className="text-2xl font-bold text-neutral-800">FitBite</span>
+              <span className="text-2xl font-bold text-neutral-800">Mymealify</span>
             </div>
             <h3 className="text-xl font-semibold text-neutral-800">
               {isSignUp ? "Create Account" : "Welcome Back"}

@@ -693,13 +693,13 @@ export default function Landing() {
                 AI-powered global diet planning that adapts to your culture, health goals, and preferences. Join 15,000+ users transforming their health journey.
               </p>
               <div className="flex space-x-3">
-                <a href="https://twitter.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-primary rounded-full flex items-center justify-center transition-colors group">
+                <a href="https://twitter.com/mymealify" className="w-10 h-10 bg-neutral-700 hover:bg-primary rounded-full flex items-center justify-center transition-colors group">
                   <i className="fab fa-twitter text-neutral-400 group-hover:text-white"></i>
                 </a>
-                <a href="https://facebook.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors group">
+                <a href="https://facebook.com/mymealify" className="w-10 h-10 bg-neutral-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors group">
                   <i className="fab fa-facebook text-neutral-400 group-hover:text-white"></i>
                 </a>
-                <a href="https://instagram.com/fitbite" className="w-10 h-10 bg-neutral-700 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors group">
+                <a href="https://instagram.com/mymealify" className="w-10 h-10 bg-neutral-700 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors group">
                   <i className="fab fa-instagram text-neutral-400 group-hover:text-white"></i>
                 </a>
               </div>

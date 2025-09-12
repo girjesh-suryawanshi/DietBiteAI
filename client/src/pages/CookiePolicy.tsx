@@ -12,7 +12,7 @@ export default function CookiePolicy() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-neutral-800 mb-4">Cookie Policy</h1>
           <p className="text-lg text-neutral-600">
-            How FitBite uses cookies and similar technologies - Last updated: {new Date().toLocaleDateString()}
+            How Mymealify uses cookies and similar technologies - Last updated: {new Date().toLocaleDateString()}
           </p>
         </div>
 
@@ -264,7 +264,7 @@ export default function CookiePolicy() {
               If you have questions about our use of cookies or this policy, please contact us:
             </p>
             <ul className="list-none text-neutral-700">
-              <li>Email: privacy@fitbite.com</li>
+              <li>Email: privacy@Mymealify.com</li>
               <li>Subject: Cookie Policy Inquiry</li>
             </ul>
           </CardContent>

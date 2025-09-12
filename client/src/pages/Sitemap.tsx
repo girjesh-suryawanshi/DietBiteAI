@@ -9,9 +9,9 @@ const sitemapData = [
     icon: Home,
     color: "text-blue-600",
     pages: [
-      { name: "Home", path: "/", description: "Welcome to FitBite - AI-powered meal planning" },
+      { name: "Home", path: "/", description: "Welcome to Mymealify - AI-powered meal planning" },
       { name: "Dashboard", path: "/dashboard", description: "Personalized meal planning dashboard" },
-      { name: "About Us", path: "/about", description: "Learn about FitBite's mission and team" },
+      { name: "About Us", path: "/about", description: "Learn about Mymealify's mission and team" },
       { name: "Contact Us", path: "/contact", description: "Get in touch with our support team" },
     ]
   },
@@ -20,7 +20,7 @@ const sitemapData = [
     icon: User,
     color: "text-green-600",
     pages: [
-      { name: "Sign In", path: "/auth", description: "Access your FitBite account" },
+      { name: "Sign In", path: "/auth", description: "Access your Mymealify account" },
       { name: "Profile Setup", path: "/dashboard?step=profile", description: "Complete your health and preference profile" },
       { name: "Goal Selection", path: "/dashboard?step=goal", description: "Set your fitness and nutrition goals" },
     ]
@@ -69,7 +69,7 @@ export default function Sitemap() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-neutral-800 mb-4">Sitemap</h1>
           <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-            Complete overview of all pages and features available on FitBite
+            Complete overview of all pages and features available on Mymealify
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export default function Sitemap() {
             <strong> Total Pages:</strong> {sitemapData.reduce((total, category) => total + category.pages.length, 0)}
           </p>
           <p className="text-neutral-500 text-sm mt-2">
-            This sitemap is automatically updated as new features and pages are added to FitBite.
+            This sitemap is automatically updated as new features and pages are added to Mymealify.
           </p>
         </div>
 

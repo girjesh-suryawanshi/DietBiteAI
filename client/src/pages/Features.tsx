@@ -131,12 +131,12 @@ export default function Features() {
             Powerful Features for <span className="text-primary">Personalized Nutrition</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-            Discover how FitBite's advanced AI technology and comprehensive features make 
+            Discover how Mymealify's advanced AI technology and comprehensive features make 
             healthy meal planning effortless, personalized, and culturally authentic.
           </p>
           <Link href="/dashboard">
             <Button size="lg" className="bg-primary hover:bg-green-600 text-white px-6 sm:px-8 py-3 text-sm sm:text-base">
-              Try FitBite Free
+              Try Mymealify Free
             </Button>
           </Link>
         </div>
@@ -189,7 +189,7 @@ export default function Features() {
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-neutral-800 mb-4">Additional Benefits</h2>
             <p className="text-base sm:text-lg text-neutral-600 px-4">
-              More reasons why FitBite is the complete solution for your nutrition needs
+              More reasons why Mymealify is the complete solution for your nutrition needs
             </p>
           </div>
 
@@ -250,7 +250,7 @@ export default function Features() {
               </div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
-              <h3 className="text-xl font-semibold mb-4">Why Choose FitBite?</h3>
+              <h3 className="text-xl font-semibold mb-4">Why Choose Mymealify?</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span>Personalization Accuracy</span>

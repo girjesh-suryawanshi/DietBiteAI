@@ -266,15 +266,15 @@ export default function Blog() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "FitBite Health & Nutrition Blog",
+    "name": "Mymealify Health & Nutrition Blog",
     "description": "Expert nutrition advice, global healthy recipes, meal planning tips, and diet strategies from certified nutritionists.",
-    "url": "https://fitbite.app/blog",
+    "url": "https://Mymealify.com/blog",
     "publisher": {
       "@type": "Organization",
-      "name": "FitBite",
+      "name": "Mymealify",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://fitbite.app/logo.png"
+        "url": "https://Mymealify.app/logo.png"
       }
     },
     "blogPost": blogPosts.slice(0, 10).map(post => ({
@@ -286,11 +286,11 @@ export default function Blog() {
         "name": post.author
       },
       "datePublished": new Date(post.date).toISOString(),
-      "url": `https://fitbite.app/blog/${post.slug}`,
+      "url": `https://Mymealify.app/blog/${post.slug}`,
       "image": post.image,
       "publisher": {
         "@type": "Organization",
-        "name": "FitBite"
+        "name": "Mymealify"
       }
     }))
   };
@@ -298,10 +298,10 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead
-        title="FitBite Health & Nutrition Blog - Expert Diet Tips & Global Recipes"
+        title="Mymealify Health & Nutrition Blog - Expert Diet Tips & Global Recipes"
         description="Discover expert nutrition advice, global healthy recipes, meal planning tips, and diet strategies from certified nutritionists. Transform your health with culturally diverse, science-backed nutrition content."
         keywords="nutrition blog, healthy recipes, meal planning, diet tips, global cuisine, weight loss, muscle building, health conditions, nutritionist advice, international food, cultural diet, personalized nutrition"
-        canonical="https://fitbite.app/blog"
+        canonical="https://Mymealify.app/blog"
         structuredData={structuredData}
       />
       <Navbar onShowAuth={() => setShowAuthModal(true)} />
@@ -427,7 +427,7 @@ export default function Blog() {
                 <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mr-2">
                   <i className="fas fa-apple-alt text-white text-sm"></i>
                 </div>
-                <span className="text-xl font-bold">FitBite</span>
+                <span className="text-xl font-bold">Mymealify</span>
               </div>
               <p className="text-neutral-400 text-sm">
                 AI-powered global diet planner helping you achieve your health goals with personalized nutrition.
@@ -475,7 +475,7 @@ export default function Blog() {
           
           <div className="border-t border-neutral-800 mt-8 pt-8 text-center">
             <p className="text-neutral-400 text-sm">
-              © 2025 FitBite. All rights reserved. | Empowering healthier lives through personalized nutrition.
+              © 2025 Mymealify. All rights reserved. | Empowering healthier lives through personalized nutrition.
             </p>
           </div>
         </div>

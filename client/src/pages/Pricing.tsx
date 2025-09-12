@@ -102,7 +102,7 @@ const faq = [
     answer: "Family sharing allows multiple household members to create their own profiles and meal plans under one subscription. Each person gets personalized recommendations."
   },
   {
-    question: "Can I use FitBite offline?",
+    question: "Can I use Mymealify offline?",
     answer: "While you need internet to generate new meal plans, you can download PDFs for offline access to your recipes and shopping lists."
   }
 ];
@@ -111,13 +111,13 @@ const testimonials = [
   {
     name: "Sarah Chen",
     role: "Busy Mom of 3",
-    content: "FitBite Pro has saved me hours every week. The family sharing feature means everyone gets meals they love while staying healthy.",
+    content: "Mymealify Pro has saved me hours every week. The family sharing feature means everyone gets meals they love while staying healthy.",
     rating: 5
   },
   {
     name: "Dr. Michael Rodriguez", 
     role: "Cardiologist",
-    content: "I recommend FitBite Premium to my patients. The health condition integration is impressive and helps them stick to heart-healthy diets.",
+    content: "I recommend Mymealify Premium to my patients. The health condition integration is impressive and helps them stick to heart-healthy diets.",
     rating: 5
   },
   {
@@ -278,7 +278,7 @@ export default function Pricing() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
             <p className="text-lg text-neutral-300">
-              Real experiences from people who've transformed their nutrition with FitBite
+              Real experiences from people who've transformed their nutrition with Mymealify
             </p>
           </div>
 
@@ -309,7 +309,7 @@ export default function Pricing() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-800 mb-4">Frequently Asked Questions</h2>
             <p className="text-lg text-neutral-600">
-              Everything you need to know about FitBite pricing and features
+              Everything you need to know about Mymealify pricing and features
             </p>
           </div>
 

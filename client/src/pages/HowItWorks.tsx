@@ -124,7 +124,7 @@ export default function HowItWorks() {
       <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-800 mb-4 sm:mb-6 leading-tight">
-            How <span className="text-primary">FitBite</span> Works
+            How <span className="text-primary">Mymealify</span> Works
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
             Transform your nutrition in 6 simple steps. From profile creation to personalized meal plans, 
@@ -203,7 +203,7 @@ export default function HowItWorks() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">Why Users Love FitBite</h2>
+            <h2 className="text-3xl font-bold text-neutral-800 mb-4">Why Users Love Mymealify</h2>
             <p className="text-lg text-neutral-600">
               Real benefits that make a difference in your daily life and long-term health
             </p>
@@ -228,7 +228,7 @@ export default function HowItWorks() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">The Science Behind FitBite</h2>
+              <h2 className="text-3xl font-bold mb-6">The Science Behind Mymealify</h2>
               <p className="text-lg text-neutral-300 mb-8">
                 Our AI doesn't just create random meal combinations. It uses advanced algorithms 
                 and nutritional science to ensure every meal plan is optimized for your unique needs.
@@ -262,7 +262,7 @@ export default function HowItWorks() {
             </div>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
-              <h3 className="text-xl font-semibold mb-6">What Makes FitBite Different</h3>
+              <h3 className="text-xl font-semibold mb-6">What Makes Mymealify Different</h3>
               <div className="space-y-4">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-primary rounded-full mr-4"></div>
@@ -326,7 +326,7 @@ export default function HowItWorks() {
                   Is this suitable for people with medical conditions?
                 </h3>
                 <p className="text-neutral-600">
-                  FitBite considers common health conditions like diabetes, hypertension, and PCOS in meal planning. 
+                  Mymealify considers common health conditions like diabetes, hypertension, and PCOS in meal planning. 
                   However, always consult your healthcare provider before making significant dietary changes.
                 </p>
               </CardContent>

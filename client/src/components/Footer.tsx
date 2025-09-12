@@ -123,7 +123,7 @@ export function Footer() {
         <div className="border-t border-neutral-200 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-neutral-500 text-sm">
-              © {new Date().getFullYear()} FitBite. All rights reserved.
+              © {new Date().getFullYear()} Mymealify. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacy" className="text-neutral-500 hover:text-primary text-sm transition-colors">

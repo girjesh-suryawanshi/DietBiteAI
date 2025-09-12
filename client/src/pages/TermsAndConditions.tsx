@@ -19,13 +19,13 @@ export default function TermsAndConditions() {
           <CardContent className="p-8 prose prose-lg max-w-none">
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">1. Acceptance of Terms</h2>
             <p className="text-neutral-700 mb-6">
-              By accessing and using FitBite's services, you agree to comply with and be bound by these 
+              By accessing and using Mymealify's services, you agree to comply with and be bound by these 
               Terms and Conditions. If you do not agree with any part of these terms, you may not use our service.
             </p>
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">2. Description of Service</h2>
             <p className="text-neutral-700 mb-4">
-              FitBite provides AI-powered personalized meal planning services that consider:
+              Mymealify provides AI-powered personalized meal planning services that consider:
             </p>
             <ul className="list-disc pl-6 text-neutral-700 mb-6">
               <li>Individual health conditions and dietary requirements</li>
@@ -56,7 +56,7 @@ export default function TermsAndConditions() {
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">4. Medical Disclaimer</h2>
             <p className="text-neutral-700 mb-6">
-              <strong>IMPORTANT:</strong> FitBite provides general nutritional guidance and meal planning suggestions. 
+              <strong>IMPORTANT:</strong> Mymealify provides general nutritional guidance and meal planning suggestions. 
               Our service is NOT a substitute for professional medical advice, diagnosis, or treatment. 
               Always consult your physician or qualified healthcare provider before starting any new diet or 
               making significant changes to your eating habits, especially if you have existing health conditions.
@@ -64,10 +64,10 @@ export default function TermsAndConditions() {
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">5. Intellectual Property</h2>
             <p className="text-neutral-700 mb-4">
-              FitBite owns all rights to:
+              Mymealify owns all rights to:
             </p>
             <ul className="list-disc pl-6 text-neutral-700 mb-6">
-              <li>The FitBite platform, software, and algorithms</li>
+              <li>The Mymealify platform, software, and algorithms</li>
               <li>All content, including meal plans, recipes, and nutritional information</li>
               <li>Trademarks, logos, and brand elements</li>
               <li>User interface design and functionality</li>
@@ -92,7 +92,7 @@ export default function TermsAndConditions() {
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">8. Limitation of Liability</h2>
             <p className="text-neutral-700 mb-6">
-              FitBite and its affiliates shall not be liable for any indirect, incidental, special, 
+              Mymealify and its affiliates shall not be liable for any indirect, incidental, special, 
               or consequential damages resulting from the use or inability to use our service. 
               Our total liability shall not exceed the amount paid by you for the service in the 12 months 
               preceding the claim.
@@ -100,7 +100,7 @@ export default function TermsAndConditions() {
 
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">9. Indemnification</h2>
             <p className="text-neutral-700 mb-6">
-              You agree to indemnify and hold harmless FitBite from any claims, damages, or expenses 
+              You agree to indemnify and hold harmless Mymealify from any claims, damages, or expenses 
               arising from your use of the service, violation of these terms, or infringement of 
               any third-party rights.
             </p>
@@ -136,7 +136,7 @@ export default function TermsAndConditions() {
               For questions about these Terms and Conditions, contact us at:
             </p>
             <ul className="list-none text-neutral-700 mb-6">
-              <li>Email: legal@fitbite.com</li>
+              <li>Email: legal@mymealify.com</li>
               <li>Subject: Terms and Conditions Inquiry</li>
             </ul>
 

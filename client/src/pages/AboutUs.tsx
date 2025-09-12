@@ -11,7 +11,7 @@ export default function AboutUs() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-neutral-800 mb-4">About FitBite</h1>
+          <h1 className="text-4xl font-bold text-neutral-800 mb-4">About Mymealify</h1>
           <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
             Revolutionizing personalized nutrition through AI-powered meal planning for a healthier world
           </p>
@@ -25,7 +25,7 @@ export default function AboutUs() {
               <h2 className="text-2xl font-bold text-neutral-800">Our Mission</h2>
             </div>
             <p className="text-neutral-700 text-lg leading-relaxed">
-              At FitBite, we believe that proper nutrition should be accessible, personalized, and enjoyable for everyone. 
+              At Mymealify, we believe that proper nutrition should be accessible, personalized, and enjoyable for everyone. 
               Our mission is to democratize healthy eating by providing AI-powered meal planning that adapts to individual 
               health conditions, dietary preferences, and cultural cuisines. We're committed to making nutrition science 
               simple and actionable for people worldwide.
@@ -41,7 +41,7 @@ export default function AboutUs() {
               <h2 className="text-2xl font-bold text-neutral-800">Our Story</h2>
             </div>
             <p className="text-neutral-700 text-lg leading-relaxed mb-4">
-              FitBite was born from the recognition that one-size-fits-all nutrition advice doesn't work in our diverse world. 
+              Mymealify was born from the recognition that one-size-fits-all nutrition advice doesn't work in our diverse world. 
               Traditional meal planning often ignores individual health conditions, cultural food preferences, and lifestyle constraints 
               that make sustainable healthy eating challenging.
             </p>
@@ -89,7 +89,7 @@ export default function AboutUs() {
               <h2 className="text-2xl font-bold text-neutral-800">Our Team</h2>
             </div>
             <p className="text-neutral-700 text-lg leading-relaxed">
-              FitBite is powered by a diverse team of nutritionists, dietitians, AI researchers, and software engineers 
+              Mymealify is powered by a diverse team of nutritionists, dietitians, AI researchers, and software engineers 
               from around the world. Our multidisciplinary approach ensures that our platform combines cutting-edge 
               technology with sound nutritional science and cultural sensitivity. We're passionate about using technology 
               to solve real-world health challenges and make a positive impact on people's lives.

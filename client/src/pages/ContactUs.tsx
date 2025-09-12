@@ -54,9 +54,9 @@ export default function ContactUs() {
               </CardHeader>
               <CardContent>
                 <p className="text-neutral-700 mb-2">For general inquiries:</p>
-                <p className="font-semibold text-primary">support@fitbite.com</p>
+                <p className="font-semibold text-primary">support@Mymealify.com</p>
                 <p className="text-neutral-700 mt-4 mb-2">For business partnerships:</p>
-                <p className="font-semibold text-primary">partnerships@fitbite.com</p>
+                <p className="font-semibold text-primary">partnerships@Mymealify.com</p>
               </CardContent>
             </Card>
 
@@ -84,7 +84,7 @@ export default function ContactUs() {
               </CardHeader>
               <CardContent>
                 <p className="text-neutral-700">
-                  FitBite serves users worldwide with support for multiple cuisines and dietary 
+                  Mymealify serves users worldwide with support for multiple cuisines and dietary 
                   preferences. Our AI-powered platform adapts to your local food availability and cultural preferences.
                 </p>
               </CardContent>
