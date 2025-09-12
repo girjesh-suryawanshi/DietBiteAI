@@ -19,6 +19,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Serve SEO files directly
+  app.get("/sitemap.xml", (req, res) => {
+    const sitemapPath = process.env.NODE_ENV === "production" 
+      ? path.resolve(import.meta.dirname, "public", "sitemap.xml")
+      : path.resolve(process.cwd(), "public", "sitemap.xml");
+    
+    if (fs.existsSync(sitemapPath)) {
+      res.setHeader('Content-Type', 'application/xml');
+      res.sendFile(sitemapPath);
+    } else {
+      res.status(404).send('Sitemap not found');
+    }
+  });
+
+  app.get("/robots.txt", (req, res) => {
+    const robotsPath = process.env.NODE_ENV === "production"
+      ? path.resolve(import.meta.dirname, "public", "robots.txt")
+      : path.resolve(process.cwd(), "public", "robots.txt");
+    
+    if (fs.existsSync(robotsPath)) {
+      res.setHeader('Content-Type', 'text/plain');
+      res.sendFile(robotsPath);
+    } else {
+      res.status(404).send('Robots.txt not found');
+    }
+  });
+
   // User routes
   app.get("/api/users/:uid", async (req, res) => {
     try {
