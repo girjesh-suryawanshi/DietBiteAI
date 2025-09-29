@@ -12,13 +12,35 @@ interface MealPlanRequest {
   gender?: string;
   weight_kg?: number;
   height_cm?: number;
+  
+  // Enhanced cultural and location context
+  country?: string;
+  region?: string;
+  city?: string;
+  cultural_background?: string[];
+  cuisine_familiarity?: string[];
+  cooking_methods?: string[];
+  local_ingredients_preference?: boolean;
+  budget_preference?: string;
 }
 
 export async function generateMealPlan(request: MealPlanRequest) {
-  const { fitness_goal, cuisine, diet_type, medical_conditions = [], food_exclusions = [], age, gender, weight_kg, height_cm } = request;
+  const { 
+    fitness_goal, cuisine, diet_type, medical_conditions = [], food_exclusions = [], 
+    age, gender, weight_kg, height_cm,
+    country, region, city, cultural_background = [], cuisine_familiarity = [],
+    cooking_methods = [], local_ingredients_preference = true, budget_preference
+  } = request;
 
-  // Create the expert dietician prompt
-  const prompt = `You are an expert dietician. Create a safe, balanced, and practical personalized 7-day diet plan following these strict guidelines:
+  // Import ingredient substitution helpers
+  const { getIngredientSubstitutions, getCookingMethods, getStapleGrains } = require('../data/ingredient-substitutions');
+  
+  // Get local context
+  const localCookingMethods = country ? getCookingMethods(country) : [];
+  const localStapleGrains = country ? getStapleGrains(country) : [];
+  
+  // Create the culturally-aware expert dietician prompt
+  const prompt = `You are an expert dietician with deep knowledge of global cuisines and local food systems. Create a safe, balanced, and culturally appropriate personalized 7-day diet plan following these strict guidelines:
 
 1. CALORIES:
    - For women: 1400–1600 kcal/day (never below 1200)
@@ -31,24 +53,50 @@ export async function generateMealPlan(request: MealPlanRequest) {
    - Fats: 25–30% (healthy fats: olive oil, nuts, seeds, avocado)
    - Fiber: minimum 25g per day
 
-3. MEAL STRUCTURE:
-   - Include 3 main meals (breakfast, lunch, dinner) + 2 healthy snacks (mid-morning, evening)
-   - Add hydration guidance (2–2.5 liters water/day, herbal teas allowed)
+3. CULTURAL & LOCATION CONTEXT:
+   - Country: ${country || 'Not specified'}
+   - Region: ${region || 'Not specified'}
+   - Cultural Background: ${cultural_background.length > 0 ? cultural_background.join(', ') : 'Not specified'}
+   - Cuisine Familiarity: ${cuisine_familiarity.length > 0 ? cuisine_familiarity.join(', ') : 'General'}
+   - Preferred Cooking Methods: ${cooking_methods.length > 0 ? cooking_methods.join(', ') : localCookingMethods.join(', ')}
+   - Local Ingredients Priority: ${local_ingredients_preference ? 'Yes' : 'No'}
+   - Budget Preference: ${budget_preference || 'Not specified'}
 
-4. NUTRITION QUALITY (Each day must include):
+4. CULTURAL MEAL PLANNING REQUIREMENTS:
+   - Use ingredient names familiar to ${country || 'the user'} (e.g., if India: use "jeera" instead of "cumin", "sabzi" instead of "vegetables")
+   - Suggest cooking methods common in ${country || 'the region'}: ${localCookingMethods.length > 0 ? localCookingMethods.join(', ') : 'standard methods'}
+   - Prioritize locally available ingredients that are affordable and easily found in ${country || 'local markets'}
+   - Use traditional meal timing appropriate for ${country || 'the culture'}
+   - Include staple grains common in ${country || 'the region'}: ${localStapleGrains.length > 0 ? localStapleGrains.join(', ') : 'rice, wheat'}
+   - Name dishes using culturally familiar terms that feel "like home"
+
+5. LOCAL INGREDIENT SUBSTITUTIONS:
+   - ${local_ingredients_preference ? 'ALWAYS prioritize locally available, affordable ingredients' : 'Use standard international ingredients'}
+   - Replace expensive/imported ingredients with local alternatives
+   - Example substitutions for ${country || 'local context'}:
+     * If quinoa is expensive → suggest ${localStapleGrains.includes('brown rice') ? 'brown rice' : 'local whole grains'}
+     * If avocado is unavailable → suggest local healthy fat sources
+     * If exotic proteins are costly → suggest affordable local protein sources
+
+6. MEAL STRUCTURE:
+   - Include 3 main meals (breakfast, lunch, dinner) + 2 healthy snacks (mid-morning, evening)
+   - Use meal timing appropriate for ${country || 'the culture'}
+   - Add hydration guidance (2–2.5 liters water/day, include traditional teas if relevant)
+
+7. NUTRITION QUALITY (Each day must include):
    - At least 1 iron-rich food (lentils, beans, spinach, pumpkin seeds, lean meat)
    - At least 1 calcium source (milk, yogurt, paneer, sesame, ragi, fortified plant milk)
    - At least 1 vitamin C source (citrus fruits, bell peppers, tomatoes)
    - At least 1 omega-3 source (chia seeds, flax, walnuts, or fish if non-vegetarian)
 
-5. DIETARY PREFERENCES:
+8. DIETARY PREFERENCES:
    - Diet Type: ${diet_type}
    - Cuisine: ${cuisine}
    - If vegetarian → exclude meat, fish, eggs. Use paneer, tofu, dals, beans, soy
    - If vegan → exclude all dairy/eggs. Use plant-based proteins and fortified alternatives
-   - Always suggest 1 swap option per meal
+   - Always suggest 1 culturally appropriate swap option per meal
 
-6. MEDICAL CONDITIONS & RESTRICTIONS:
+9. MEDICAL CONDITIONS & RESTRICTIONS:
    - Medical conditions: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'}
    - Food exclusions: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
 
