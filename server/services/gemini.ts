@@ -1,4 +1,6 @@
 // Using Google Gemini REST API for meal plan generation
+import { getIngredientSubstitutions, getCookingMethods, getStapleGrains } from '../data/ingredient-substitutions.js';
+
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "demo-key";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
@@ -32,9 +34,6 @@ export async function generateMealPlan(request: MealPlanRequest) {
     cooking_methods = [], local_ingredients_preference = true, budget_preference
   } = request;
 
-  // Import ingredient substitution helpers
-  const { getIngredientSubstitutions, getCookingMethods, getStapleGrains } = require('../data/ingredient-substitutions');
-  
   // Get local context
   const localCookingMethods = country ? getCookingMethods(country) : [];
   const localStapleGrains = country ? getStapleGrains(country) : [];
