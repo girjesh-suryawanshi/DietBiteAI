@@ -13,7 +13,19 @@ export const users = pgTable("users", {
   height_cm: integer("height_cm"),
   weight_kg: integer("weight_kg"),
   activity_level: text("activity_level"), // sedentary, lightly_active, moderately_active, very_active, extremely_active
-  country_region: text("country_region"),
+  
+  // Enhanced location and cultural preferences
+  country: text("country"), // India, USA, UK, etc.
+  region: text("region"), // State/Province: Maharashtra, California, etc.
+  city: text("city"), // Mumbai, Los Angeles, etc.
+  cultural_background: text("cultural_background").array(), // north_indian, south_indian, punjabi, bengali, etc.
+  cuisine_familiarity: text("cuisine_familiarity").array(), // indian, chinese, mediterranean, mexican, etc.
+  cooking_methods: text("cooking_methods").array(), // pressure_cooker, tandoor, wok, oven, stovetop, etc.
+  local_ingredients_preference: boolean("local_ingredients_preference").default(true),
+  budget_preference: text("budget_preference"), // budget_friendly, moderate, premium
+  
+  // Existing fields
+  country_region: text("country_region"), // Keep for backward compatibility
   health_conditions: text("health_conditions").array(), // diabetes, high_blood_pressure, thyroid, pcos, none, other
   foods_to_include: text("foods_to_include").array(), // tea, coffee, dark_chocolate, one_cookie_a_day, other
   created_at: timestamp("created_at").defaultNow(),
