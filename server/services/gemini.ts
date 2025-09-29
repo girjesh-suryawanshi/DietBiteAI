@@ -44,30 +44,23 @@ export async function generateMealPlan(request: MealPlanRequest) {
   const mealTargets = calculateMealTargets(userStats, diet_type, country);
   const portionRecommendations = generatePortionRecommendations(userStats, country);
   
-  // Create a concise but comprehensive prompt
-  const prompt = `Create a 7-day ${diet_type} ${cuisine} diet plan for ${fitness_goal}. 
+  // Create a focused prompt for structured meal generation
+  const prompt = `Generate a 7-day ${diet_type} ${cuisine} diet plan for ${fitness_goal} in ${country || 'International'}.
 
-PERSONAL INFO: Age: ${age || 'N/A'}, Gender: ${gender || 'N/A'}, Weight: ${weight_kg || 'N/A'}kg, Height: ${height_cm || 'N/A'}cm
-LOCATION: ${country || 'International'} 
-DAILY CALORIES: ${gender === 'male' ? '1700-1900' : '1400-1600'} kcal
-RESTRICTIONS: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'} | Avoid: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
+USER: ${gender || 'N/A'}, ${age || 'N/A'}yrs, ${weight_kg || 'N/A'}kg
+DAILY: ${gender === 'male' ? '1800' : '1500'} calories
+AVOID: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
 
-MEAL TARGETS:
-- Breakfast: ${mealTargets.breakfast?.calories || 400} cal, ${mealTargets.breakfast?.protein_g || 20}g protein
-- Lunch: ${mealTargets.lunch?.calories || 500} cal, ${mealTargets.lunch?.protein_g || 25}g protein  
-- Dinner: ${mealTargets.dinner?.calories || 400} cal, ${mealTargets.dinner?.protein_g || 20}g protein
-- 2 Snacks: ${mealTargets.mid_morning_snack?.calories || 150} cal each
+MEALS PER DAY (exact calories):
+• Breakfast: ${mealTargets.breakfast?.calories || 400} cal, ${mealTargets.breakfast?.protein_g || 20}g protein
+• Lunch: ${mealTargets.lunch?.calories || 500} cal, ${mealTargets.lunch?.protein_g || 25}g protein
+• Dinner: ${mealTargets.dinner?.calories || 400} cal, ${mealTargets.dinner?.protein_g || 20}g protein
+• 2 Snacks: ${mealTargets.mid_morning_snack?.calories || 150} cal each
 
-CRITICAL REQUIREMENTS:
-1. Use ${country || 'local'} ingredients & cooking methods: ${localCookingMethods.slice(0,3).join(', ')}
-2. Include local names (e.g., ${country === 'India' ? 'jeera for cumin, sabzi for vegetables' : 'regional terms'})
-3. EVERY ingredient MUST have quantities: {"name": "rice", "local_name": "${country === 'India' ? 'चावल' : 'rice'}", "quantity": 1, "unit": "cup", "household_unit": "1 medium ${country === 'India' ? 'katori' : 'cup'} (150ml)"}
-4. Use affordable, locally available ingredients
+MANDATORY: ALL ingredients with quantities like:
+{"name": "rice", "local_name": "${country === 'India' ? 'चावल' : 'rice'}", "quantity": 1, "unit": "cup", "household_unit": "1 ${country === 'India' ? 'katori' : 'cup'}", "macros": {"calories": 200, "protein_g": 4}}
 
-INGREDIENT FORMAT (MANDATORY):
-{"name": "rice", "local_name": "${country === 'India' ? 'चावल' : 'rice'}", "quantity": 1, "unit": "cup", "household_unit": "1 medium ${country === 'India' ? 'katori' : 'cup'} (150ml)", "macros": {"calories": 200, "protein_g": 4}}
-
-OUTPUT: Return valid JSON with 7 days, 5 meals each (breakfast, mid_morning_snack, lunch, evening_snack, dinner). Use calorie targets: Breakfast ${mealTargets.breakfast?.calories || 400}, Lunch ${mealTargets.lunch?.calories || 500}, Dinner ${mealTargets.dinner?.calories || 400}, Snacks ${mealTargets.mid_morning_snack?.calories || 150} each. ALL ingredients must use structured format above with quantities.`;
+Return JSON only - 7 days, 5 meals per day, structured ingredients with exact quantities.`;
 
   try {
     console.log('🤖 Calling Gemini API to generate meal plan...');
@@ -87,7 +80,7 @@ OUTPUT: Return valid JSON with 7 days, 5 meals each (breakfast, mid_morning_snac
           temperature: 0.7,
           topP: 0.8,
           topK: 40,
-          maxOutputTokens: 8192,
+          maxOutputTokens: 20000,
         }
       })
     });
