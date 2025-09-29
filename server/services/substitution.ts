@@ -20,7 +20,7 @@ export interface SubstitutionResult {
 
 // Apply smart substitutions to a list of ingredients
 export function applySmartSubstitutions(
-  ingredients: string[], 
+  ingredients: (string | {name: string, local_name?: string})[], 
   context: SubstitutionContext
 ): { original_ingredients: string[], substituted_ingredients: string[], substitutions_made: SubstitutionResult[] } {
   const substitutions_made: SubstitutionResult[] = [];
@@ -36,7 +36,11 @@ export function applySmartSubstitutions(
   }
 
   ingredients.forEach(ingredient => {
-    const substitution = getIngredientSubstitutions(ingredient, context.country!, context.region);
+    // Handle both string and object formats
+    const ingredientName = typeof ingredient === 'string' ? ingredient : ingredient.name;
+    const displayName = typeof ingredient === 'string' ? ingredient : (ingredient.local_name || ingredient.name);
+    
+    const substitution = getIngredientSubstitutions(ingredientName, context.country!, context.region);
     
     if (substitution && substitution.substitutes.length > 0) {
       // Choose the best substitute based on context
@@ -45,22 +49,22 @@ export function applySmartSubstitutions(
       if (bestSubstitute) {
         substituted_ingredients.push(bestSubstitute.ingredient);
         substitutions_made.push({
-          original_ingredient: ingredient,
+          original_ingredient: displayName,
           suggested_substitute: bestSubstitute.ingredient,
           reason: bestSubstitute.reason,
-          cost_impact: determineCostImpact(ingredient, bestSubstitute.ingredient, context),
+          cost_impact: determineCostImpact(ingredientName, bestSubstitute.ingredient, context),
           availability: 'common' // Local substitutes are typically more available
         });
       } else {
-        substituted_ingredients.push(ingredient);
+        substituted_ingredients.push(displayName);
       }
     } else {
-      substituted_ingredients.push(ingredient);
+      substituted_ingredients.push(displayName);
     }
   });
 
   return {
-    original_ingredients: ingredients,
+    original_ingredients: ingredients.map(ing => typeof ing === 'string' ? ing : (ing.local_name || ing.name)),
     substituted_ingredients,
     substitutions_made
   };
