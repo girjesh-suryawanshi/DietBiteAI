@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WeeklyMealPlan, DayMealPlan, Meal } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { RecipeAdjustmentModal } from "./RecipeAdjustmentModal";
 
 interface MealPlanDisplayProps {
   mealPlan: WeeklyMealPlan;
@@ -44,9 +45,26 @@ const WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "satur
 
 export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, downloadLoading = false }: MealPlanDisplayProps) {
   const [selectedDay, setSelectedDay] = useState(0);
+  const [currentMealPlan, setCurrentMealPlan] = useState(mealPlan);
   const { toast } = useToast();
 
-  const currentDay = mealPlan.days[selectedDay];
+  const updateMeal = (dayIndex: number, mealIndex: number, updatedMeal: Meal) => {
+    setCurrentMealPlan(prev => ({
+      ...prev,
+      days: prev.days.map((day, dIndex) => 
+        dIndex === dayIndex 
+          ? {
+              ...day,
+              meals: day.meals.map((meal, mIndex) => 
+                mIndex === mealIndex ? updatedMeal : meal
+              )
+            }
+          : day
+      )
+    }));
+  };
+
+  const currentDay = currentMealPlan.days[selectedDay];
   const totalDailyCalories = currentDay?.meals.reduce((sum, meal) => sum + meal.calories, 0) || 0;
 
   const handleDownload = async () => {
@@ -191,7 +209,7 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
             ))}
           </TabsList>
           
-          {mealPlan.days.map((day, dayIndex) => {
+          {currentMealPlan.days.map((day, dayIndex) => {
             const dayTotalCalories = day.meals.reduce((sum, meal) => sum + meal.calories, 0);
             
             return (
@@ -205,7 +223,14 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
                 
                 <div className="space-y-4">
                   {day.meals.map((meal, mealIndex) => (
-                    <MealCard key={mealIndex} meal={meal} />
+                    <MealCard 
+                      key={mealIndex} 
+                      meal={meal} 
+                      mealPlanId={mealPlanId}
+                      day={day.day}
+                      mealIndex={mealIndex}
+                      onMealUpdated={(updatedMeal) => updateMeal(dayIndex, mealIndex, updatedMeal)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -242,12 +267,41 @@ export function MealPlanDisplay({ mealPlan, mealPlanId, onDownloadPDF, onShare, 
   );
 }
 
-function MealCard({ meal }: { meal: Meal }) {
+interface MealCardProps {
+  meal: Meal;
+  mealPlanId: string;
+  day: string;
+  mealIndex: number;
+  onMealUpdated: (updatedMeal: Meal) => void;
+}
+
+function MealCard({ meal, mealPlanId, day, mealIndex, onMealUpdated }: MealCardProps) {
   const mealColor = MEAL_COLORS[meal.type as keyof typeof MEAL_COLORS] || MEAL_COLORS.snack;
 
   return (
-    <div className={`${mealColor.bg} rounded-xl p-6`}>
-      <div className="flex items-center justify-between mb-4">
+    <div className={`${mealColor.bg} rounded-xl p-6 relative`}>
+      {/* Adjustment button */}
+      <div className="absolute top-4 right-4">
+        <RecipeAdjustmentModal
+          meal={meal}
+          mealPlanId={mealPlanId}
+          day={day}
+          mealIndex={mealIndex}
+          onMealUpdated={onMealUpdated}
+        >
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white/80 hover:bg-white shadow-sm"
+            data-testid="button-adjust-recipe"
+          >
+            <i className="fas fa-cog mr-2"></i>
+            Adjust
+          </Button>
+        </RecipeAdjustmentModal>
+      </div>
+
+      <div className="flex items-center justify-between mb-4 pr-20">
         <div className="flex items-center">
           <div className={`w-12 h-12 ${mealColor.iconBg} rounded-full flex items-center justify-center mr-4`}>
             <i className={`${mealColor.icon} text-white`}></i>
@@ -260,11 +314,24 @@ function MealCard({ meal }: { meal: Meal }) {
         <div className="text-right">
           <span className={`text-2xl font-bold ${mealColor.textColor}`}>{meal.calories}</span>
           <span className="text-sm text-neutral-600">cal</span>
+          {meal.serving_size && meal.serving_size !== 1 && (
+            <div className="text-xs text-neutral-500 mt-1">
+              {meal.serving_size}x serving
+            </div>
+          )}
         </div>
       </div>
       
       <div className="bg-white rounded-lg p-4">
         <h5 className="font-semibold text-neutral-800 mb-2">{meal.name}</h5>
+        
+        {/* Show modifications if any */}
+        {meal.modifications?.ingredient_swaps && meal.modifications.ingredient_swaps.length > 0 && (
+          <div className="mb-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
+            <i className="fas fa-info-circle mr-1"></i>
+            {meal.modifications.ingredient_swaps.length} ingredient{meal.modifications.ingredient_swaps.length > 1 ? 's' : ''} modified
+          </div>
+        )}
         
         <div className="mb-4">
           <h6 className="text-sm font-medium text-neutral-700 mb-2">Ingredients:</h6>
@@ -280,14 +347,33 @@ function MealCard({ meal }: { meal: Meal }) {
           </div>
         </div>
 
-        <div>
+        <div className="mb-4">
           <h6 className="text-sm font-medium text-neutral-700 mb-2">Instructions:</h6>
           <ol className="text-sm text-neutral-600 space-y-1">
-            {meal.instructions.map((instruction, index) => (
+            {(meal.modifications?.custom_instructions || meal.instructions).map((instruction, index) => (
               <li key={index}>{index + 1}. {instruction}</li>
             ))}
           </ol>
         </div>
+
+        {/* Show nutritional information if available */}
+        {(meal.protein_g || meal.carbs_g || meal.fat_g) && (
+          <div className="border-t pt-3">
+            <h6 className="text-xs font-medium text-neutral-600 mb-2">Nutrition per serving:</h6>
+            <div className="flex space-x-4 text-xs text-neutral-600">
+              {meal.protein_g && <span>Protein: {meal.protein_g}g</span>}
+              {meal.carbs_g && <span>Carbs: {meal.carbs_g}g</span>}
+              {meal.fat_g && <span>Fat: {meal.fat_g}g</span>}
+            </div>
+          </div>
+        )}
+
+        {/* Show personal notes if any */}
+        {meal.modifications?.notes && (
+          <div className="mt-3 p-2 bg-yellow-50 rounded text-xs">
+            <strong>Your notes:</strong> {meal.modifications.notes}
+          </div>
+        )}
       </div>
     </div>
   );

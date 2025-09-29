@@ -472,7 +472,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Remove duplicates and limit to 6 suggestions
-      suggestions = [...new Set(suggestions)].slice(0, 6);
+      suggestions = Array.from(new Set(suggestions)).slice(0, 6);
 
       // If no specific suggestions found, provide general healthy alternatives
       if (suggestions.length === 0) {
