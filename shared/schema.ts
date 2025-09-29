@@ -110,14 +110,12 @@ export type WeeklyMealPlan = z.infer<typeof weeklyMealPlanSchema>;
 
 // Recipe adjustment schemas
 export const adjustServingSizeSchema = z.object({
-  meal_plan_id: z.string(),
   day: z.string(),
   meal_index: z.number(),
   serving_multiplier: z.number().min(0.5).max(4), // Allow 0.5x to 4x adjustments
 });
 
 export const swapIngredientSchema = z.object({
-  meal_plan_id: z.string(),
   day: z.string(),
   meal_index: z.number(),
   original_ingredient: z.string(),
@@ -126,7 +124,6 @@ export const swapIngredientSchema = z.object({
 });
 
 export const customizeRecipeSchema = z.object({
-  meal_plan_id: z.string(),
   day: z.string(),
   meal_index: z.number(),
   custom_instructions: z.array(z.string()).optional(),
