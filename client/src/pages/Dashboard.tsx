@@ -61,25 +61,15 @@ export default function Dashboard() {
     },
   });
 
-  // Download PDF mutation
+  // Download PDF mutation - just for notifications since MealPlanDisplay handles the actual download
   const downloadPdfMutation = useMutation({
     mutationFn: async (mealPlanId: string) => {
-      const response = await apiRequest("POST", `/api/meal-plans/${mealPlanId}/pdf`, {});
-      return response.json();
+      // No-op since MealPlanDisplay handles the actual download
+      return Promise.resolve({ success: true });
     },
-    onSuccess: (data) => {
-      // Download PDF file directly with user-friendly filename
-      const link = document.createElement('a');
-      link.href = data.url;
-      link.download = data.filename || `fitbite-meal-plan-${Date.now()}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      toast({
-        title: "PDF downloaded!",
-        description: "Your meal plan PDF has been downloaded to your device",
-      });
+    onSuccess: () => {
+      // Just show success notification
+      console.log("PDF download completed from MealPlanDisplay");
     },
     onError: (error: any) => {
       toast({
