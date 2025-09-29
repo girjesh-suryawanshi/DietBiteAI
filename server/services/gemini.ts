@@ -1,5 +1,6 @@
 // Using Google Gemini REST API for meal plan generation
 import { getIngredientSubstitutions, getCookingMethods, getStapleGrains } from '../data/ingredient-substitutions.js';
+import { calculateMealTargets, generatePortionRecommendations, type UserStats } from './portion.js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "demo-key";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
@@ -38,6 +39,11 @@ export async function generateMealPlan(request: MealPlanRequest) {
   const localCookingMethods = country ? getCookingMethods(country) : [];
   const localStapleGrains = country ? getStapleGrains(country) : [];
   
+  // Calculate portion targets based on user stats
+  const userStats: UserStats = { age, gender, weight_kg, height_cm, fitness_goal };
+  const mealTargets = calculateMealTargets(userStats, diet_type, country);
+  const portionRecommendations = generatePortionRecommendations(userStats, country);
+  
   // Create the culturally-aware expert dietician prompt
   const prompt = `You are an expert dietician with deep knowledge of global cuisines and local food systems. Create a safe, balanced, and culturally appropriate personalized 7-day diet plan following these strict guidelines:
 
@@ -52,7 +58,17 @@ export async function generateMealPlan(request: MealPlanRequest) {
    - Fats: 25–30% (healthy fats: olive oil, nuts, seeds, avocado)
    - Fiber: minimum 25g per day
 
-3. CULTURAL & LOCATION CONTEXT:
+3. CALCULATED MEAL TARGETS (Use these exact targets for each meal):
+   - Breakfast: ${mealTargets.breakfast?.calories || 400} calories, ${mealTargets.breakfast?.protein_g || 20}g protein, ${mealTargets.breakfast?.carbs_g || 45}g carbs, ${mealTargets.breakfast?.fat_g || 15}g fat
+   - Mid-Morning Snack: ${mealTargets.mid_morning_snack?.calories || 150} calories, ${mealTargets.mid_morning_snack?.protein_g || 8}g protein, ${mealTargets.mid_morning_snack?.carbs_g || 15}g carbs, ${mealTargets.mid_morning_snack?.fat_g || 7}g fat
+   - Lunch: ${mealTargets.lunch?.calories || 500} calories, ${mealTargets.lunch?.protein_g || 25}g protein, ${mealTargets.lunch?.carbs_g || 60}g carbs, ${mealTargets.lunch?.fat_g || 18}g fat
+   - Evening Snack: ${mealTargets.evening_snack?.calories || 150} calories, ${mealTargets.evening_snack?.protein_g || 8}g protein, ${mealTargets.evening_snack?.carbs_g || 15}g carbs, ${mealTargets.evening_snack?.fat_g || 7}g fat
+   - Dinner: ${mealTargets.dinner?.calories || 400} calories, ${mealTargets.dinner?.protein_g || 20}g protein, ${mealTargets.dinner?.carbs_g || 45}g carbs, ${mealTargets.dinner?.fat_g || 15}g fat
+
+4. PORTION RECOMMENDATIONS:
+   ${portionRecommendations}
+
+5. CULTURAL & LOCATION CONTEXT:
    - Country: ${country || 'Not specified'}
    - Region: ${region || 'Not specified'}
    - Cultural Background: ${cultural_background.length > 0 ? cultural_background.join(', ') : 'Not specified'}
@@ -61,7 +77,7 @@ export async function generateMealPlan(request: MealPlanRequest) {
    - Local Ingredients Priority: ${local_ingredients_preference ? 'Yes' : 'No'}
    - Budget Preference: ${budget_preference || 'Not specified'}
 
-4. CULTURAL MEAL PLANNING REQUIREMENTS:
+6. CULTURAL MEAL PLANNING REQUIREMENTS:
    - Use ingredient names familiar to ${country || 'the user'} (e.g., if India: use "jeera" instead of "cumin", "sabzi" instead of "vegetables")
    - Suggest cooking methods common in ${country || 'the region'}: ${localCookingMethods.length > 0 ? localCookingMethods.join(', ') : 'standard methods'}
    - Prioritize locally available ingredients that are affordable and easily found in ${country || 'local markets'}
@@ -69,7 +85,7 @@ export async function generateMealPlan(request: MealPlanRequest) {
    - Include staple grains common in ${country || 'the region'}: ${localStapleGrains.length > 0 ? localStapleGrains.join(', ') : 'rice, wheat'}
    - Name dishes using culturally familiar terms that feel "like home"
 
-5. LOCAL INGREDIENT SUBSTITUTIONS:
+7. LOCAL INGREDIENT SUBSTITUTIONS:
    - ${local_ingredients_preference ? 'ALWAYS prioritize locally available, affordable ingredients' : 'Use standard international ingredients'}
    - Replace expensive/imported ingredients with local alternatives
    - Example substitutions for ${country || 'local context'}:
@@ -77,36 +93,36 @@ export async function generateMealPlan(request: MealPlanRequest) {
      * If avocado is unavailable → suggest local healthy fat sources
      * If exotic proteins are costly → suggest affordable local protein sources
 
-6. MEAL STRUCTURE:
+8. MEAL STRUCTURE:
    - Include 3 main meals (breakfast, lunch, dinner) + 2 healthy snacks (mid-morning, evening)
    - Use meal timing appropriate for ${country || 'the culture'}
    - Add hydration guidance (2–2.5 liters water/day, include traditional teas if relevant)
 
-7. NUTRITION QUALITY (Each day must include):
+9. NUTRITION QUALITY (Each day must include):
    - At least 1 iron-rich food (lentils, beans, spinach, pumpkin seeds, lean meat)
    - At least 1 calcium source (milk, yogurt, paneer, sesame, ragi, fortified plant milk)
    - At least 1 vitamin C source (citrus fruits, bell peppers, tomatoes)
    - At least 1 omega-3 source (chia seeds, flax, walnuts, or fish if non-vegetarian)
 
-8. DIETARY PREFERENCES:
+10. DIETARY PREFERENCES:
    - Diet Type: ${diet_type}
    - Cuisine: ${cuisine}
    - If vegetarian → exclude meat, fish, eggs. Use paneer, tofu, dals, beans, soy
    - If vegan → exclude all dairy/eggs. Use plant-based proteins and fortified alternatives
    - Always suggest 1 culturally appropriate swap option per meal
 
-9. MEDICAL CONDITIONS & RESTRICTIONS:
+11. MEDICAL CONDITIONS & RESTRICTIONS:
    - Medical conditions: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'}
    - Food exclusions: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
 
-10. STRUCTURED INGREDIENT REQUIREMENTS:
+12. STRUCTURED INGREDIENT REQUIREMENTS:
    - EVERY ingredient MUST include specific quantities and units
    - Use household measures familiar to ${country || 'the region'} (e.g., katori, cup, tbsp, piece, bunch)
    - Provide both metric and local household measures when possible
    - Include local/cultural names alongside English names
    - Example: {"name": "rice", "local_name": "चावल", "quantity": 1, "unit": "katori", "household_unit": "1 medium katori (150ml)", "household_qty": 1}
 
-11. OUTPUT FORMAT - Return a valid JSON object with this exact structure:
+13. OUTPUT FORMAT - Return a valid JSON object with this exact structure:
 {
   "week_start": "current date range",
   "total_daily_calories": number,
