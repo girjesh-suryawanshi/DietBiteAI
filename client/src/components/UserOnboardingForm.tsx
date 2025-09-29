@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ArrowRight, User, Activity, Globe, Heart, Coffee } from "lucide-react";
+import { ArrowLeft, ArrowRight, User, Activity, Globe, Heart, Coffee, MapPin, ChefHat } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,10 +18,24 @@ const userOnboardingSchema = z.object({
   height_cm: z.number().min(100, "Height must be at least 100cm").max(250, "Invalid height"),
   weight_kg: z.number().min(30, "Weight must be at least 30kg").max(300, "Invalid weight"),
   activity_level: z.enum(["sedentary", "lightly_active", "moderately_active", "very_active", "extremely_active"]),
-  country_region: z.string().min(1, "Please select a cuisine preference"),
+  
+  // Location and cultural preferences
+  country: z.string().min(1, "Please select your country"),
+  region: z.string().optional(),
+  city: z.string().optional(),
+  cultural_background: z.array(z.string()).default([]),
+  cuisine_familiarity: z.array(z.string()).default([]),
+  cooking_methods: z.array(z.string()).default([]),
+  local_ingredients_preference: z.boolean().default(true),
+  budget_preference: z.enum(["budget_friendly", "moderate", "premium"]).optional(),
+  
+  // Diet and health
   food_preference: z.enum(["vegetarian", "non_vegetarian", "vegan", "keto", "paleo", "mediterranean"]),
   health_conditions: z.array(z.string()).default([]),
   foods_to_include: z.array(z.string()).default([]),
+  
+  // Backward compatibility
+  country_region: z.string().optional(),
 });
 
 type UserOnboardingData = z.infer<typeof userOnboardingSchema>;
@@ -34,9 +48,11 @@ interface UserOnboardingFormProps {
 const STEPS = [
   { id: 1, title: "Personal Info", icon: User, description: "Tell us about yourself" },
   { id: 2, title: "Physical Stats", icon: Activity, description: "Your body metrics" },
-  { id: 3, title: "Lifestyle", icon: Globe, description: "Activity & preferences" },
-  { id: 4, title: "Health & Diet", icon: Heart, description: "Health conditions" },
-  { id: 5, title: "Food Include", icon: Coffee, description: "Foods you must have" },
+  { id: 3, title: "Location", icon: MapPin, description: "Where are you from?" },
+  { id: 4, title: "Cultural Taste", icon: ChefHat, description: "Your cooking style" },
+  { id: 5, title: "Lifestyle", icon: Globe, description: "Diet & activity level" },
+  { id: 6, title: "Health", icon: Heart, description: "Health conditions" },
+  { id: 7, title: "Preferences", icon: Coffee, description: "Foods you love" },
 ];
 
 const ACTIVITY_LEVELS = [
@@ -47,15 +63,56 @@ const ACTIVITY_LEVELS = [
   { value: "extremely_active", label: "Extremely Active", description: "Very hard exercise, physical job" },
 ];
 
+// Location data
+const COUNTRIES = [
+  { value: "India", label: "India", regions: ["North India", "South India", "West India", "East India", "Northeast India"] },
+  { value: "USA", label: "United States", regions: ["Northeast", "Southeast", "Midwest", "Southwest", "West Coast"] },
+  { value: "UK", label: "United Kingdom", regions: ["England", "Scotland", "Wales", "Northern Ireland"] },
+  { value: "Canada", label: "Canada", regions: ["Ontario", "Quebec", "British Columbia", "Alberta", "Other Provinces"] },
+  { value: "Australia", label: "Australia", regions: ["New South Wales", "Victoria", "Queensland", "Western Australia", "Other States"] },
+  { value: "Mexico", label: "Mexico", regions: ["Northern Mexico", "Central Mexico", "Southern Mexico", "Coastal Mexico"] },
+  { value: "China", label: "China", regions: ["Northern China", "Southern China", "Eastern China", "Western China"] },
+  { value: "Germany", label: "Germany", regions: ["Bavaria", "North Rhine-Westphalia", "Baden-Württemberg", "Other States"] },
+  { value: "France", label: "France", regions: ["Île-de-France", "Provence", "Normandy", "Aquitaine", "Other Regions"] },
+  { value: "Italy", label: "Italy", regions: ["Northern Italy", "Central Italy", "Southern Italy", "Islands"] },
+  { value: "Other", label: "Other Country", regions: [] }
+];
+
+// Cultural backgrounds by region
+const CULTURAL_BACKGROUNDS = {
+  India: ["North Indian", "South Indian", "Punjabi", "Bengali", "Gujarati", "Maharashtrian", "Tamil", "Kerala", "Rajasthani", "Other"],
+  USA: ["American", "Mexican-American", "Italian-American", "Asian-American", "African-American", "Native American", "Other"],
+  China: ["Han Chinese", "Cantonese", "Sichuan", "Hunan", "Beijing", "Shanghai", "Other"],
+  Mexico: ["Mexican", "Maya", "Aztec Heritage", "Spanish Influence", "Regional Mexican", "Other"],
+  Other: ["Local Traditional", "Mixed Heritage", "International", "Other"]
+};
+
+// Cuisine familiarity options
 const CUISINES = [
   { value: "indian", label: "Indian Cuisine" },
   { value: "american", label: "American Cuisine" },
+  { value: "chinese", label: "Chinese Cuisine" },
   { value: "mediterranean", label: "Mediterranean" },
-  { value: "asian", label: "Asian Cuisine" },
   { value: "italian", label: "Italian Cuisine" },
   { value: "mexican", label: "Mexican Cuisine" },
   { value: "middle_eastern", label: "Middle Eastern" },
-  { value: "european", label: "European Cuisine" },
+  { value: "japanese", label: "Japanese Cuisine" },
+  { value: "thai", label: "Thai Cuisine" },
+  { value: "french", label: "French Cuisine" },
+];
+
+// Cooking methods
+const COOKING_METHODS = [
+  { value: "pressure_cooker", label: "Pressure Cooker" },
+  { value: "stovetop", label: "Stovetop Cooking" },
+  { value: "oven", label: "Oven Baking" },
+  { value: "wok", label: "Wok/Stir Fry" },
+  { value: "grill", label: "Grilling" },
+  { value: "steaming", label: "Steaming" },
+  { value: "tandoor", label: "Tandoor/Clay Oven" },
+  { value: "slow_cooker", label: "Slow Cooker" },
+  { value: "microwave", label: "Microwave" },
+  { value: "air_fryer", label: "Air Fryer" },
 ];
 
 const HEALTH_CONDITIONS = [
@@ -81,6 +138,13 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   const [foodsToInclude, setFoodsToInclude] = useState<string[]>([]);
   const [customHealthCondition, setCustomHealthCondition] = useState("");
   const [customFoodToInclude, setCustomFoodToInclude] = useState("");
+  
+  // New cultural and location state
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [availableRegions, setAvailableRegions] = useState<string[]>([]);
+  const [culturalBackgrounds, setCulturalBackgrounds] = useState<string[]>([]);
+  const [cuisineFamiliarity, setCuisineFamiliarity] = useState<string[]>([]);
+  const [cookingMethods, setCookingMethods] = useState<string[]>([]);
 
   const {
     register,
@@ -95,6 +159,10 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
     defaultValues: {
       health_conditions: [],
       foods_to_include: [],
+      cultural_background: [],
+      cuisine_familiarity: [],
+      cooking_methods: [],
+      local_ingredients_preference: true,
     },
   });
 
@@ -102,8 +170,8 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
   const progress = (currentStep / STEPS.length) * 100;
 
   const nextStep = async () => {
-    // For steps 4 and 5, we don't need strict validation as they are optional
-    if (currentStep === 4 || currentStep === 5) {
+    // For steps 4, 6, and 7, we don't need strict validation as they are optional
+    if (currentStep === 4 || currentStep === 6 || currentStep === 7) {
       if (currentStep < STEPS.length) {
         setCurrentStep(currentStep + 1);
       }
@@ -128,9 +196,11 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
     switch (step) {
       case 1: return ['name', 'age', 'gender'];
       case 2: return ['height_cm', 'weight_kg'];
-      case 3: return ['activity_level', 'country_region', 'food_preference'];
-      case 4: return ['health_conditions'];
-      case 5: return ['foods_to_include'];
+      case 3: return ['country'];
+      case 4: return []; // Cultural preferences are optional
+      case 5: return ['activity_level', 'food_preference'];
+      case 6: return []; // Health conditions are optional
+      case 7: return []; // Food preferences are optional
       default: return [];
     }
   };
@@ -181,8 +251,50 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
       ...data,
       health_conditions: finalHealthConditions,
       foods_to_include: finalFoodsToInclude,
+      cultural_background: culturalBackgrounds,
+      cuisine_familiarity: cuisineFamiliarity,
+      cooking_methods: cookingMethods,
+      // Set backward compatibility field
+      country_region: data.country,
     };
     onSubmit(finalData);
+  };
+  
+  // Handle country selection and update available regions
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+    setValue('country', country);
+    
+    const countryData = COUNTRIES.find(c => c.value === country);
+    setAvailableRegions(countryData?.regions || []);
+    setValue('region', ''); // Reset region when country changes
+  };
+  
+  // Handle cultural background changes
+  const handleCulturalBackgroundChange = (background: string, checked: boolean) => {
+    const newBackgrounds = checked
+      ? [...culturalBackgrounds, background]
+      : culturalBackgrounds.filter(b => b !== background);
+    setCulturalBackgrounds(newBackgrounds);
+    setValue('cultural_background', newBackgrounds);
+  };
+  
+  // Handle cuisine familiarity changes
+  const handleCuisineFamiliarityChange = (cuisine: string, checked: boolean) => {
+    const newCuisines = checked
+      ? [...cuisineFamiliarity, cuisine]
+      : cuisineFamiliarity.filter(c => c !== cuisine);
+    setCuisineFamiliarity(newCuisines);
+    setValue('cuisine_familiarity', newCuisines);
+  };
+  
+  // Handle cooking methods changes
+  const handleCookingMethodsChange = (method: string, checked: boolean) => {
+    const newMethods = checked
+      ? [...cookingMethods, method]
+      : cookingMethods.filter(m => m !== method);
+    setCookingMethods(newMethods);
+    setValue('cooking_methods', newMethods);
   };
 
   const renderStepContent = () => {
@@ -277,8 +389,145 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Lifestyle & Preferences</h2>
-              <p className="text-gray-600 mt-2">Tell us about your activity level and food preferences</p>
+              <h2 className="text-2xl font-bold text-gray-900">Where Are You Located?</h2>
+              <p className="text-gray-600 mt-2">Help us suggest ingredients available in your area</p>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <Label>Country</Label>
+                <Select onValueChange={handleCountryChange}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select your country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((country) => (
+                      <SelectItem key={country.value} value={country.value}>
+                        {country.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>}
+              </div>
+
+              {availableRegions.length > 0 && (
+                <div>
+                  <Label>Region/State (Optional)</Label>
+                  <Select onValueChange={(value) => setValue("region", value)}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select your region" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableRegions.map((region) => (
+                        <SelectItem key={region} value={region}>
+                          {region}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <div>
+                <Label htmlFor="city">City (Optional)</Label>
+                <Input
+                  id="city"
+                  placeholder="e.g., Mumbai, New York, London"
+                  {...register("city")}
+                  className="mt-1"
+                />
+              </div>
+
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>Why we ask:</strong> This helps us suggest locally available ingredients and culturally appropriate meals for your area.
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Your Cultural Food Background</h2>
+              <p className="text-gray-600 mt-2">Tell us about your food culture and cooking preferences</p>
+            </div>
+            
+            <div className="space-y-6">
+              {selectedCountry && CULTURAL_BACKGROUNDS[selectedCountry as keyof typeof CULTURAL_BACKGROUNDS] && (
+                <div>
+                  <Label className="text-base font-medium">Cultural Background (Select all that apply)</Label>
+                  <div className="grid grid-cols-2 gap-3 mt-2">
+                    {CULTURAL_BACKGROUNDS[selectedCountry as keyof typeof CULTURAL_BACKGROUNDS].map((background) => (
+                      <div key={background} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`cultural-${background}`}
+                          checked={culturalBackgrounds.includes(background)}
+                          onCheckedChange={(checked) => handleCulturalBackgroundChange(background, checked as boolean)}
+                        />
+                        <Label htmlFor={`cultural-${background}`} className="text-sm font-normal">
+                          {background}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <Label className="text-base font-medium">Cuisines You're Familiar With (Optional)</Label>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  {CUISINES.map((cuisine) => (
+                    <div key={cuisine.value} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`cuisine-${cuisine.value}`}
+                        checked={cuisineFamiliarity.includes(cuisine.value)}
+                        onCheckedChange={(checked) => handleCuisineFamiliarityChange(cuisine.value, checked as boolean)}
+                      />
+                      <Label htmlFor={`cuisine-${cuisine.value}`} className="text-sm font-normal">
+                        {cuisine.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-base font-medium">Cooking Methods You Use (Optional)</Label>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  {COOKING_METHODS.map((method) => (
+                    <div key={method.value} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`cooking-${method.value}`}
+                        checked={cookingMethods.includes(method.value)}
+                        onCheckedChange={(checked) => handleCookingMethodsChange(method.value, checked as boolean)}
+                      />
+                      <Label htmlFor={`cooking-${method.value}`} className="text-sm font-normal">
+                        {method.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4 p-3 bg-green-50 rounded-lg">
+                <p className="text-sm text-green-800">
+                  <strong>Note:</strong> This step is optional. We'll use this information to make meal plans that feel familiar and use cooking methods you're comfortable with.
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Lifestyle & Diet Preferences</h2>
+              <p className="text-gray-600 mt-2">Tell us about your activity level and dietary choices</p>
             </div>
             
             <div className="space-y-4">
@@ -303,24 +552,7 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
               </div>
 
               <div>
-                <Label>Country/Region Preference</Label>
-                <Select onValueChange={(value) => setValue("country_region", value)}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select cuisine" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {CUISINES.map((cuisine) => (
-                      <SelectItem key={cuisine.value} value={cuisine.value}>
-                        {cuisine.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.country_region && <p className="text-red-500 text-sm mt-1">{errors.country_region.message}</p>}
-              </div>
-
-              <div>
-                <Label>Food Preference</Label>
+                <Label>Diet Type</Label>
                 <Select onValueChange={(value) => setValue("food_preference", value as any)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select diet type" />
@@ -336,11 +568,36 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
                 </Select>
                 {errors.food_preference && <p className="text-red-500 text-sm mt-1">{errors.food_preference.message}</p>}
               </div>
+
+              <div>
+                <Label>Budget Preference (Optional)</Label>
+                <Select onValueChange={(value) => setValue("budget_preference", value as any)}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select budget preference" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="budget_friendly">Budget-Friendly</SelectItem>
+                    <SelectItem value="moderate">Moderate</SelectItem>
+                    <SelectItem value="premium">Premium</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="local_ingredients"
+                  checked={watchedValues.local_ingredients_preference ?? true}
+                  onCheckedChange={(checked) => setValue("local_ingredients_preference", checked as boolean)}
+                />
+                <Label htmlFor="local_ingredients" className="text-sm font-normal">
+                  Prefer locally available ingredients (recommended)
+                </Label>
+              </div>
             </div>
           </div>
         );
 
-      case 4:
+      case 6:
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
@@ -374,10 +631,16 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
                 </div>
               ))}
             </div>
+            
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600">
+                <strong>Note:</strong> This step is optional. You can skip it if you don't have any specific health conditions.
+              </p>
+            </div>
           </div>
         );
 
-      case 5:
+      case 7:
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
@@ -487,7 +750,7 @@ export function UserOnboardingForm({ onSubmit, isLoading = false }: UserOnboardi
 
               {currentStep < STEPS.length ? (
                 <div className="flex space-x-2">
-                  {currentStep === 5 && (
+                  {(currentStep === 4 || currentStep === 6 || currentStep === 7) && (
                     <Button
                       type="button"
                       variant="outline"
