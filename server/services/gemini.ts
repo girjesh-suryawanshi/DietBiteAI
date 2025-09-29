@@ -99,7 +99,14 @@ export async function generateMealPlan(request: MealPlanRequest) {
    - Medical conditions: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'}
    - Food exclusions: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
 
-7. OUTPUT FORMAT - Return a valid JSON object with this exact structure:
+10. STRUCTURED INGREDIENT REQUIREMENTS:
+   - EVERY ingredient MUST include specific quantities and units
+   - Use household measures familiar to ${country || 'the region'} (e.g., katori, cup, tbsp, piece, bunch)
+   - Provide both metric and local household measures when possible
+   - Include local/cultural names alongside English names
+   - Example: {"name": "rice", "local_name": "चावल", "quantity": 1, "unit": "katori", "household_unit": "1 medium katori (150ml)", "household_qty": 1}
+
+11. OUTPUT FORMAT - Return a valid JSON object with this exact structure:
 {
   "week_start": "current date range",
   "total_daily_calories": number,
@@ -116,66 +123,99 @@ export async function generateMealPlan(request: MealPlanRequest) {
           "type": "breakfast",
           "time": "8:00 AM",
           "name": "Dish Name",
-          "ingredients": ["ingredient1", "ingredient2"],
+          "ingredients": [
+            {
+              "name": "ingredient name",
+              "local_name": "local cultural name (optional)",
+              "quantity": number,
+              "unit": "g|kg|ml|l|cup|tbsp|tsp|piece|slice|medium|large|small|bunch|katori|bowl",
+              "household_unit": "description like '1 medium bowl' or '2 katori'",
+              "household_qty": number,
+              "macros": {
+                "calories": number,
+                "protein_g": number,
+                "carbs_g": number,
+                "fat_g": number
+              },
+              "notes": "any special notes about the ingredient",
+              "substitutions": ["substitute1", "substitute2"]
+            }
+          ],
           "instructions": ["step1", "step2"],
           "calories": number,
           "protein_g": number,
           "carbs_g": number,
           "fat_g": number,
           "fiber_g": number,
-          "swap_option": "Alternative dish description"
+          "swap_option": "Alternative dish description",
+          "portion_notes": "Notes about portion sizes and adjustments"
         },
         {
           "type": "mid_morning_snack",
           "time": "10:30 AM",
           "name": "Snack Name",
-          "ingredients": ["ingredient1"],
+          "ingredients": [
+            {
+              "name": "ingredient name",
+              "local_name": "local name",
+              "quantity": number,
+              "unit": "appropriate unit",
+              "household_unit": "household description",
+              "household_qty": number,
+              "macros": {"calories": number, "protein_g": number, "carbs_g": number, "fat_g": number},
+              "substitutions": ["alternative options"]
+            }
+          ],
           "instructions": ["preparation"],
           "calories": number,
           "protein_g": number,
           "carbs_g": number,
           "fat_g": number,
           "fiber_g": number,
-          "swap_option": "Alternative snack"
+          "swap_option": "Alternative snack",
+          "portion_notes": "Portion guidance"
         },
         {
           "type": "lunch",
           "time": "1:00 PM",
           "name": "Lunch Dish",
-          "ingredients": ["ingredient1", "ingredient2"],
+          "ingredients": [structured ingredient objects as above],
           "instructions": ["step1", "step2"],
           "calories": number,
           "protein_g": number,
           "carbs_g": number,
           "fat_g": number,
           "fiber_g": number,
-          "swap_option": "Alternative meal"
+          "swap_option": "Alternative meal",
+          "portion_notes": "Portion guidance"
         },
         {
           "type": "evening_snack",
           "time": "4:00 PM",
           "name": "Evening Snack",
-          "ingredients": ["ingredient1"],
+          "ingredients": [structured ingredient objects as above],
           "instructions": ["preparation"],
           "calories": number,
           "protein_g": number,
           "carbs_g": number,
           "fat_g": number,
           "fiber_g": number,
-          "swap_option": "Alternative snack"
+          "swap_option": "Alternative snack",
+          "portion_notes": "Portion guidance"
         },
         {
           "type": "dinner",
           "time": "7:00 PM",
           "name": "Dinner Dish",
-          "ingredients": ["ingredient1", "ingredient2"],
+          "ingredients": [structured ingredient objects as above],
           "instructions": ["step1", "step2"],
           "calories": number,
           "protein_g": number,
           "carbs_g": number,
           "fat_g": number,
           "fiber_g": number,
-          "swap_option": "Alternative dinner"
+          "swap_option": "Alternative dinner",
+          "portion_notes": "Portion guidance"
         }
       ],
       "daily_totals": {
