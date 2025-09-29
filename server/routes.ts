@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import * as path from "path";
 import * as fs from "fs";
 import { storage } from "./storage";
-import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema, WeeklyMealPlan } from "@shared/schema";
+import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema, WeeklyMealPlan, adjustServingSizeSchema, swapIngredientSchema, customizeRecipeSchema } from "@shared/schema";
 import { generateMealPlan } from "./services/gemini";
 import { generateMealPlanPDF } from "./services/pdf";
 
@@ -278,6 +278,221 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.sendFile(filePath);
     } else {
       res.status(404).json({ message: "File not found" });
+    }
+  });
+
+  // Recipe adjustment endpoints
+  app.patch("/api/meal-plans/:id/adjust-serving", async (req, res) => {
+    try {
+      const { day, meal_index, serving_multiplier } = adjustServingSizeSchema.parse(req.body);
+      const mealPlanId = req.params.id;
+
+      const mealPlan = await storage.getMealPlan(mealPlanId);
+      if (!mealPlan) {
+        return res.status(404).json({ message: "Meal plan not found" });
+      }
+
+      const planData = mealPlan.plan_data as WeeklyMealPlan;
+      const dayPlan = planData.days.find(d => d.day === day);
+      if (!dayPlan || !dayPlan.meals[meal_index]) {
+        return res.status(404).json({ message: "Meal not found" });
+      }
+
+      const meal = dayPlan.meals[meal_index];
+      
+      // Store original calories if not already stored
+      if (!meal.original_calories) {
+        meal.original_calories = meal.calories;
+      }
+
+      // Update serving size and recalculate nutrition
+      meal.serving_size = serving_multiplier;
+      const baseCalories = meal.original_calories || meal.calories;
+      meal.calories = Math.round(baseCalories * serving_multiplier);
+      
+      if (meal.protein_g) meal.protein_g = Math.round(meal.protein_g * serving_multiplier);
+      if (meal.carbs_g) meal.carbs_g = Math.round(meal.carbs_g * serving_multiplier);
+      if (meal.fat_g) meal.fat_g = Math.round(meal.fat_g * serving_multiplier);
+      if (meal.fiber_g) meal.fiber_g = Math.round(meal.fiber_g * serving_multiplier);
+
+      // Update the meal plan in storage
+      await storage.updateMealPlan(mealPlanId, { plan_data: planData });
+
+      res.json({ message: "Serving size adjusted successfully", meal });
+    } catch (error) {
+      console.error("Error adjusting serving size:", error);
+      res.status(500).json({ 
+        message: "Failed to adjust serving size", 
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.patch("/api/meal-plans/:id/swap-ingredient", async (req, res) => {
+    try {
+      const { day, meal_index, original_ingredient, replacement_ingredient, reason } = swapIngredientSchema.parse(req.body);
+      const mealPlanId = req.params.id;
+
+      const mealPlan = await storage.getMealPlan(mealPlanId);
+      if (!mealPlan) {
+        return res.status(404).json({ message: "Meal plan not found" });
+      }
+
+      const planData = mealPlan.plan_data as WeeklyMealPlan;
+      const dayPlan = planData.days.find(d => d.day === day);
+      if (!dayPlan || !dayPlan.meals[meal_index]) {
+        return res.status(404).json({ message: "Meal not found" });
+      }
+
+      const meal = dayPlan.meals[meal_index];
+
+      // Find and replace the ingredient
+      const ingredientIndex = meal.ingredients.findIndex(ing => 
+        ing.toLowerCase().includes(original_ingredient.toLowerCase())
+      );
+
+      if (ingredientIndex === -1) {
+        return res.status(404).json({ message: "Original ingredient not found in recipe" });
+      }
+
+      meal.ingredients[ingredientIndex] = replacement_ingredient;
+
+      // Track the modification
+      if (!meal.modifications) {
+        meal.modifications = {};
+      }
+      if (!meal.modifications.ingredient_swaps) {
+        meal.modifications.ingredient_swaps = [];
+      }
+
+      meal.modifications.ingredient_swaps.push({
+        original: original_ingredient,
+        replacement: replacement_ingredient,
+        reason: reason || "User preference"
+      });
+
+      // Update the meal plan in storage
+      await storage.updateMealPlan(mealPlanId, { plan_data: planData });
+
+      res.json({ message: "Ingredient swapped successfully", meal });
+    } catch (error) {
+      console.error("Error swapping ingredient:", error);
+      res.status(500).json({ 
+        message: "Failed to swap ingredient", 
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.patch("/api/meal-plans/:id/customize-recipe", async (req, res) => {
+    try {
+      const { day, meal_index, custom_instructions, notes } = customizeRecipeSchema.parse(req.body);
+      const mealPlanId = req.params.id;
+
+      const mealPlan = await storage.getMealPlan(mealPlanId);
+      if (!mealPlan) {
+        return res.status(404).json({ message: "Meal plan not found" });
+      }
+
+      const planData = mealPlan.plan_data as WeeklyMealPlan;
+      const dayPlan = planData.days.find(d => d.day === day);
+      if (!dayPlan || !dayPlan.meals[meal_index]) {
+        return res.status(404).json({ message: "Meal not found" });
+      }
+
+      const meal = dayPlan.meals[meal_index];
+
+      // Initialize modifications if not exists
+      if (!meal.modifications) {
+        meal.modifications = {};
+      }
+
+      // Update custom instructions and notes
+      if (custom_instructions) {
+        meal.modifications.custom_instructions = custom_instructions;
+      }
+      if (notes) {
+        meal.modifications.notes = notes;
+      }
+
+      // Update the meal plan in storage
+      await storage.updateMealPlan(mealPlanId, { plan_data: planData });
+
+      res.json({ message: "Recipe customized successfully", meal });
+    } catch (error) {
+      console.error("Error customizing recipe:", error);
+      res.status(500).json({ 
+        message: "Failed to customize recipe", 
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Get ingredient suggestions for swapping
+  app.get("/api/ingredient-suggestions/:ingredient", async (req, res) => {
+    try {
+      const ingredient = req.params.ingredient.toLowerCase();
+      
+      // Common ingredient substitutions map
+      const substitutions: Record<string, string[]> = {
+        // Proteins
+        "chicken": ["turkey", "tofu", "tempeh", "chickpeas", "lentils"],
+        "beef": ["lean turkey", "portobello mushrooms", "beyond meat", "black beans"],
+        "fish": ["tofu", "tempeh", "chickpeas", "nuts"],
+        "eggs": ["flax eggs", "chia eggs", "aquafaba", "silken tofu"],
+        
+        // Dairy
+        "milk": ["almond milk", "oat milk", "soy milk", "coconut milk"],
+        "cheese": ["nutritional yeast", "cashew cheese", "vegan cheese"],
+        "yogurt": ["coconut yogurt", "almond yogurt", "soy yogurt"],
+        "butter": ["olive oil", "coconut oil", "avocado", "nut butter"],
+        
+        // Grains
+        "rice": ["quinoa", "cauliflower rice", "bulgur", "barley"],
+        "pasta": ["zucchini noodles", "shirataki noodles", "lentil pasta", "quinoa pasta"],
+        "bread": ["lettuce wraps", "portobello caps", "sweet potato slices"],
+        
+        // Vegetables
+        "potato": ["sweet potato", "cauliflower", "turnips", "rutabaga"],
+        "onion": ["shallots", "leeks", "garlic", "green onions"],
+        "tomato": ["red bell pepper", "sun-dried tomatoes", "roasted red pepper"],
+        
+        // Common allergens
+        "nuts": ["seeds", "roasted chickpeas", "coconut flakes"],
+        "gluten": ["gluten-free alternatives", "rice-based products"],
+        "soy": ["coconut products", "nut-based alternatives"]
+      };
+
+      // Find suggestions based on ingredient matching
+      let suggestions: string[] = [];
+      for (const [key, subs] of Object.entries(substitutions)) {
+        if (ingredient.includes(key) || key.includes(ingredient)) {
+          suggestions = [...suggestions, ...subs];
+        }
+      }
+
+      // Remove duplicates and limit to 6 suggestions
+      suggestions = [...new Set(suggestions)].slice(0, 6);
+
+      // If no specific suggestions found, provide general healthy alternatives
+      if (suggestions.length === 0) {
+        suggestions = [
+          "Similar protein source",
+          "Vegetarian alternative", 
+          "Lower calorie option",
+          "Higher fiber substitute",
+          "Gluten-free version",
+          "Dairy-free alternative"
+        ];
+      }
+
+      res.json({ suggestions });
+    } catch (error) {
+      console.error("Error getting ingredient suggestions:", error);
+      res.status(500).json({ 
+        message: "Failed to get suggestions", 
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
     }
   });
 
