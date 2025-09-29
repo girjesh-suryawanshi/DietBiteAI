@@ -74,12 +74,30 @@ export type InsertMealPlan = z.infer<typeof insertMealPlanSchema>;
 export type PdfFile = typeof pdf_files.$inferSelect;
 export type InsertPdfFile = z.infer<typeof insertPdfFileSchema>;
 
+// Ingredient structure with quantities and cultural context
+export const ingredientSchema = z.object({
+  name: z.string(), // English/standardized name
+  local_name: z.string().optional(), // Local/cultural name (e.g., "पालक" for spinach)
+  quantity: z.number(), // Numeric amount
+  unit: z.enum(['g', 'kg', 'ml', 'l', 'cup', 'tbsp', 'tsp', 'piece', 'slice', 'medium', 'large', 'small', 'bunch', 'katori', 'bowl']), // Standard units
+  household_unit: z.string().optional(), // Household measure (e.g., "1 medium bowl", "2 katori")
+  household_qty: z.number().optional(), // Quantity in household units
+  macros: z.object({
+    calories: z.number().optional(),
+    protein_g: z.number().optional(),
+    carbs_g: z.number().optional(),
+    fat_g: z.number().optional(),
+  }).optional(),
+  notes: z.string().optional(), // Any special notes
+  substitutions: z.array(z.string()).optional(), // Available substitutes
+});
+
 // Meal plan data structure
 export const mealSchema = z.object({
   type: z.string(), // breakfast, lunch, dinner, snack
   time: z.string(),
   name: z.string(),
-  ingredients: z.array(z.string()),
+  ingredients: z.array(ingredientSchema), // Now structured ingredients with quantities
   instructions: z.array(z.string()),
   calories: z.number(),
   protein_g: z.number().optional(),
@@ -89,6 +107,7 @@ export const mealSchema = z.object({
   swap_option: z.string().optional(),
   serving_size: z.number().default(1), // multiplier for adjusting portions
   original_calories: z.number().optional(), // store original calories for calculations
+  portion_notes: z.string().optional(), // Notes about portion sizes and adjustments
   modifications: z.object({
     ingredient_swaps: z.array(z.object({
       original: z.string(),
@@ -116,6 +135,7 @@ export const weeklyMealPlanSchema = z.object({
   }),
 });
 
+export type Ingredient = z.infer<typeof ingredientSchema>;
 export type Meal = z.infer<typeof mealSchema>;
 export type DayMealPlan = z.infer<typeof dayMealPlanSchema>;
 export type WeeklyMealPlan = z.infer<typeof weeklyMealPlanSchema>;
