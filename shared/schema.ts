@@ -70,6 +70,22 @@ export const mealSchema = z.object({
   ingredients: z.array(z.string()),
   instructions: z.array(z.string()),
   calories: z.number(),
+  protein_g: z.number().optional(),
+  carbs_g: z.number().optional(),
+  fat_g: z.number().optional(),
+  fiber_g: z.number().optional(),
+  swap_option: z.string().optional(),
+  serving_size: z.number().default(1), // multiplier for adjusting portions
+  original_calories: z.number().optional(), // store original calories for calculations
+  modifications: z.object({
+    ingredient_swaps: z.array(z.object({
+      original: z.string(),
+      replacement: z.string(),
+      reason: z.string().optional(),
+    })).optional(),
+    custom_instructions: z.array(z.string()).optional(),
+    notes: z.string().optional(),
+  }).optional(),
 });
 
 export const dayMealPlanSchema = z.object({
@@ -91,3 +107,32 @@ export const weeklyMealPlanSchema = z.object({
 export type Meal = z.infer<typeof mealSchema>;
 export type DayMealPlan = z.infer<typeof dayMealPlanSchema>;
 export type WeeklyMealPlan = z.infer<typeof weeklyMealPlanSchema>;
+
+// Recipe adjustment schemas
+export const adjustServingSizeSchema = z.object({
+  meal_plan_id: z.string(),
+  day: z.string(),
+  meal_index: z.number(),
+  serving_multiplier: z.number().min(0.5).max(4), // Allow 0.5x to 4x adjustments
+});
+
+export const swapIngredientSchema = z.object({
+  meal_plan_id: z.string(),
+  day: z.string(),
+  meal_index: z.number(),
+  original_ingredient: z.string(),
+  replacement_ingredient: z.string(),
+  reason: z.string().optional(),
+});
+
+export const customizeRecipeSchema = z.object({
+  meal_plan_id: z.string(),
+  day: z.string(),
+  meal_index: z.number(),
+  custom_instructions: z.array(z.string()).optional(),
+  notes: z.string().optional(),
+});
+
+export type AdjustServingSize = z.infer<typeof adjustServingSizeSchema>;
+export type SwapIngredient = z.infer<typeof swapIngredientSchema>;
+export type CustomizeRecipe = z.infer<typeof customizeRecipeSchema>;
