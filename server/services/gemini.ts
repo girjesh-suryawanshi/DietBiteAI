@@ -44,226 +44,30 @@ export async function generateMealPlan(request: MealPlanRequest) {
   const mealTargets = calculateMealTargets(userStats, diet_type, country);
   const portionRecommendations = generatePortionRecommendations(userStats, country);
   
-  // Create the culturally-aware expert dietician prompt
-  const prompt = `You are an expert dietician with deep knowledge of global cuisines and local food systems. Create a safe, balanced, and culturally appropriate personalized 7-day diet plan following these strict guidelines:
+  // Create a concise but comprehensive prompt
+  const prompt = `Create a 7-day ${diet_type} ${cuisine} diet plan for ${fitness_goal}. 
 
-1. CALORIES:
-   - For women: 1400–1600 kcal/day (never below 1200)
-   - For men: 1700–1900 kcal/day (never below 1500)
-   - Adjust based on: Age: ${age || 'N/A'}, Gender: ${gender || 'N/A'}, Weight: ${weight_kg || 'N/A'}kg, Height: ${height_cm || 'N/A'}cm, Goal: ${fitness_goal}
+PERSONAL INFO: Age: ${age || 'N/A'}, Gender: ${gender || 'N/A'}, Weight: ${weight_kg || 'N/A'}kg, Height: ${height_cm || 'N/A'}cm
+LOCATION: ${country || 'International'} 
+DAILY CALORIES: ${gender === 'male' ? '1700-1900' : '1400-1600'} kcal
+RESTRICTIONS: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'} | Avoid: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
 
-2. MACRONUTRIENTS:
-   - Protein: 20–25% of calories (70–80g minimum daily)
-   - Carbohydrates: 45–50% (mostly complex carbs, low GI)
-   - Fats: 25–30% (healthy fats: olive oil, nuts, seeds, avocado)
-   - Fiber: minimum 25g per day
+MEAL TARGETS:
+- Breakfast: ${mealTargets.breakfast?.calories || 400} cal, ${mealTargets.breakfast?.protein_g || 20}g protein
+- Lunch: ${mealTargets.lunch?.calories || 500} cal, ${mealTargets.lunch?.protein_g || 25}g protein  
+- Dinner: ${mealTargets.dinner?.calories || 400} cal, ${mealTargets.dinner?.protein_g || 20}g protein
+- 2 Snacks: ${mealTargets.mid_morning_snack?.calories || 150} cal each
 
-3. CALCULATED MEAL TARGETS (Use these exact targets for each meal):
-   - Breakfast: ${mealTargets.breakfast?.calories || 400} calories, ${mealTargets.breakfast?.protein_g || 20}g protein, ${mealTargets.breakfast?.carbs_g || 45}g carbs, ${mealTargets.breakfast?.fat_g || 15}g fat
-   - Mid-Morning Snack: ${mealTargets.mid_morning_snack?.calories || 150} calories, ${mealTargets.mid_morning_snack?.protein_g || 8}g protein, ${mealTargets.mid_morning_snack?.carbs_g || 15}g carbs, ${mealTargets.mid_morning_snack?.fat_g || 7}g fat
-   - Lunch: ${mealTargets.lunch?.calories || 500} calories, ${mealTargets.lunch?.protein_g || 25}g protein, ${mealTargets.lunch?.carbs_g || 60}g carbs, ${mealTargets.lunch?.fat_g || 18}g fat
-   - Evening Snack: ${mealTargets.evening_snack?.calories || 150} calories, ${mealTargets.evening_snack?.protein_g || 8}g protein, ${mealTargets.evening_snack?.carbs_g || 15}g carbs, ${mealTargets.evening_snack?.fat_g || 7}g fat
-   - Dinner: ${mealTargets.dinner?.calories || 400} calories, ${mealTargets.dinner?.protein_g || 20}g protein, ${mealTargets.dinner?.carbs_g || 45}g carbs, ${mealTargets.dinner?.fat_g || 15}g fat
+CRITICAL REQUIREMENTS:
+1. Use ${country || 'local'} ingredients & cooking methods: ${localCookingMethods.slice(0,3).join(', ')}
+2. Include local names (e.g., ${country === 'India' ? 'jeera for cumin, sabzi for vegetables' : 'regional terms'})
+3. EVERY ingredient MUST have quantities: {"name": "rice", "local_name": "${country === 'India' ? 'चावल' : 'rice'}", "quantity": 1, "unit": "cup", "household_unit": "1 medium ${country === 'India' ? 'katori' : 'cup'} (150ml)"}
+4. Use affordable, locally available ingredients
 
-4. PORTION RECOMMENDATIONS:
-   ${portionRecommendations}
+INGREDIENT FORMAT (MANDATORY):
+{"name": "rice", "local_name": "${country === 'India' ? 'चावल' : 'rice'}", "quantity": 1, "unit": "cup", "household_unit": "1 medium ${country === 'India' ? 'katori' : 'cup'} (150ml)", "macros": {"calories": 200, "protein_g": 4}}
 
-5. CULTURAL & LOCATION CONTEXT:
-   - Country: ${country || 'Not specified'}
-   - Region: ${region || 'Not specified'}
-   - Cultural Background: ${cultural_background.length > 0 ? cultural_background.join(', ') : 'Not specified'}
-   - Cuisine Familiarity: ${cuisine_familiarity.length > 0 ? cuisine_familiarity.join(', ') : 'General'}
-   - Preferred Cooking Methods: ${cooking_methods.length > 0 ? cooking_methods.join(', ') : localCookingMethods.join(', ')}
-   - Local Ingredients Priority: ${local_ingredients_preference ? 'Yes' : 'No'}
-   - Budget Preference: ${budget_preference || 'Not specified'}
-
-6. CULTURAL MEAL PLANNING REQUIREMENTS:
-   - Use ingredient names familiar to ${country || 'the user'} (e.g., if India: use "jeera" instead of "cumin", "sabzi" instead of "vegetables")
-   - Suggest cooking methods common in ${country || 'the region'}: ${localCookingMethods.length > 0 ? localCookingMethods.join(', ') : 'standard methods'}
-   - Prioritize locally available ingredients that are affordable and easily found in ${country || 'local markets'}
-   - Use traditional meal timing appropriate for ${country || 'the culture'}
-   - Include staple grains common in ${country || 'the region'}: ${localStapleGrains.length > 0 ? localStapleGrains.join(', ') : 'rice, wheat'}
-   - Name dishes using culturally familiar terms that feel "like home"
-
-7. LOCAL INGREDIENT SUBSTITUTIONS:
-   - ${local_ingredients_preference ? 'ALWAYS prioritize locally available, affordable ingredients' : 'Use standard international ingredients'}
-   - Replace expensive/imported ingredients with local alternatives
-   - Example substitutions for ${country || 'local context'}:
-     * If quinoa is expensive → suggest ${localStapleGrains.includes('brown rice') ? 'brown rice' : 'local whole grains'}
-     * If avocado is unavailable → suggest local healthy fat sources
-     * If exotic proteins are costly → suggest affordable local protein sources
-
-8. MEAL STRUCTURE:
-   - Include 3 main meals (breakfast, lunch, dinner) + 2 healthy snacks (mid-morning, evening)
-   - Use meal timing appropriate for ${country || 'the culture'}
-   - Add hydration guidance (2–2.5 liters water/day, include traditional teas if relevant)
-
-9. NUTRITION QUALITY (Each day must include):
-   - At least 1 iron-rich food (lentils, beans, spinach, pumpkin seeds, lean meat)
-   - At least 1 calcium source (milk, yogurt, paneer, sesame, ragi, fortified plant milk)
-   - At least 1 vitamin C source (citrus fruits, bell peppers, tomatoes)
-   - At least 1 omega-3 source (chia seeds, flax, walnuts, or fish if non-vegetarian)
-
-10. DIETARY PREFERENCES:
-   - Diet Type: ${diet_type}
-   - Cuisine: ${cuisine}
-   - If vegetarian → exclude meat, fish, eggs. Use paneer, tofu, dals, beans, soy
-   - If vegan → exclude all dairy/eggs. Use plant-based proteins and fortified alternatives
-   - Always suggest 1 culturally appropriate swap option per meal
-
-11. MEDICAL CONDITIONS & RESTRICTIONS:
-   - Medical conditions: ${medical_conditions.length > 0 ? medical_conditions.join(', ') : 'None'}
-   - Food exclusions: ${food_exclusions.length > 0 ? food_exclusions.join(', ') : 'None'}
-
-12. STRUCTURED INGREDIENT REQUIREMENTS:
-   - EVERY ingredient MUST include specific quantities and units
-   - Use household measures familiar to ${country || 'the region'} (e.g., katori, cup, tbsp, piece, bunch)
-   - Provide both metric and local household measures when possible
-   - Include local/cultural names alongside English names
-   - Example: {"name": "rice", "local_name": "चावल", "quantity": 1, "unit": "katori", "household_unit": "1 medium katori (150ml)", "household_qty": 1}
-
-13. OUTPUT FORMAT - Return a valid JSON object with this exact structure:
-{
-  "week_start": "current date range",
-  "total_daily_calories": number,
-  "goals": {
-    "fitness_goal": "${fitness_goal}",
-    "cuisine": "${cuisine}",
-    "diet_type": "${diet_type}"
-  },
-  "days": [
-    {
-      "day": "Monday",
-      "meals": [
-        {
-          "type": "breakfast",
-          "time": "8:00 AM",
-          "name": "Dish Name",
-          "ingredients": [
-            {
-              "name": "ingredient name",
-              "local_name": "local cultural name (optional)",
-              "quantity": number,
-              "unit": "g|kg|ml|l|cup|tbsp|tsp|piece|slice|medium|large|small|bunch|katori|bowl",
-              "household_unit": "description like '1 medium bowl' or '2 katori'",
-              "household_qty": number,
-              "macros": {
-                "calories": number,
-                "protein_g": number,
-                "carbs_g": number,
-                "fat_g": number
-              },
-              "notes": "any special notes about the ingredient",
-              "substitutions": ["substitute1", "substitute2"]
-            }
-          ],
-          "instructions": ["step1", "step2"],
-          "calories": number,
-          "protein_g": number,
-          "carbs_g": number,
-          "fat_g": number,
-          "fiber_g": number,
-          "swap_option": "Alternative dish description",
-          "portion_notes": "Notes about portion sizes and adjustments"
-        },
-        {
-          "type": "mid_morning_snack",
-          "time": "10:30 AM",
-          "name": "Snack Name",
-          "ingredients": [
-            {
-              "name": "ingredient name",
-              "local_name": "local name",
-              "quantity": number,
-              "unit": "appropriate unit",
-              "household_unit": "household description",
-              "household_qty": number,
-              "macros": {"calories": number, "protein_g": number, "carbs_g": number, "fat_g": number},
-              "substitutions": ["alternative options"]
-            }
-          ],
-          "instructions": ["preparation"],
-          "calories": number,
-          "protein_g": number,
-          "carbs_g": number,
-          "fat_g": number,
-          "fiber_g": number,
-          "swap_option": "Alternative snack",
-          "portion_notes": "Portion guidance"
-        },
-        {
-          "type": "lunch",
-          "time": "1:00 PM",
-          "name": "Lunch Dish",
-          "ingredients": [structured ingredient objects as above],
-          "instructions": ["step1", "step2"],
-          "calories": number,
-          "protein_g": number,
-          "carbs_g": number,
-          "fat_g": number,
-          "fiber_g": number,
-          "swap_option": "Alternative meal",
-          "portion_notes": "Portion guidance"
-        },
-        {
-          "type": "evening_snack",
-          "time": "4:00 PM",
-          "name": "Evening Snack",
-          "ingredients": [structured ingredient objects as above],
-          "instructions": ["preparation"],
-          "calories": number,
-          "protein_g": number,
-          "carbs_g": number,
-          "fat_g": number,
-          "fiber_g": number,
-          "swap_option": "Alternative snack",
-          "portion_notes": "Portion guidance"
-        },
-        {
-          "type": "dinner",
-          "time": "7:00 PM",
-          "name": "Dinner Dish",
-          "ingredients": [structured ingredient objects as above],
-          "instructions": ["step1", "step2"],
-          "calories": number,
-          "protein_g": number,
-          "carbs_g": number,
-          "fat_g": number,
-          "fiber_g": number,
-          "swap_option": "Alternative dinner",
-          "portion_notes": "Portion guidance"
-        }
-      ],
-      "daily_totals": {
-        "calories": number,
-        "protein_g": number,
-        "carbs_g": number,
-        "fat_g": number,
-        "fiber_g": number
-      }
-    }
-    // ... repeat for all 7 days
-  ],
-  "weekly_summary": {
-    "avg_daily_calories": number,
-    "avg_protein_g": number,
-    "avg_carbs_g": number,
-    "avg_fat_g": number,
-    "avg_fiber_g": number
-  },
-  "grocery_list": {
-    "vegetables": ["item1", "item2"],
-    "fruits": ["item1", "item2"],
-    "grains_legumes": ["item1", "item2"],
-    "proteins": ["item1", "item2"],
-    "dairy_alternatives": ["item1", "item2"],
-    "spices_condiments": ["item1", "item2"],
-    "nuts_seeds": ["item1", "item2"]
-  },
-  "hydration_guidance": "Daily water intake recommendations and herbal tea suggestions"
-}
-
-Make the plan practical with simple recipes using common ingredients. Ensure it's culturally adaptable and follows all safety guidelines. Return ONLY the JSON object, no additional text.`;
+OUTPUT: Return valid JSON with 7 days, 5 meals each (breakfast, mid_morning_snack, lunch, evening_snack, dinner). Use calorie targets: Breakfast ${mealTargets.breakfast?.calories || 400}, Lunch ${mealTargets.lunch?.calories || 500}, Dinner ${mealTargets.dinner?.calories || 400}, Snacks ${mealTargets.mid_morning_snack?.calories || 150} each. ALL ingredients must use structured format above with quantities.`;
 
   try {
     console.log('🤖 Calling Gemini API to generate meal plan...');
@@ -343,7 +147,17 @@ Make the plan practical with simple recipes using common ingredients. Ensure it'
               "type": "breakfast",
               "time": "8:00 AM",
               "name": isVegetarian ? "Avocado Toast with Seeds" : "Scrambled Eggs with Toast",
-              "ingredients": isVegetarian ? ["Whole grain bread", "Avocado", "Tomato", "Chia seeds", "Olive oil"] : ["Eggs", "Whole grain bread", "Butter", "Milk", "Spinach"],
+              "ingredients": isVegetarian ? [
+                {"name": "bread", "local_name": "Whole grain bread", "quantity": 2, "unit": "slices", "household_unit": "2 medium slices", "macros": {"calories": 160, "protein_g": 6}},
+                {"name": "avocado", "local_name": "Avocado", "quantity": 1, "unit": "medium", "household_unit": "1 medium fruit", "macros": {"calories": 120, "protein_g": 2}},
+                {"name": "tomato", "local_name": "Tomato", "quantity": 50, "unit": "g", "household_unit": "3-4 slices", "macros": {"calories": 10, "protein_g": 1}},
+                {"name": "chia seeds", "local_name": "Chia seeds", "quantity": 1, "unit": "tbsp", "household_unit": "1 tablespoon", "macros": {"calories": 60, "protein_g": 3}}
+              ] : [
+                {"name": "eggs", "local_name": "Eggs", "quantity": 2, "unit": "large", "household_unit": "2 large eggs", "macros": {"calories": 140, "protein_g": 12}},
+                {"name": "bread", "local_name": "Whole grain bread", "quantity": 2, "unit": "slices", "household_unit": "2 medium slices", "macros": {"calories": 160, "protein_g": 6}},
+                {"name": "spinach", "local_name": "Spinach", "quantity": 30, "unit": "g", "household_unit": "1 handful", "macros": {"calories": 7, "protein_g": 1}},
+                {"name": "butter", "local_name": "Butter", "quantity": 1, "unit": "tsp", "household_unit": "1 teaspoon", "macros": {"calories": 35, "protein_g": 0}}
+              ],
               "instructions": isVegetarian ? ["Toast bread", "Mash avocado with chia seeds", "Add tomato slices", "Drizzle olive oil"] : ["Beat eggs", "Scramble with spinach", "Toast bread", "Serve hot"],
               "calories": 350,
               "protein_g": isVegetarian ? 12 : 22,
@@ -369,7 +183,17 @@ Make the plan practical with simple recipes using common ingredients. Ensure it'
               "type": "lunch",
               "time": "1:00 PM",
               "name": isVegetarian ? "Quinoa Bowl with Chickpeas" : "Grilled Chicken Salad",
-              "ingredients": isVegetarian ? ["Quinoa", "Chickpeas", "Mixed vegetables", "Tahini", "Lemon"] : ["Chicken breast", "Mixed greens", "Cherry tomatoes", "Cucumber", "Olive oil"],
+              "ingredients": isVegetarian ? [
+                {"name": "quinoa", "local_name": "Quinoa", "quantity": 80, "unit": "g", "household_unit": "1/2 cup cooked", "macros": {"calories": 160, "protein_g": 6}},
+                {"name": "chickpeas", "local_name": "Chickpeas", "quantity": 100, "unit": "g", "household_unit": "1/2 cup cooked", "macros": {"calories": 120, "protein_g": 8}},
+                {"name": "mixed vegetables", "local_name": "Mixed vegetables", "quantity": 150, "unit": "g", "household_unit": "1 cup chopped", "macros": {"calories": 50, "protein_g": 2}},
+                {"name": "tahini", "local_name": "Tahini", "quantity": 1, "unit": "tbsp", "household_unit": "1 tablespoon", "macros": {"calories": 60, "protein_g": 2}}
+              ] : [
+                {"name": "chicken breast", "local_name": "Chicken breast", "quantity": 120, "unit": "g", "household_unit": "1 medium piece", "macros": {"calories": 200, "protein_g": 30}},
+                {"name": "mixed greens", "local_name": "Mixed greens", "quantity": 100, "unit": "g", "household_unit": "2 cups", "macros": {"calories": 20, "protein_g": 2}},
+                {"name": "cherry tomatoes", "local_name": "Cherry tomatoes", "quantity": 80, "unit": "g", "household_unit": "6-8 pieces", "macros": {"calories": 15, "protein_g": 1}},
+                {"name": "olive oil", "local_name": "Olive oil", "quantity": 1, "unit": "tbsp", "household_unit": "1 tablespoon", "macros": {"calories": 120, "protein_g": 0}}
+              ],
               "instructions": isVegetarian ? ["Cook quinoa", "Roast chickpeas", "Mix with vegetables", "Add tahini dressing"] : ["Grill seasoned chicken", "Prepare fresh salad", "Add olive oil dressing"],
               "calories": 480,
               "protein_g": isVegetarian ? 18 : 38,
