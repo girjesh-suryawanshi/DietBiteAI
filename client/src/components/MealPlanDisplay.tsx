@@ -335,15 +335,49 @@ function MealCard({ meal, mealPlanId, day, mealIndex, onMealUpdated }: MealCardP
         
         <div className="mb-4">
           <h6 className="text-sm font-medium text-neutral-700 mb-2">Ingredients:</h6>
-          <div className="flex flex-wrap gap-2">
-            {meal.ingredients.map((ingredient, index) => (
-              <span 
-                key={index}
-                className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm"
-              >
-                {ingredient}
-              </span>
-            ))}
+          <div className="space-y-2">
+            {meal.ingredients.map((ingredient, index) => {
+              // Handle both old format (string) and new format (object)
+              if (typeof ingredient === 'string') {
+                return (
+                  <span 
+                    key={index}
+                    className="inline-block bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm mr-2 mb-2"
+                  >
+                    {ingredient}
+                  </span>
+                );
+              } else {
+                // New structured ingredient format
+                const displayName = ingredient.local_name || ingredient.name;
+                const quantityText = ingredient.household_unit || `${ingredient.quantity} ${ingredient.unit}`;
+                
+                return (
+                  <div 
+                    key={index}
+                    className="flex items-center justify-between bg-neutral-50 p-3 rounded-lg border"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium text-neutral-800">{displayName}</span>
+                        {ingredient.local_name && ingredient.name !== ingredient.local_name && (
+                          <span className="text-xs text-neutral-500">({ingredient.name})</span>
+                        )}
+                      </div>
+                      {ingredient.notes && (
+                        <p className="text-xs text-neutral-600 mt-1">{ingredient.notes}</p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className="font-semibold text-neutral-700">{quantityText}</div>
+                      {ingredient.macros?.calories && (
+                        <div className="text-xs text-neutral-500">{ingredient.macros.calories} cal</div>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+            })}
           </div>
         </div>
 
@@ -355,6 +389,16 @@ function MealCard({ meal, mealPlanId, day, mealIndex, onMealUpdated }: MealCardP
             ))}
           </ol>
         </div>
+
+        {/* Show portion notes if available */}
+        {meal.portion_notes && (
+          <div className="mb-3 p-3 bg-green-50 rounded-lg border border-green-200">
+            <h6 className="text-xs font-medium text-green-700 mb-1">
+              <i className="fas fa-balance-scale mr-1"></i>Portion Guide:
+            </h6>
+            <p className="text-xs text-green-600">{meal.portion_notes}</p>
+          </div>
+        )}
 
         {/* Show nutritional information if available */}
         {(meal.protein_g || meal.carbs_g || meal.fat_g) && (

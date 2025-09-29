@@ -18,7 +18,22 @@ interface Meal {
   name: string;
   time?: string;
   calories?: number;
-  ingredients?: string[];
+  ingredients?: (string | {
+    name: string;
+    local_name?: string;
+    quantity: number;
+    unit: string;
+    household_unit?: string;
+    household_qty?: number;
+    macros?: {
+      calories?: number;
+      protein_g?: number;
+      carbs_g?: number;
+      fat_g?: number;
+    };
+    notes?: string;
+    substitutions?: string[];
+  })[];
   instructions?: string[];
 }
 
@@ -417,7 +432,19 @@ export async function generateMealPlanPDF(mealPlan: WeeklyMealPlan, userProfile?
         mealY -= 20;
 
         for (const ingredient of meal.ingredients.slice(0, 6)) {
-          page.drawText(`• ${sanitizeText(ingredient)}`, {
+          let ingredientText = '';
+          
+          // Handle both old format (string) and new format (object)
+          if (typeof ingredient === 'string') {
+            ingredientText = `• ${sanitizeText(ingredient)}`;
+          } else {
+            // New structured ingredient format
+            const displayName = ingredient.local_name || ingredient.name;
+            const quantityText = ingredient.household_unit || `${ingredient.quantity} ${ingredient.unit}`;
+            ingredientText = `• ${sanitizeText(displayName)} - ${quantityText}`;
+          }
+          
+          page.drawText(ingredientText, {
             x: margin + 20,
             y: mealY,
             size: 10,
@@ -619,11 +646,25 @@ function generateGroceryList(days: Day[]): { [category: string]: string[] } {
     day.meals.forEach(meal => {
       if (meal.ingredients) {
         meal.ingredients.forEach(ingredient => {
-          const lowerIngredient = ingredient.toLowerCase();
+          let ingredientName = '';
+          let displayText = '';
+          
+          // Handle both old format (string) and new format (object)
+          if (typeof ingredient === 'string') {
+            ingredientName = ingredient;
+            displayText = ingredient;
+          } else {
+            // New structured ingredient format
+            ingredientName = ingredient.name;
+            const quantity = ingredient.household_unit || `${ingredient.quantity} ${ingredient.unit}`;
+            displayText = `${ingredient.local_name || ingredient.name} (${quantity})`;
+          }
+          
+          const lowerIngredient = ingredientName.toLowerCase();
           
           Object.entries(categoryKeywords).forEach(([category, keywords]) => {
             if (keywords.some(keyword => lowerIngredient.includes(keyword))) {
-              groceryList[category].add(ingredient);
+              groceryList[category].add(displayText);
             }
           });
         });
