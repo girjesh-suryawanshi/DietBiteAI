@@ -6,6 +6,7 @@ import { storage } from "./storage";
 import { insertUserSchema, insertMealPlanSchema, insertPdfFileSchema, WeeklyMealPlan, adjustServingSizeSchema, swapIngredientSchema, customizeRecipeSchema } from "@shared/schema";
 import { generateMealPlan } from "./services/gemini";
 import { generateMealPlanPDF } from "./services/pdf";
+import { applyMealPlanSubstitutions, getIngredientAlternatives, type SubstitutionContext } from "./services/substitution";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint for Docker
@@ -176,7 +177,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      // Generate meal plan using Gemini
+      // Generate meal plan using Gemini with cultural context
       const mealPlanData = await generateMealPlan({
         fitness_goal,
         cuisine,
@@ -187,7 +188,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
         gender: user.gender || undefined,
         weight_kg: user.weight_kg || undefined,
         height_cm: user.height_cm || undefined,
+        
+        // Enhanced cultural and location context
+        country: user.country || undefined,
+        region: user.region || undefined,
+        city: user.city || undefined,
+        cultural_background: user.cultural_background || [],
+        cuisine_familiarity: user.cuisine_familiarity || [],
+        cooking_methods: user.cooking_methods || [],
+        local_ingredients_preference: user.local_ingredients_preference ?? true,
+        budget_preference: user.budget_preference || undefined,
       });
+
+      // Apply smart ingredient substitutions based on user location and preferences
+      const substitutionContext: SubstitutionContext = {
+        country: user.country || undefined,
+        region: user.region || undefined,
+        budget_preference: user.budget_preference || undefined,
+        local_ingredients_preference: user.local_ingredients_preference ?? true,
+        cultural_background: user.cultural_background || [],
+        cuisine_familiarity: user.cuisine_familiarity || [],
+      };
+
+      const { substituted_meal_plan, all_substitutions } = applyMealPlanSubstitutions(mealPlanData, substitutionContext);
+      
+      // Add substitution metadata to meal plan
+      const finalMealPlanData = {
+        ...substituted_meal_plan,
+        substitutions_applied: all_substitutions.length,
+        substitution_details: all_substitutions.slice(0, 10), // Include first 10 substitutions for reference
+        location_context: {
+          country: user.country,
+          region: user.region,
+          cultural_background: user.cultural_background,
+          local_ingredients_preference: user.local_ingredients_preference
+        }
+      };
 
       // Save meal plan to storage using the database user ID
       const mealPlan = await storage.createMealPlan({
@@ -195,7 +231,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         fitness_goal,
         cuisine,
         diet_type,
-        plan_data: mealPlanData,
+        plan_data: finalMealPlanData,
         is_active: true,
       });
 
@@ -282,6 +318,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Recipe adjustment endpoints
+  
+  // Get ingredient alternatives for smart substitutions
+  app.get("/api/ingredients/:ingredient/alternatives", async (req, res) => {
+    try {
+      const { ingredient } = req.params;
+      const { country, region, budget_preference, cultural_background } = req.query;
+      
+      const substitutionContext: SubstitutionContext = {
+        country: country as string || undefined,
+        region: region as string || undefined,
+        budget_preference: budget_preference as string || undefined,
+        local_ingredients_preference: true,
+        cultural_background: cultural_background ? (cultural_background as string).split(',') : [],
+        cuisine_familiarity: []
+      };
+
+      const alternatives = getIngredientAlternatives(ingredient, substitutionContext);
+      res.json({ alternatives });
+    } catch (error) {
+      console.error("Error getting ingredient alternatives:", error);
+      res.status(500).json({ 
+        message: "Failed to get ingredient alternatives", 
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   app.patch("/api/meal-plans/:id/adjust-serving", async (req, res) => {
     try {
       const { day, meal_index, serving_multiplier } = adjustServingSizeSchema.parse(req.body);
