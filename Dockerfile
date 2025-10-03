@@ -1,6 +1,6 @@
-# Multi-stage build for FitBite
+# Multi-stage build for MyMealify
 # Stage 1: Build the client and server
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -28,7 +28,7 @@ COPY . .
 RUN npx vite build && npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist --define:import.meta.dirname='"/app"'
 
 # Stage 2: Production image
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init
@@ -38,7 +38,7 @@ WORKDIR /app
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
-RUN adduser -S fitbite -u 1001
+RUN adduser -S mymealify -u 1001
 
 # Copy package files
 COPY package*.json ./
@@ -57,10 +57,10 @@ COPY --from=builder /app/dist/public ./public
 RUN mkdir -p server/temp
 
 # Fix ownership before switching to non-root user
-RUN chown -R fitbite:nodejs /app
+RUN chown -R mymealify:nodejs /app
 
 # Change to non-root user
-USER fitbite
+USER mymealify
 
 # Expose port
 EXPOSE 5000
