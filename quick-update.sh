@@ -26,6 +26,10 @@ docker compose build
 echo -e "${GREEN}[INFO]${NC} Restarting services..."
 docker compose up -d
 
+# Update database schema
+echo -e "${GREEN}[INFO]${NC} Updating database schema..."
+docker compose exec -T mymealify-app npm run db:push || echo -e "${YELLOW}[WARN]${NC} Database schema update failed or no changes needed"
+
 # Show status
 echo -e "${GREEN}[INFO]${NC} Service status:"
 docker compose ps
